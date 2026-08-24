@@ -1,0 +1,46 @@
+﻿using GenXTransitAPI.Models;
+using System.Net;
+using System.Text.Json;
+
+namespace GenXTransitAPI.Middleware
+{
+    public class ExceptionMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionMiddleware> _logger;
+        private readonly IWebHostEnvironment _env;
+
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IWebHostEnvironment env)
+        {
+            _next = next;
+            _logger = logger;
+            _env = env;
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            try
+            {
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unhandled exception: {Message}", ex.Message);
+
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+                // In development return the real error so we can debug
+                // In production return generic message
+                var message = _env.IsDevelopment()
+                    ? $"{ex.GetType().Name}: {ex.Message}"
+                    : "An unexpected error occurred. Please try again.";
+
+                var response = ApiResponse<object>.Fail(message);
+                await context.Response.WriteAsync(
+                    JsonSerializer.Serialize(response, new JsonSerializerOptions
+                    { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+            }
+        }
+    }
+}

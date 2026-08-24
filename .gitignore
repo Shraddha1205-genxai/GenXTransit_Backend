@@ -1,0 +1,115 @@
+# =========================
+# Visual Studio
+# =========================
+.vs/
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =========================
+# Build Results
+# =========================
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# =========================
+# Visual Studio Generated
+# =========================
+*.pdb
+*.dll
+*.exe
+*.cache
+*.log
+
+# =========================
+# ASP.NET / .NET
+# =========================
+wwwroot/lib/
+wwwroot/uploads/
+wwwroot/temp/
+
+# =========================
+# Configuration / Secrets
+# =========================
+appsettings.Local.json
+appsettings.Development.json
+
+# Secret files
+*.pfx
+*.key
+*.pem
+*.crt
+
+# Firebase
+firebase-service-account.json
+google-services.json
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+
+# =========================
+# Database / Local Data
+# =========================
+*.mdf
+*.ldf
+*.bak
+
+# =========================
+# Test Results
+# =========================
+TestResults/
+*.trx
+coverage/
+coverage.xml
+
+# =========================
+# NuGet
+# =========================
+packages/
+*.nupkg
+*.snupkg
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# JetBrains / Rider
+# =========================
+.idea/
+*.sln.iml
+
+# =========================
+# Azure / Local Development
+# =========================
+.azure/
