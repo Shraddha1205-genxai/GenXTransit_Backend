@@ -13,13 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\IRepositories\" />
-    <Folder Include="Interface\IServices\" />
-    <Folder Include="Services\" />
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GenXTransitAPI.Models\GenXTransitAPI.Models.csproj" />
   </ItemGroup>
 
