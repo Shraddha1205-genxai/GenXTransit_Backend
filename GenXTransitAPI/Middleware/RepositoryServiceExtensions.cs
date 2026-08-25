@@ -1,42 +1,35 @@
-﻿using GenXTransitAPI.DataAccess.Interface.IRepositories;
-using GenXTransitAPI.DataAccess.Interface.IServices;
+﻿using GenXTransitAPI.DataAccess.Data;
+using GenXTransitAPI.DataAccess.Interfaces.Repositories;
+using GenXTransitAPI.DataAccess.Interfaces.Services;
 using GenXTransitAPI.DataAccess.Repositories;
-using GenXTransitAPI.DataAccess.Security;
 using GenXTransitAPI.DataAccess.Services;
-using GenXTransitAPI.Models.DTO_s;
-using GenXTransitAPI.Models.DTOs;
-using GenXTransittAPI.DataAccess.Data;
-using Microsoft.AspNetCore.Authorization;
 
 namespace GenXTransitAPI.Middleware
 {
-    public static class RepositoryServiceExtensions
+    public static class repositoryServiceExtensions
     {
-        public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
+            // ─── DI registrations ─────────────────────────────────────────────────────────
+            services.AddSingleton<DBHelper>();
 
-            //    // ─── DI registrations ─────────────────────────────────────────────────────────
-                services.AddSingleton<DBHelper>();
+            //  -- CORPORATION
+            services.AddScoped<IOrgCorporationRepository, OrgCorporationRepository>();
+            services.AddScoped<IOrgCorporationService, OrgCorporationService>();
 
+            //  -- REGION
+            services.AddScoped<IOrgRegionRepository, OrgRegionRepository>();
+            services.AddScoped<IOrgRegionService, OrgRegionService>();
 
-            // DATA ACCESS
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IAuthRepository, AuthRepository>();
+            //  -- DIVISION
+            services.AddScoped<IOrgDivisionRepository, OrgDivisionRepository>();
+            services.AddScoped<IOrgDivisionService, OrgDivisionService>();
 
-            // SERVICES
-            services.AddScoped<IPasswordService, PasswordService>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IJwtService, JwtService>();
-
-            // EMAIL SETTINGS
-            services.Configure<SendEmailDto>(
-                configuration.GetSection("EmailSettings"));
-
-            services.Configure<JwtSettings>(
-        configuration.GetSection("Jwt"));
+            // -- ZONE
+            services.AddScoped<IOrgZoneRepository, OrgZoneRepository>();
+            services.AddScoped<IOrgZoneService, OrgZoneService>();
 
             return services;
-
         }
     }
 }
