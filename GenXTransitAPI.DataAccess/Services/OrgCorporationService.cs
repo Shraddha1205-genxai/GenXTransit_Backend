@@ -29,7 +29,7 @@ namespace GenXTransitAPI.DataAccess.Services
             try
             {
                 var items = await _repo.GetAllAsync(searchText, stateName, isActive, scopeToUser, pageNumber, pageSize);
-                var totalCount = items.FirstOrDefault()?.TotalCount ?? 0;
+                var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<OrgCorporationDTO>>.Ok(items, null, totalCount);
             }
             catch (Exception ex)
@@ -72,16 +72,16 @@ namespace GenXTransitAPI.DataAccess.Services
             try
             {
                 // Validations
-                if (string.IsNullOrWhiteSpace(entity.Corporation_Name))
+                if (string.IsNullOrWhiteSpace(entity.corporationName))
                     return ApiResponse<int>.Fail("Corporation Name is required.");
 
-                if (string.IsNullOrWhiteSpace(entity.State_Name))
+                if (string.IsNullOrWhiteSpace(entity.stateName))
                     return ApiResponse<int>.Fail("State Name is required.");
 
-                if (string.IsNullOrWhiteSpace(entity.District_Name))
+                if (string.IsNullOrWhiteSpace(entity.districtName))
                     return ApiResponse<int>.Fail("District Name is required.");
 
-                if (string.IsNullOrWhiteSpace(entity.City_Name))
+                if (string.IsNullOrWhiteSpace(entity.cityName))
                     return ApiResponse<int>.Fail("City Name is required.");
 
                 var id = await _repo.InsertAsync(entity, userId);
@@ -98,24 +98,27 @@ namespace GenXTransitAPI.DataAccess.Services
             try
             {
                 // Validations
-                if (!entity.Corporation_Id.HasValue || entity.Corporation_Id <= 0)
-                    return ApiResponse<bool>.Fail("Invalid Corporation ID.");
+                if (string.IsNullOrEmpty(entity.corpId))
+                    return ApiResponse<bool>.Fail("Corporation ID is required.");
 
-                if (string.IsNullOrWhiteSpace(entity.Corporation_Name))
+                if (!int.TryParse(entity.corpId, out int id))
+                    return ApiResponse<bool>.Fail("Invalid Corporation ID format.");
+
+                if (string.IsNullOrWhiteSpace(entity.corporationName))
                     return ApiResponse<bool>.Fail("Corporation Name is required.");
 
-                if (string.IsNullOrWhiteSpace(entity.State_Name))
+                if (string.IsNullOrWhiteSpace(entity.stateName))
                     return ApiResponse<bool>.Fail("State Name is required.");
 
-                if (string.IsNullOrWhiteSpace(entity.District_Name))
+                if (string.IsNullOrWhiteSpace(entity.districtName))
                     return ApiResponse<bool>.Fail("District Name is required.");
 
-                if (string.IsNullOrWhiteSpace(entity.City_Name))
+                if (string.IsNullOrWhiteSpace(entity.cityName))
                     return ApiResponse<bool>.Fail("City Name is required.");
 
                 var success = await _repo.UpdateAsync(entity, userId);
                 if (!success)
-                    return ApiResponse<bool>.Fail($"Corporation with ID {entity.Corporation_Id} not found.");
+                    return ApiResponse<bool>.Fail($"Corporation with ID {entity.corpId} not found.");
 
                 return ApiResponse<bool>.Ok(true, "Corporation updated successfully.");
             }

@@ -63,6 +63,11 @@ namespace GenXTransitAPI.Models.DTO_s
         public bool IsDeleted { get; set; } = false;
         public int? Deleted_By { get; set; }
         public DateTime? Deleted_Date { get; set; }
-        public int TotalCount { get; set; }  
+        public int TotalCount { get; set; }
+
+        public int DivisionCount { get; set; }
+        public int DepotCount { get; set; }
+        public int StationCount { get; set; }
+        public int WorkshopCount { get; set; }
     }
 }

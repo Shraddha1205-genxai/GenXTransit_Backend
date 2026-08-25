@@ -35,8 +35,8 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     SearchText = searchText,
                     IsActive = isActive,
                     ScopeToUser = scopeToUser,
-                    PageNumber = pageNumber,   
-                    PageSize = pageSize        
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
                 },
                 commandType: CommandType.StoredProcedure);
 
@@ -47,10 +47,10 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 regionCode = x.Region_Code,
                 regionName = x.Region_Name,
                 isActive = x.IsActive,
-                divisions = 0,
-                depots = 0,
-                stations = 0,
-                workshops = 0,
+                divisions = x.DivisionCount,  // ✅ Now mapping from database
+                depots = x.DepotCount,        // ✅ Now mapping from database
+                stations = x.StationCount,    // ✅ Now mapping from database
+                workshops = x.WorkshopCount,  // ✅ Now mapping from database
                 createdBy = x.Created_By,
                 createdDate = x.Created_Date,
                 modifiedBy = x.Modified_By,
@@ -58,7 +58,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 isDeleted = x.IsDeleted,
                 deletedBy = x.Deleted_By,
                 deletedDate = x.Deleted_Date,
-                TotalCount = x.TotalCount  
+                TotalCount = x.TotalCount
             });
         }
 
@@ -81,10 +81,10 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 regionCode = dbResult.Region_Code,
                 regionName = dbResult.Region_Name,
                 isActive = dbResult.IsActive,
-                divisions = 0,
-                depots = 0,
-                stations = 0,
-                workshops = 0,
+                divisions = dbResult.DivisionCount,  // ✅ Added mapping
+                depots = dbResult.DepotCount,        // ✅ Added mapping
+                stations = dbResult.StationCount,    // ✅ Added mapping
+                workshops = dbResult.WorkshopCount,  // ✅ Added mapping
                 createdBy = dbResult.Created_By,
                 createdDate = dbResult.Created_Date,
                 modifiedBy = dbResult.Modified_By,

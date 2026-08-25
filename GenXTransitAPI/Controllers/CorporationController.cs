@@ -47,19 +47,73 @@ namespace GenXTransitAPI.Controllers
         }
 
         [HttpPost("insert")]
-        public async Task<IActionResult> Insert([FromBody] OrgCorporationDTO entity)
+        public async Task<IActionResult> Insert([FromBody] InsertCorporationRequest request)
         {
-            var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
+            if (request == null)
+                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+
+            if (string.IsNullOrWhiteSpace(request.corporationName))
+                return BadRequest(ApiResponse<int>.Fail("Corporation Name is required."));
+
+            if (string.IsNullOrWhiteSpace(request.stateName))
+                return BadRequest(ApiResponse<int>.Fail("State Name is required."));
+
+            if (string.IsNullOrWhiteSpace(request.districtName))
+                return BadRequest(ApiResponse<int>.Fail("District Name is required."));
+
+            if (string.IsNullOrWhiteSpace(request.cityName))
+                return BadRequest(ApiResponse<int>.Fail("City Name is required."));
+
+            var entity = new OrgCorporationDTO
             {
-                return Ok(result);
-            }
-            return BadRequest(result);
+                corporationName = request.corporationName,
+                stateName = request.stateName,
+                districtName = request.districtName,
+                cityName = request.cityName,
+                isActive = request.isActive
+            };
+
+            var result = await _svc.InsertAsync(entity, GetCurrentUserId());
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
-        public async Task<IActionResult> Update([FromBody] OrgCorporationDTO entity)
+        public async Task<IActionResult> Update([FromBody] UpdateCorporationRequest request)
         {
+            if (request == null)
+                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+
+            if (string.IsNullOrEmpty(request.corporationId))
+                return BadRequest(ApiResponse<bool>.Fail("Corporation ID is required."));
+
+            if (!int.TryParse(request.corporationId, out int id))
+                return BadRequest(ApiResponse<bool>.Fail("Invalid Corporation ID format."));
+
+            if (string.IsNullOrWhiteSpace(request.corporationName))
+                return BadRequest(ApiResponse<bool>.Fail("Corporation Name is required."));
+
+            if (string.IsNullOrWhiteSpace(request.stateName))
+                return BadRequest(ApiResponse<bool>.Fail("State Name is required."));
+
+            if (string.IsNullOrWhiteSpace(request.districtName))
+                return BadRequest(ApiResponse<bool>.Fail("District Name is required."));
+
+            if (string.IsNullOrWhiteSpace(request.cityName))
+                return BadRequest(ApiResponse<bool>.Fail("City Name is required."));
+
+            var entity = new OrgCorporationDTO
+            {
+                corpId = id.ToString(),
+                corporationName = request.corporationName,
+                stateName = request.stateName,
+                districtName = request.districtName,
+                cityName = request.cityName,
+                isActive = request.isActive
+            };
+
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
             if (!result.Success)
             {

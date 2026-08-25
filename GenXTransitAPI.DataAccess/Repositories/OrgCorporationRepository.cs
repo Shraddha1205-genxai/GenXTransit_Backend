@@ -29,7 +29,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
         {
             using var conn = _db.CreateConnection();
 
-            // ✅ Use OrgCorporationDbDTO to map TotalCount from SP
             var dbResult = await conn.QueryAsync<OrgCorporationDbDTO>(
                 "usp_Corporation_GetAll",
                 new
@@ -43,24 +42,23 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            // ✅ Convert from DB DTO to UI DTO with TotalCount
             return dbResult.Select(x => new OrgCorporationDTO
             {
-                Corporation_Id = x.Corporation_Id,
-                Corp_Code = x.Corp_Code,
-                Corporation_Name = x.Corporation_Name,
-                State_Name = x.State_Name,
-                District_Name = x.District_Name,
-                City_Name = x.City_Name,
-                IsActive = x.IsActive,
-                Created_By = x.Created_By,
-                Created_Date = x.Created_Date,
-                Modified_By = x.Modified_By,
-                Modified_Date = x.Modified_Date,
-                IsDeleted = x.IsDeleted,
-                Deleted_By = x.Deleted_By,
-                Deleted_Date = x.Deleted_Date,
-                TotalCount = x.TotalCount  // ✅ Map TotalCount
+                corpId = x.Corporation_Id?.ToString(),
+                corpCode = x.Corp_Code,
+                corporationName = x.Corporation_Name,
+                stateName = x.State_Name,
+                districtName = x.District_Name,
+                cityName = x.City_Name,
+                isActive = x.IsActive,
+                createdBy = x.Created_By,
+                createdDate = x.Created_Date,
+                modifiedBy = x.Modified_By,
+                modifiedDate = x.Modified_Date,
+                isDeleted = x.IsDeleted,
+                deletedBy = x.Deleted_By,
+                deletedDate = x.Deleted_Date,
+                totalCount = x.TotalCount
             });
         }
 
@@ -68,10 +66,32 @@ namespace GenXTransitAPI.DataAccess.Repositories
         {
             using var conn = _db.CreateConnection();
 
-            return await conn.QueryFirstOrDefaultAsync<OrgCorporationDTO>(
+            var dbResult = await conn.QueryFirstOrDefaultAsync<OrgCorporationDbDTO>(
                 "usp_Corporation_GetById",
                 new { Corporation_Id = corporationId },
                 commandType: CommandType.StoredProcedure);
+
+            if (dbResult == null)
+                return null;
+
+            return new OrgCorporationDTO
+            {
+                corpId = dbResult.Corporation_Id?.ToString(),
+                corpCode = dbResult.Corp_Code,
+                corporationName = dbResult.Corporation_Name,
+                stateName = dbResult.State_Name,
+                districtName = dbResult.District_Name,
+                cityName = dbResult.City_Name,
+                isActive = dbResult.IsActive,
+                createdBy = dbResult.Created_By,
+                createdDate = dbResult.Created_Date,
+                modifiedBy = dbResult.Modified_By,
+                modifiedDate = dbResult.Modified_Date,
+                isDeleted = dbResult.IsDeleted,
+                deletedBy = dbResult.Deleted_By,
+                deletedDate = dbResult.Deleted_Date,
+                totalCount = 0
+            };
         }
 
         public async Task<string> GetNextCodeAsync()
@@ -97,11 +117,11 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
                 var p = new DynamicParameters();
 
-                p.Add("@Corporation_Name", entity.Corporation_Name);
-                p.Add("@State_Name", entity.State_Name);
-                p.Add("@District_Name", entity.District_Name);
-                p.Add("@City_Name", entity.City_Name);
-                p.Add("@IsActive", entity.IsActive);
+                p.Add("@Corporation_Name", entity.corporationName);
+                p.Add("@State_Name", entity.stateName);
+                p.Add("@District_Name", entity.districtName);
+                p.Add("@City_Name", entity.cityName);
+                p.Add("@IsActive", entity.isActive);
                 p.Add("@UserId", userId);
                 p.Add("@NewId", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
@@ -126,12 +146,12 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
                 var p = new DynamicParameters();
 
-                p.Add("@Corporation_Id", entity.Corporation_Id);
-                p.Add("@Corporation_Name", entity.Corporation_Name);
-                p.Add("@State_Name", entity.State_Name);
-                p.Add("@District_Name", entity.District_Name);
-                p.Add("@City_Name", entity.City_Name);
-                p.Add("@IsActive", entity.IsActive);
+                p.Add("@Corporation_Id", Convert.ToInt32(entity.corpId));
+                p.Add("@Corporation_Name", entity.corporationName);
+                p.Add("@State_Name", entity.stateName);
+                p.Add("@District_Name", entity.districtName);
+                p.Add("@City_Name", entity.cityName);
+                p.Add("@IsActive", entity.isActive);
                 p.Add("@UserId", userId);
                 p.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
 
