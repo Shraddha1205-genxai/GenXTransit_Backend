@@ -59,7 +59,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             p.Add("@PasswordHash", user.PasswordHash);
             p.Add("@FirstName", user.FirstName);
             p.Add("@LastName", user.LastName);
-            p.Add("@RoleId", user.RoleId);
+           // p.Add("@RoleId", user.RoleId);
             p.Add("@IsActive", user.IsActive);
             p.Add("@IsEmailVerified", user.IsEmailVerified);
             p.Add("@IsMobileVerified", user.IsMobileVerified);
@@ -72,6 +72,71 @@ namespace GenXTransitAPI.DataAccess.Repositories
          p,
          commandType: CommandType.StoredProcedure);
         }
+
+        public async Task<User?> GetUserByIdAsync(int userId)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync<User>(
+                "usp_User_GetById",
+                new
+                {
+                    UserId = userId
+                },
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<bool> UpdateUserAsync( int userId, UpdateUserRequest request)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result = await conn.ExecuteScalarAsync<bool>(
+                "usp_User_Update",
+                new
+                {
+                    UserId = userId,
+                    UserName = request.UserName,
+                    Email = request.Email,
+                    MobileNo = request.MobileNo,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName
+                },
+                commandType: CommandType.StoredProcedure);
+
+            return result;
+        }
+
+        public async Task<User?> GetUserForLoginAsync(
+            string loginId)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync<User>(
+                "usp_User_Login",
+                new
+                {
+                    LoginId = loginId
+                },
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<bool> ChangePasswordAsync( int userId, string newPassword)
+        {
+            using var conn = _db.CreateConnection();
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", userId);
+            parameters.Add("@NewPassword", newPassword);
+
+            var result = await conn.QueryFirstOrDefaultAsync<int>(
+                "usp_User_ChangePassword",
+                parameters,
+                commandType: CommandType.StoredProcedure);
+
+            return result == 1;
+        }
     }
 }
+
     

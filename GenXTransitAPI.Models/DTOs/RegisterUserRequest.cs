@@ -18,7 +18,7 @@ namespace GenXTransitAPI.Models.DTO_s
 
         public string LastName { get; set; } = string.Empty;
 
-        public int RoleId { get; set; }
+       // public int RoleId { get; set; }
     }
 
     public class RegisterUserResponse
@@ -32,4 +32,20 @@ namespace GenXTransitAPI.Models.DTO_s
         public string Message { get; set; } = string.Empty;
     }
 
+    public class UpdateUserResponse
+    {
+        public int UserId { get; set; }
+
+        public string UserName { get; set; } = string.Empty;
+
+        public string Email { get; set; } = string.Empty;
+
+        public string? MobileNo { get; set; }
+
+        public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
+
+        public string Message { get; set; } = string.Empty;
+    }
 }
