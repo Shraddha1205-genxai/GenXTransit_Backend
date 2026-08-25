@@ -1,35 +1,42 @@
-﻿using GenXTransitAPI.DataAccess.Data;
-using GenXTransitAPI.DataAccess.Interfaces.Repositories;
-using GenXTransitAPI.DataAccess.Interfaces.Services;
+﻿using GenXTransitAPI.DataAccess.Interface.IRepositories;
+using GenXTransitAPI.DataAccess.Interface.IServices;
 using GenXTransitAPI.DataAccess.Repositories;
+using GenXTransitAPI.DataAccess.Security;
 using GenXTransitAPI.DataAccess.Services;
+using GenXTransitAPI.Models.DTO_s;
+using GenXTransitAPI.Models.DTOs;
+using GenXTransittAPI.DataAccess.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GenXTransitAPI.Middleware
 {
-    public static class repositoryServiceExtensions
+    public static class RepositoryServiceExtensions
     {
-        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
         {
-            // ─── DI registrations ─────────────────────────────────────────────────────────
-            services.AddSingleton<DBHelper>();
 
-            //  -- CORPORATION
-            services.AddScoped<IOrgCorporationRepository, OrgCorporationRepository>();
-            services.AddScoped<IOrgCorporationService, OrgCorporationService>();
+            //    // ─── DI registrations ─────────────────────────────────────────────────────────
+                services.AddSingleton<DBHelper>();
 
-            //  -- REGION
-            services.AddScoped<IOrgRegionRepository, OrgRegionRepository>();
-            services.AddScoped<IOrgRegionService, OrgRegionService>();
 
-            //  -- DIVISION
-            services.AddScoped<IOrgDivisionRepository, OrgDivisionRepository>();
-            services.AddScoped<IOrgDivisionService, OrgDivisionService>();
+            // DATA ACCESS
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
 
-            // -- ZONE
-            services.AddScoped<IOrgZoneRepository, OrgZoneRepository>();
-            services.AddScoped<IOrgZoneService, OrgZoneService>();
+            // SERVICES
+            services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IJwtService, JwtService>();
+
+            // EMAIL SETTINGS
+            services.Configure<SendEmailDto>(
+                configuration.GetSection("EmailSettings"));
+
+            services.Configure<JwtSettings>(
+        configuration.GetSection("Jwt"));
 
             return services;
+
         }
     }
 }

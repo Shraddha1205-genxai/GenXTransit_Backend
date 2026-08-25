@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenXTransitAPI.DataAccess.Data
+namespace GenXTransittAPI.DataAccess.Data
 {
     public class DBHelper
     {
