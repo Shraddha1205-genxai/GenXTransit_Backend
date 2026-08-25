@@ -20,5 +20,10 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
         Task<User?> GetUserForLoginAsync(string loginId);
 
         Task<bool> ChangePasswordAsync( int userId, string newPassword);
+
+        Task<bool> UpdateUserPasswordAsync( int userId,string newPasswordHash,  int modifiedBy);
+
+        Task<bool> RevokeAllUserRefreshTokensAsync(int userId, int modifiedBy);
+
     }
 }

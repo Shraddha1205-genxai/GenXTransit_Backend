@@ -6,7 +6,10 @@ using GenXTransitAPI.Models;
 using GenXTransitAPI.Models.DTO_s;
 using GenXTransitAPI.Models.DTOs;
 using GenXTransitAPI.Models.Entities;
-//using Microsoft.AspNetCore.Identity.Data;
+
+using Org.BouncyCastle.Crypto.Generators;
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -238,5 +241,102 @@ namespace GenXTransitAPI.DataAccess.Services
                 response,
                 "Login successful.");
         }
+
+
+        public async Task<ApiResponse<string>> ChangePasswordAsync(
+    ChangePasswordRequest request,
+    int userId)
+        {
+            if (request == null)
+            {
+                return ApiResponse<string>.Fail(
+                    "Invalid request.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.OldPassword))
+            {
+                return ApiResponse<string>.Fail(
+                    "Old password is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.NewPassword))
+            {
+                return ApiResponse<string>.Fail(
+                    "New password is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.ConfirmPassword))
+            {
+                return ApiResponse<string>.Fail(
+                    "Confirm password is required.");
+            }
+
+            if (request.NewPassword != request.ConfirmPassword)
+            {
+                return ApiResponse<string>.Fail(
+                    "New password and confirm password do not match.");
+            }
+
+            if (request.NewPassword.Length < 8)
+            {
+                return ApiResponse<string>.Fail(
+                    "New password must be at least 8 characters long.");
+            }
+
+            // Get user
+            var user =
+                await _authRepo.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return ApiResponse<string>.Fail(
+                    "User not found.");
+            }
+
+            // Verify old password
+            if (!BCrypt.Net.BCrypt.Verify(
+                    request.OldPassword,
+                    user.PasswordHash))
+            {
+                return ApiResponse<string>.Fail(
+                    "Old password is incorrect.");
+            }
+
+            // Prevent same password
+            if (BCrypt.Net.BCrypt.Verify(
+                    request.NewPassword,
+                    user.PasswordHash))
+            {
+                return ApiResponse<string>.Fail(
+                    "New password cannot be same as old password.");
+            }
+
+            // Generate new password hash
+            var newHash =
+                BCrypt.Net.BCrypt.HashPassword(
+                    request.NewPassword);
+
+            // Update password
+            var passwordUpdated =
+                await _authRepo.UpdateUserPasswordAsync(
+                    userId,
+                    newHash,
+                    userId);
+
+            if (!passwordUpdated)
+            {
+                return ApiResponse<string>.Fail(
+                    "Password could not be changed.");
+            }
+
+            // Revoke all refresh tokens
+            await _authRepo.RevokeAllUserRefreshTokensAsync(
+                userId,
+                userId);
+
+            return ApiResponse<string>.Ok(
+                "Password changed successfully.");
+        }
+
     }
 }

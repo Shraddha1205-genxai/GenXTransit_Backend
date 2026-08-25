@@ -88,6 +88,36 @@ namespace GenXTransitAPI.Controllers
 
             return Ok(result);
         }
+
+
+       // [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            var userIdClaim =
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized(
+                    ApiResponse<string>.Fail("Invalid token."));
+            }
+
+            if (!int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized(
+                    ApiResponse<string>.Fail("Invalid user identity."));
+            }
+
+            var result = await _authService.ChangePasswordAsync(
+                request,
+                userId);
+
+            return result.Success
+                ? Ok(result)
+                : BadRequest(result);
+        }
+
     }
 }
 

@@ -136,6 +136,43 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
             return result == 1;
         }
+
+
+        public async Task<bool> UpdateUserPasswordAsync(
+    int userId,
+    string newPasswordHash,
+    int modifiedBy)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result = await conn.ExecuteAsync(
+                "USP_UpdateUserPassword",
+                new
+                {
+                    UserId = userId,
+                    NewPasswordHash = newPasswordHash,
+                    ModifiedBy = modifiedBy
+                },
+                commandType: CommandType.StoredProcedure);
+
+            return result > 0;
+        }
+
+        public async Task<bool> RevokeAllUserRefreshTokensAsync( int userId,  int modifiedBy)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result = await conn.ExecuteAsync(
+                "USP_RevokeAllUserRefreshTokens",
+                new
+                {
+                    UserId = userId,
+                    ModifiedBy = modifiedBy
+                },
+                commandType: CommandType.StoredProcedure);
+
+            return result > 0;
+        }
     }
 }
 

@@ -15,7 +15,10 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
         Task<RegisterUserResponse> RegisterAsync(
             RegisterUserRequest request);
         Task<ApiResponse<UpdateUserResponse>> UpdateUserAsync( UpdateUserRequest request, int userId);
-        Task<ApiResponse<LoginResponse>> LoginAsync(
-         LoginRequest request);
+
+
+        Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request);
+        Task<ApiResponse<string>> ChangePasswordAsync( ChangePasswordRequest request,int userId);
+
     }
 }
