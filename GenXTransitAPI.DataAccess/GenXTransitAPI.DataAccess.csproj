@@ -7,16 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.79" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.11" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interface\IRepositories\" />
-    <Folder Include="Interface\IServices\" />
-    <Folder Include="Services\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
