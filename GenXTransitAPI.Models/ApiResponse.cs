@@ -15,7 +15,7 @@ namespace GenXTransitAPI.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? TotalCount { get; set; }
 
-        public static ApiResponse<T> Ok(T data, string message = "Success", int? total = null)
+        public static ApiResponse<T> Ok(T data, string message = "Successs", int? total = null)
             => new() { Success = true, Message = message, Data = data, TotalCount = total };
 
         public static ApiResponse<T> Fail(string message)
