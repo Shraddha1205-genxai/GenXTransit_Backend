@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using static GenXTransitAPI.Models.DTO_s.OrgDivisionDTO;
 
 namespace GenXTransitAPI.DataAccess.Repositories
 {
@@ -38,8 +37,8 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     RegionId = regionId,
                     IsActive = isActive,
                     ScopeToUser = scopeToUser,
-                    PageNumber = pageNumber,   // ✅ ADD THIS
-                    PageSize = pageSize        // ✅ ADD THIS
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
                 },
                 commandType: CommandType.StoredProcedure);
 
@@ -53,10 +52,11 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 regionCode = x.Region_Code,
                 regionName = x.Region_Name,
                 isActive = x.IsActive,
-                depots = 0,
-                workshops = 0,
-                stations = 0,
-                parkingYards = 0,
+                // ✅ Map the actual counts from SP instead of hardcoded 0
+                depots = x.DepotCount,
+                workshops = x.WorkshopCount,
+                stations = x.StationCount,
+                parkingYards = x.ParkingYardCount,
                 createdBy = x.Created_By,
                 createdDate = x.Created_Date,
                 modifiedBy = x.Modified_By,
@@ -64,7 +64,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 isDeleted = x.IsDeleted,
                 deletedBy = x.Deleted_By,
                 deletedDate = x.Deleted_Date,
-                TotalCount = x.TotalCount  // ✅ ADD THIS
+                TotalCount = x.TotalCount
             });
         }
 
@@ -90,10 +90,11 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 regionCode = dbResult.Region_Code,
                 regionName = dbResult.Region_Name,
                 isActive = dbResult.IsActive,
-                depots = 0,
-                workshops = 0,
-                stations = 0,
-                parkingYards = 0,
+                // ✅ Map the actual counts from SP
+                depots = dbResult.DepotCount,
+                workshops = dbResult.WorkshopCount,
+                stations = dbResult.StationCount,
+                parkingYards = dbResult.ParkingYardCount,
                 createdBy = dbResult.Created_By,
                 createdDate = dbResult.Created_Date,
                 modifiedBy = dbResult.Modified_By,
@@ -101,7 +102,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 isDeleted = dbResult.IsDeleted,
                 deletedBy = dbResult.Deleted_By,
                 deletedDate = dbResult.Deleted_Date,
-                TotalCount = 0
+                TotalCount = dbResult.TotalCount
             };
         }
 

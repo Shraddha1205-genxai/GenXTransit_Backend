@@ -47,10 +47,10 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 regionCode = x.Region_Code,
                 regionName = x.Region_Name,
                 isActive = x.IsActive,
-                divisions = x.DivisionCount,  // ✅ Now mapping from database
-                depots = x.DepotCount,        // ✅ Now mapping from database
-                stations = x.StationCount,    // ✅ Now mapping from database
-                workshops = x.WorkshopCount,  // ✅ Now mapping from database
+                divisions = x.DivisionCount,  
+                depots = x.DepotCount,        
+                stations = x.StationCount,    
+                workshops = x.WorkshopCount,  
                 createdBy = x.Created_By,
                 createdDate = x.Created_Date,
                 modifiedBy = x.Modified_By,

@@ -25,6 +25,10 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IOrgDivisionRepository, OrgDivisionRepository>();
             services.AddScoped<IOrgDivisionService, OrgDivisionService>();
 
+            // -- ZONE
+            services.AddScoped<IOrgZoneRepository, OrgZoneRepository>();
+            services.AddScoped<IOrgZoneService, OrgZoneService>();
+
             return services;
         }
     }
