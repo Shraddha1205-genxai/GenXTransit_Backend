@@ -83,7 +83,7 @@ namespace GenXTransitAPI.DataAccess.Services
                 MailboxAddress.Parse(toEmail));
 
             message.Subject =
-                "Your Account Has Been Created - GenXAI";
+                "Your Account Has Been Created - GenXTransit";
 
             message.Body = new BodyBuilder
             {
@@ -91,7 +91,7 @@ namespace GenXTransitAPI.DataAccess.Services
                     <html>
                     <body style='font-family: Arial, sans-serif; font-size:14px;'>
 
-                        <h2>Welcome to GenXAI Platform</h2>
+                        <h2>Welcome to GenXTransit Platform</h2>
 
                         <p>Dear User,</p>
 
@@ -102,11 +102,11 @@ namespace GenXTransitAPI.DataAccess.Services
                         <table cellpadding='6' cellspacing='0'>
                             <tr>
                                 <td><b>Login ID</b></td>
-                                <td>{loginId}</td>
+                                <td>{toEmail}</td>
                             </tr>
 
                             <tr>
-                                <td><b>Temporary Password</b></td>
+                                <td><b> Password</b></td>
                                 <td>{password}</td>
                             </tr>
                         </table>
@@ -120,7 +120,7 @@ namespace GenXTransitAPI.DataAccess.Services
                                       padding:10px 20px;
                                       text-decoration:none;
                                       border-radius:4px;'>
-                                Login to GenXAI
+                                Login to GenXTransit
                             </a>
                         </p>
 
@@ -132,16 +132,11 @@ namespace GenXTransitAPI.DataAccess.Services
                             <a href='{loginUrl}'>{loginUrl}</a>
                         </p>
 
-                        <p style='color:red'>
-                            <b>Important:</b>
-                            Please change your password after your first login.
-                        </p>
-
                         <br/>
 
                         <p>
                             Regards,<br/>
-                            <b>GenXAI Support Team</b>
+                            <b>GenXTransit Support Team</b>
                         </p>
 
                     </body>

@@ -4,6 +4,7 @@ using GenXTransitAPI.DataAccess.Repositories;
 using GenXTransitAPI.DataAccess.Security;
 using GenXTransitAPI.DataAccess.Services;
 using GenXTransitAPI.Models.DTO_s;
+using GenXTransitAPI.Models.DTOs;
 using GenXTransittAPI.DataAccess.Data;
 using Microsoft.AspNetCore.Authorization;
 
@@ -25,10 +26,14 @@ namespace GenXTransitAPI.Middleware
             // SERVICES
             services.AddScoped<IPasswordService, PasswordService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IJwtService, JwtService>();
 
             // EMAIL SETTINGS
             services.Configure<SendEmailDto>(
                 configuration.GetSection("EmailSettings"));
+
+            services.Configure<JwtSettings>(
+        configuration.GetSection("Jwt"));
 
             return services;
 
