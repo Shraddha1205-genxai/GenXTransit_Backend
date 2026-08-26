@@ -5,7 +5,7 @@ using GenXTransitAPI.DataAccess.Security;
 using GenXTransitAPI.DataAccess.Services;
 using GenXTransitAPI.Models.DTO_s;
 using GenXTransitAPI.Models.DTOs;
-using GenXTransittAPI.DataAccess.Data;
+using GenXTransitAPI.DataAccess.Data;
 using Microsoft.AspNetCore.Authorization;
 
 namespace GenXTransitAPI.Middleware
@@ -22,6 +22,16 @@ namespace GenXTransitAPI.Middleware
             // DATA ACCESS
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+
+            services.AddScoped<IOrgCorporationRepository, OrgCorporationRepository>();
+            services.AddScoped<IOrgDivisionRepository, OrgDivisionRepository>();
+            services.AddScoped<IOrgRegionRepository, OrgRegionRepository>();
+            services.AddScoped<IOrgZoneRepository, OrgZoneRepository>();
+
+            services.AddScoped<IOrgCorporationService, OrgCorporationService>();
+            services.AddScoped<IOrgDivisionService, OrgDivisionService>();
+            services.AddScoped<IOrgRegionService, OrgRegionService>();
+            services.AddScoped<IOrgZoneService, OrgZoneService>();
 
             // SERVICES
             services.AddScoped<IPasswordService, PasswordService>();
