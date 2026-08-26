@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace GenXTransitAPI.DataAccess.Repositories
 {
@@ -40,25 +41,22 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            // Convert from DB format to UI format
             return dbResult.Select(x => new OrgRegionDTO
             {
                 regionId = x.Region_ID?.ToString(),
                 regionCode = x.Region_Code,
                 regionName = x.Region_Name,
                 isActive = x.IsActive,
-                divisions = x.DivisionCount,  
-                depots = x.DepotCount,        
-                stations = x.StationCount,    
-                workshops = x.WorkshopCount,  
+                divisions = x.DivisionCount,
+                zoneCount = x.ZoneCount, // ✅ Added
+                depots = x.DepotCount,
+                stations = x.StationCount,
+                workshops = x.WorkshopCount,
                 createdBy = x.Created_By,
                 createdDate = x.Created_Date,
                 modifiedBy = x.Modified_By,
                 modifiedDate = x.Modified_Date,
-                isDeleted = x.IsDeleted,
-                deletedBy = x.Deleted_By,
-                deletedDate = x.Deleted_Date,
-                TotalCount = x.TotalCount
+                totalCount = x.TotalCount
             });
         }
 
@@ -81,18 +79,26 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 regionCode = dbResult.Region_Code,
                 regionName = dbResult.Region_Name,
                 isActive = dbResult.IsActive,
-                divisions = dbResult.DivisionCount,  // ✅ Added mapping
-                depots = dbResult.DepotCount,        // ✅ Added mapping
-                stations = dbResult.StationCount,    // ✅ Added mapping
-                workshops = dbResult.WorkshopCount,  // ✅ Added mapping
+                divisions = dbResult.DivisionCount,
+                zoneCount = dbResult.ZoneCount, // ✅ Added
+                depots = dbResult.DepotCount,
+                stations = dbResult.StationCount,
+                workshops = dbResult.WorkshopCount,
                 createdBy = dbResult.Created_By,
                 createdDate = dbResult.Created_Date,
                 modifiedBy = dbResult.Modified_By,
                 modifiedDate = dbResult.Modified_Date,
-                isDeleted = dbResult.IsDeleted,
-                deletedBy = dbResult.Deleted_By,
-                deletedDate = dbResult.Deleted_Date,
-                TotalCount = 0
+                totalCount = 0,
+                // ✅ Parse JSON from database
+                divisionsList = !string.IsNullOrEmpty(dbResult.Divisions)
+                    ? JsonConvert.DeserializeObject(dbResult.Divisions)
+                    : null,
+                zonesList = !string.IsNullOrEmpty(dbResult.Zones)
+                    ? JsonConvert.DeserializeObject(dbResult.Zones)
+                    : null,
+                depotsList = !string.IsNullOrEmpty(dbResult.Depots)
+                    ? JsonConvert.DeserializeObject(dbResult.Depots)
+                    : null
             };
         }
 

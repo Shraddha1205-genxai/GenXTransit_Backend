@@ -28,7 +28,7 @@ namespace GenXTransitAPI.DataAccess.Services
             try
             {
                 var items = await _repo.GetAllAsync(searchText, isActive, scopeToUser, pageNumber, pageSize);
-                var totalCount = items.FirstOrDefault()?.TotalCount ?? 0;
+                var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<OrgRegionDTO>>.Ok(items, null, totalCount);
             }
             catch (Exception ex)
@@ -91,6 +91,9 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (string.IsNullOrEmpty(entity.regionId))
                     return ApiResponse<bool>.Fail("Region ID is required.");
 
+                if (!int.TryParse(entity.regionId, out int id))
+                    return ApiResponse<bool>.Fail("Invalid Region ID format.");
+
                 if (string.IsNullOrWhiteSpace(entity.regionName))
                     return ApiResponse<bool>.Fail("Region Name is required.");
 
@@ -112,9 +115,9 @@ namespace GenXTransitAPI.DataAccess.Services
             {
                 var success = await _repo.DeleteAsync(regionId, deletedBy);
                 if (!success)
-                    return ApiResponse<bool>.Fail($"Region with ID {regionId} not found.");
+                    return ApiResponse<bool>.Fail($"Region with ID {regionId} not found or already inactive.");
 
-                return ApiResponse<bool>.Ok(true, "Region deleted successfully.");
+                return ApiResponse<bool>.Ok(true, "Region and all associated records deleted successfully.");
             }
             catch (Exception ex)
             {

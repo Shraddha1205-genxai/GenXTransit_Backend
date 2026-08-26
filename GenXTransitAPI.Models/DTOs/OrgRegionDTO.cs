@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GenXTransitAPI.Models.DTO_s
 {
@@ -16,16 +17,19 @@ namespace GenXTransitAPI.Models.DTO_s
         public int depots { get; set; }
         public int stations { get; set; }
         public int workshops { get; set; }
+        public int zoneCount { get; set; } // ✅ Added: Count of active zones
 
         // Audit fields (camelCase for UI)
         public int? createdBy { get; set; }
         public DateTime? createdDate { get; set; }
         public int? modifiedBy { get; set; }
         public DateTime? modifiedDate { get; set; }
-        public bool isDeleted { get; set; } = false;
-        public int? deletedBy { get; set; }
-        public DateTime? deletedDate { get; set; }
-        public int TotalCount { get; set; } 
+        public int totalCount { get; set; }
+
+        // ✅ Added: JSON data for child records (GetById)
+        public object? divisionsList { get; set; }
+        public object? zonesList { get; set; }
+        public object? depotsList { get; set; }
     }
 
     // ✅ Request model for Insert
@@ -60,14 +64,18 @@ namespace GenXTransitAPI.Models.DTO_s
         public DateTime? Created_Date { get; set; }
         public int? Modified_By { get; set; }
         public DateTime? Modified_Date { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public int? Deleted_By { get; set; }
-        public DateTime? Deleted_Date { get; set; }
         public int TotalCount { get; set; }
 
+        // Count properties from GetAll
         public int DivisionCount { get; set; }
+        public int ZoneCount { get; set; } // ✅ Added
         public int DepotCount { get; set; }
         public int StationCount { get; set; }
         public int WorkshopCount { get; set; }
+
+        // ✅ Added: JSON data for GetById
+        public string? Divisions { get; set; }
+        public string? Zones { get; set; }
+        public string? Depots { get; set; }
     }
 }

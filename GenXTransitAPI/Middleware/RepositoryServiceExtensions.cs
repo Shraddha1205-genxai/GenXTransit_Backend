@@ -27,11 +27,25 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IOrgDivisionRepository, OrgDivisionRepository>();
             services.AddScoped<IOrgRegionRepository, OrgRegionRepository>();
             services.AddScoped<IOrgZoneRepository, OrgZoneRepository>();
+            services.AddScoped<IOrgDepotRepository, OrgDepotRepository>();
+            services.AddScoped<IOrgStationRepository, OrgStationRepository>();
+            services.AddScoped<IOrgWorkshopRepository, OrgWorkshopRepository>();
+            services.AddScoped<IOrgParkingYardRepository, OrgParkingYardRepository>();
+
+
+
 
             services.AddScoped<IOrgCorporationService, OrgCorporationService>();
             services.AddScoped<IOrgDivisionService, OrgDivisionService>();
             services.AddScoped<IOrgRegionService, OrgRegionService>();
             services.AddScoped<IOrgZoneService, OrgZoneService>();
+            services.AddScoped<IOrgDepotService, OrgDepotService>();
+            services.AddScoped<IOrgStationService, OrgStationService>();
+            services.AddScoped<IOrgWorkshopService, OrgWorkshopService>();
+            services.AddScoped<IOrgParkingYardService, OrgParkingYardService>();
+
+
+
 
             // SERVICES
             services.AddScoped<IPasswordService, PasswordService>();

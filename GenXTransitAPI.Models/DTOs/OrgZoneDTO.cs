@@ -16,15 +16,18 @@ namespace GenXTransitAPI.Models.DTO_s
         public List<string>? districts { get; set; }
         public bool isActive { get; set; } = true;
 
+        // ✅ Added: Count of active depots in this zone
+        public int depotCount { get; set; }
+
         // Audit fields (camelCase for UI)
         public int? createdBy { get; set; }
         public DateTime? createdDate { get; set; }
         public int? modifiedBy { get; set; }
         public DateTime? modifiedDate { get; set; }
-        public bool isDeleted { get; set; } = false;
-        public int? deletedBy { get; set; }
-        public DateTime? deletedDate { get; set; }
-        public int TotalCount { get; set; }  // For pagination
+        public int totalCount { get; set; }  // For pagination
+
+        // ✅ Added: JSON data for child records (GetById)
+        public object? depotsList { get; set; }
     }
 
     // ✅ Request model for Insert
@@ -67,9 +70,10 @@ namespace GenXTransitAPI.Models.DTO_s
         public DateTime? Created_Date { get; set; }
         public int? Modified_By { get; set; }
         public DateTime? Modified_Date { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public int? Deleted_By { get; set; }
-        public DateTime? Deleted_Date { get; set; }
         public int TotalCount { get; set; }
+        public int DepotCount { get; set; }
+
+        // ✅ Added: JSON data for GetById
+        public string? Depots { get; set; }
     }
 }

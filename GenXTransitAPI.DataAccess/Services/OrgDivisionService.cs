@@ -29,7 +29,7 @@ namespace GenXTransitAPI.DataAccess.Services
             try
             {
                 var items = await _repo.GetAllAsync(searchText, regionId, isActive, scopeToUser, pageNumber, pageSize);
-                var totalCount = items.FirstOrDefault()?.TotalCount ?? 0;
+                var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<OrgDivisionDTO>>.Ok(items, null, totalCount);
             }
             catch (Exception ex)
@@ -78,6 +78,9 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (string.IsNullOrWhiteSpace(entity.regionId))
                     return ApiResponse<int>.Fail("Region is required.");
 
+                if (!int.TryParse(entity.regionId, out int regionId))
+                    return ApiResponse<int>.Fail("Invalid Region ID format.");
+
                 var id = await _repo.InsertAsync(entity, userId);
                 return ApiResponse<int>.Ok(id, "Division created successfully.");
             }
@@ -95,11 +98,17 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (string.IsNullOrEmpty(entity.divisionId))
                     return ApiResponse<bool>.Fail("Division ID is required.");
 
+                if (!int.TryParse(entity.divisionId, out int divisionId))
+                    return ApiResponse<bool>.Fail("Invalid Division ID format.");
+
                 if (string.IsNullOrWhiteSpace(entity.divisionName))
                     return ApiResponse<bool>.Fail("Division Name is required.");
 
                 if (string.IsNullOrWhiteSpace(entity.regionId))
                     return ApiResponse<bool>.Fail("Region is required.");
+
+                if (!int.TryParse(entity.regionId, out int regionId))
+                    return ApiResponse<bool>.Fail("Invalid Region ID format.");
 
                 var success = await _repo.UpdateAsync(entity, userId);
                 if (!success)
@@ -119,9 +128,9 @@ namespace GenXTransitAPI.DataAccess.Services
             {
                 var success = await _repo.DeleteAsync(divisionId, deletedBy);
                 if (!success)
-                    return ApiResponse<bool>.Fail($"Division with ID {divisionId} not found.");
+                    return ApiResponse<bool>.Fail($"Division with ID {divisionId} not found or already inactive.");
 
-                return ApiResponse<bool>.Ok(true, "Division deleted successfully.");
+                return ApiResponse<bool>.Ok(true, "Division and all associated records deleted successfully.");
             }
             catch (Exception ex)
             {
