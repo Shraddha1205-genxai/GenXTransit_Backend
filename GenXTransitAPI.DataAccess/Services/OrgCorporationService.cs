@@ -134,9 +134,9 @@ namespace GenXTransitAPI.DataAccess.Services
             {
                 var success = await _repo.DeleteAsync(corporationId, deletedBy);
                 if (!success)
-                    return ApiResponse<bool>.Fail($"Corporation with ID {corporationId} not found.");
+                    return ApiResponse<bool>.Fail($"Corporation with ID {corporationId} not found or already inactive.");
 
-                return ApiResponse<bool>.Ok(true, "Corporation deleted successfully.");
+                return ApiResponse<bool>.Ok(true, "Corporation and all associated records deleted successfully.");
             }
             catch (Exception ex)
             {

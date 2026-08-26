@@ -11,8 +11,8 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
             int? regionId,
             bool? isActive,
             int? scopeToUser,
-            int pageNumber = 1,    
-            int pageSize = 10);    
+            int pageNumber = 1,
+            int pageSize = 10);
 
         Task<OrgDivisionDTO> GetByIdAsync(int divisionId);
         Task<string> GetNextCodeAsync();

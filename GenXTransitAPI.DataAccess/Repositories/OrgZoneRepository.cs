@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace GenXTransitAPI.DataAccess.Repositories
 {
@@ -56,14 +57,12 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     ? x.Districts.Split(',').Select(d => d.Trim()).ToList()
                     : new List<string>(),
                 isActive = x.IsActive,
+                depotCount = x.DepotCount, // ✅ Added
                 createdBy = x.Created_By,
                 createdDate = x.Created_Date,
                 modifiedBy = x.Modified_By,
                 modifiedDate = x.Modified_Date,
-                isDeleted = x.IsDeleted,
-                deletedBy = x.Deleted_By,
-                deletedDate = x.Deleted_Date,
-                TotalCount = x.TotalCount
+                totalCount = x.TotalCount
             });
         }
 
@@ -93,14 +92,16 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     ? dbResult.Districts.Split(',').Select(d => d.Trim()).ToList()
                     : new List<string>(),
                 isActive = dbResult.IsActive,
+                depotCount = dbResult.DepotCount, // ✅ Added
                 createdBy = dbResult.Created_By,
                 createdDate = dbResult.Created_Date,
                 modifiedBy = dbResult.Modified_By,
                 modifiedDate = dbResult.Modified_Date,
-                isDeleted = dbResult.IsDeleted,
-                deletedBy = dbResult.Deleted_By,
-                deletedDate = dbResult.Deleted_Date,
-                TotalCount = dbResult.TotalCount
+                totalCount = 0,
+                // ✅ Parse JSON from database
+                depotsList = !string.IsNullOrEmpty(dbResult.Depots)
+                    ? JsonConvert.DeserializeObject(dbResult.Depots)
+                    : null
             };
         }
 

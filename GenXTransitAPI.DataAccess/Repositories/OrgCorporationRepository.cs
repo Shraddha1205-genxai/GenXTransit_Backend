@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace GenXTransitAPI.DataAccess.Repositories
 {
@@ -55,10 +56,8 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 createdDate = x.Created_Date,
                 modifiedBy = x.Modified_By,
                 modifiedDate = x.Modified_Date,
-                isDeleted = x.IsDeleted,
-                deletedBy = x.Deleted_By,
-                deletedDate = x.Deleted_Date,
-                totalCount = x.TotalCount
+                totalCount = x.TotalCount,
+                depotCount = x.DepotCount // ✅ Added
             });
         }
 
@@ -87,10 +86,12 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 createdDate = dbResult.Created_Date,
                 modifiedBy = dbResult.Modified_By,
                 modifiedDate = dbResult.Modified_Date,
-                isDeleted = dbResult.IsDeleted,
-                deletedBy = dbResult.Deleted_By,
-                deletedDate = dbResult.Deleted_Date,
-                totalCount = dbResult.TotalCount
+                totalCount = 0,
+                depotCount = 0,
+                // ✅ Parse JSON from database
+                depots = !string.IsNullOrEmpty(dbResult.Depots)
+                    ? JsonConvert.DeserializeObject(dbResult.Depots)
+                    : null
             };
         }
 

@@ -16,10 +16,9 @@ namespace GenXTransitAPI.Models.DTO_s
         public DateTime? createdDate { get; set; }
         public int? modifiedBy { get; set; }
         public DateTime? modifiedDate { get; set; }
-        public bool isDeleted { get; set; } = false;
-        public int? deletedBy { get; set; }
-        public DateTime? deletedDate { get; set; }
         public int totalCount { get; set; }
+        public int depotCount { get; set; } // ✅ Added: Count of active depots
+        public object? depots { get; set; } // ✅ Added: JSON array of depots for GetById
     }
 
     // ✅ Request model for Insert
@@ -63,9 +62,8 @@ namespace GenXTransitAPI.Models.DTO_s
         public DateTime? Created_Date { get; set; }
         public int? Modified_By { get; set; }
         public DateTime? Modified_Date { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public int? Deleted_By { get; set; }
-        public DateTime? Deleted_Date { get; set; }
         public int TotalCount { get; set; }
+        public int DepotCount { get; set; } // ✅ Added: For GetAll
+        public string? Depots { get; set; } // ✅ Added: JSON for GetById
     }
 }
