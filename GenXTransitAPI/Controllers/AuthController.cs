@@ -13,7 +13,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
 
@@ -75,6 +75,7 @@ namespace GenXTransitAPI.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(
             [FromBody] LoginRequest request)
         {
