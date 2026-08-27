@@ -19,6 +19,10 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
 
         Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request);
         Task<ApiResponse<string>> ChangePasswordAsync( ChangePasswordRequest request,int userId);
+        Task<ApiResponse<string>> ForgotPasswordAsync( ForgotPasswordRequest request);
 
+        Task<ApiResponse<string>> ResetPasswordAsync( ResetPasswordRequest request);
+
+        Task<ApiResponse<RefreshTokenResponse>> RefreshTokenAsync(RefreshTokenRequest request);
     }
 }

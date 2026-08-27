@@ -9,6 +9,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GenXTransitAPI.Models.DTOs;
 
 namespace GenXTransitAPI.DataAccess.Repositories
 {
@@ -120,6 +121,19 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 commandType: CommandType.StoredProcedure);
         }
 
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync<User>(
+                "usp_User_GetByEmail",
+                new
+                {
+                    Email = email
+                },
+                commandType: CommandType.StoredProcedure);
+        }
+
         public async Task<bool> ChangePasswordAsync( int userId, string newPassword)
         {
             using var conn = _db.CreateConnection();
@@ -145,7 +159,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
         {
             using var conn = _db.CreateConnection();
 
-            var result = await conn.ExecuteAsync(
+            var result = await conn.QueryFirstOrDefaultAsync<PasswordUpdateResult>(
                 "USP_UpdateUserPassword",
                 new
                 {
@@ -155,7 +169,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
 
-            return result > 0;
+            return result?.Status == 1;
         }
 
         public async Task<bool> RevokeAllUserRefreshTokensAsync( int userId,  int modifiedBy)
@@ -172,6 +186,48 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 commandType: CommandType.StoredProcedure);
 
             return result > 0;
+        }
+        public async Task<PasswordResetTokenResult> CreatePasswordResetTokenAsync(
+    int userId,
+    string tokenHash,
+    DateTime tokenExpiry)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result =
+                await conn.QueryFirstOrDefaultAsync<PasswordResetTokenResult>(
+                    "USP_CreatePasswordResetToken",
+                    new
+                    {
+                        UserId = userId,
+                        TokenHash = tokenHash,
+                        TokenExpiry = tokenExpiry
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+            return result ?? new PasswordResetTokenResult
+            {
+                RowsAffected = 0,
+                Message = "Unable to create password reset token."
+            };
+        }
+
+        public async Task<ResetPasswordResult> ResetUserPasswordAsync( string tokenHash, string newPasswordHash)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result =
+                await conn.QueryFirstOrDefaultAsync<ResetPasswordResult>(
+                    "USP_ResetUserPassword",
+                    new
+                    {
+                        TokenHash = tokenHash,
+                        NewPasswordHash = newPasswordHash
+                      
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+            return result;
         }
     }
 }

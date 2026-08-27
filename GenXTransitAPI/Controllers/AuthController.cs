@@ -90,7 +90,7 @@ namespace GenXTransitAPI.Controllers
         }
 
 
-       // [Authorize]
+       [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
@@ -118,6 +118,41 @@ namespace GenXTransitAPI.Controllers
                 : BadRequest(result);
         }
 
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            var response =
+                await _authService.ForgotPasswordAsync(request);
+
+            return Ok(response);
+        }
+
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            var response =
+                await _authService.ResetPasswordAsync(request);
+
+            return Ok(response);
+        }
+
+       // [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        {
+            var response =
+                await _authService.RefreshTokenAsync(request);
+
+            if (!response.Success)
+            {
+                return Unauthorized(response);
+            }
+
+            return Ok(response);
+        }
     }
 }
 
