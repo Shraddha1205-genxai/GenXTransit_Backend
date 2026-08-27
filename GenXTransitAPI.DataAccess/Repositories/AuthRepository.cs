@@ -1,6 +1,6 @@
 ﻿using GenXTransitAPI.DataAccess.Interface.IRepositories;
 using GenXTransitAPI.Models.Entities;
-using GenXTransittAPI.DataAccess.Data;
+using GenXTransitAPI.DataAccess.Data;
 using System;
 using Dapper;
 using System.Collections.Generic;
