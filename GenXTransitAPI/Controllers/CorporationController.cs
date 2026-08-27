@@ -21,11 +21,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetAll(
             [FromQuery] string? searchText,
             [FromQuery] string? stateName,
+            [FromQuery] string? districtName,
+            [FromQuery] string? cityName,
             [FromQuery] bool? isActive,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, stateName, isActive, GetCurrentUserId(), pageNumber, pageSize);
+            var result = await _svc.GetAllAsync(
+                searchText,
+                stateName,
+                districtName,
+                cityName,
+                isActive,
+                GetCurrentUserId(),
+                pageNumber,
+                pageSize);
             return Ok(result);
         }
 
@@ -106,7 +116,7 @@ namespace GenXTransitAPI.Controllers
 
             var entity = new OrgCorporationDTO
             {
-                corpId = id.ToString(),
+                corpId = request.corporationId,
                 corporationName = request.corporationName,
                 stateName = request.stateName,
                 districtName = request.districtName,

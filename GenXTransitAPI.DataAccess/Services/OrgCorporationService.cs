@@ -21,6 +21,8 @@ namespace GenXTransitAPI.DataAccess.Services
         public async Task<ApiResponse<IEnumerable<OrgCorporationDTO>>> GetAllAsync(
             string? searchText,
             string? stateName,
+            string? districtName,
+            string? cityName,
             bool? isActive,
             int? scopeToUser,
             int pageNumber = 1,
@@ -28,7 +30,7 @@ namespace GenXTransitAPI.DataAccess.Services
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, stateName, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, stateName, districtName, cityName, isActive, scopeToUser, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<OrgCorporationDTO>>.Ok(items, null, totalCount);
             }

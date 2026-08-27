@@ -31,6 +31,16 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IOrgStationRepository, OrgStationRepository>();
             services.AddScoped<IOrgWorkshopRepository, OrgWorkshopRepository>();
             services.AddScoped<IOrgParkingYardRepository, OrgParkingYardRepository>();
+            services.AddScoped<IVehicleCategoryRepository, VehicleCategoryRepository>();
+            services.AddScoped<IRouteRepository, RouteRepository>();
+            services.AddScoped<IStopRepository, StopRepository>();
+            services.AddScoped<IStageRepository, StageRepository>();
+            services.AddScoped<IFarePolicyRepository, FarePolicyRepository>();
+            services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+
+
+
+
 
 
 
@@ -43,6 +53,15 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IOrgStationService, OrgStationService>();
             services.AddScoped<IOrgWorkshopService, OrgWorkshopService>();
             services.AddScoped<IOrgParkingYardService, OrgParkingYardService>();
+            services.AddScoped<IVehicleCategoryService, VehicleCategoryService>();
+            services.AddScoped<IRouteService, RouteService>();
+            services.AddScoped<IStopService, StopService>();
+            services.AddScoped<IStageService, StageService>();
+            services.AddScoped<IFarePolicyService, FarePolicyService>();
+            services.AddScoped<ITicketTypeService, TicketTypeService>();
+
+
+
 
 
 
