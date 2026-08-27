@@ -22,7 +22,9 @@ namespace GenXTransitAPI.Middleware
             // DATA ACCESS
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
 
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOrgCorporationRepository, OrgCorporationRepository>();
             services.AddScoped<IOrgDivisionRepository, OrgDivisionRepository>();
             services.AddScoped<IOrgRegionRepository, OrgRegionRepository>();
