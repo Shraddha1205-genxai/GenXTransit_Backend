@@ -33,26 +33,26 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("GenxAIPolicy", policy =>
-//        policy.SetIsOriginAllowed(origin => true)
-//              .AllowAnyHeader()
-//              .AllowAnyMethod()
-//              .AllowCredentials());
-//});
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("GenxAIPolicy", policy =>
-    {
-        policy
-            .WithOrigins("https://localhost:7101")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
+        policy.SetIsOriginAllowed(origin => true)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
 });
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("GenxAIPolicy", policy =>
+//    {
+//        policy
+//            .WithOrigins("https://localhost:7101")
+//            .AllowAnyHeader()
+//            .AllowAnyMethod()
+//            .AllowCredentials();
+//    });
+//});
 // Register Repositories & Services
 builder.Services.AddRepositories(builder.Configuration);
 

@@ -40,7 +40,7 @@ namespace GenXTransitAPI.Controllers
         }
 
 
-         [Authorize]
+         //[Authorize]
         //[AllowAnonymous]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)

@@ -62,12 +62,12 @@ namespace GenXTransitAPI.DataAccess.Repositories
             p.Add("@PasswordHash", user.PasswordHash);
             p.Add("@FirstName", user.FirstName);
             p.Add("@LastName", user.LastName);
-            // p.Add("@RoleId", user.RoleId);
+            p.Add("@RoleId", user.RoleId);
             p.Add("@IsActive", user.IsActive);
             p.Add("@IsEmailVerified", user.IsEmailVerified);
             p.Add("@IsMobileVerified", user.IsMobileVerified);
             p.Add("@IsFirstLogin", user.IsFirstLogin);
-            p.Add("@PasswordChangedDate", user.PasswordChangedDate);
+            //p.Add("@PasswordChangedDate", user.PasswordChangedDate);
             p.Add("@CreatedBy", userId);
 
             return await conn.ExecuteScalarAsync<int>(
@@ -218,7 +218,8 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     Email = request.Email,
                     MobileNo = request.MobileNo,
                     FirstName = request.FirstName,
-                    LastName = request.LastName
+                    LastName = request.LastName,
+                    RoleId= request.RoleId
                 },
                 commandType: CommandType.StoredProcedure);
 

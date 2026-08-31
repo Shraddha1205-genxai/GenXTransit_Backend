@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace GenXTransitAPI.Controllers
 {
-    [Route("api/usermaster")]
+    [Route("api/users")]
     [ApiController]
    // [Authorize]
     public class UserMasterController : BaseController
@@ -22,7 +22,7 @@ namespace GenXTransitAPI.Controllers
             _userService = userService;
         }
         [AllowAnonymous]
-        [HttpPost("AddUser")]
+        [HttpPost("insert")]
         
         public async Task<IActionResult> AddUser(
            [FromBody] AddUserRequest request)
@@ -40,7 +40,7 @@ namespace GenXTransitAPI.Controllers
 
         // [Authorize]
         [AllowAnonymous]
-        [HttpPost("UpdateUser")]
+        [HttpPost("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
         {
             var userIdClaim = User.FindFirst(
@@ -75,7 +75,7 @@ namespace GenXTransitAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetAllUsers")]
+        [HttpGet]
         public async Task<IActionResult> GetAllUsers([FromQuery] string? searchText,
     [FromQuery] bool? isActive,
     [FromQuery] int pageNumber = 1,
@@ -105,7 +105,7 @@ namespace GenXTransitAPI.Controllers
             }
         }
 
-        [HttpGet("GetUserById/{userId}")]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserById(int userId)
         {
             try
