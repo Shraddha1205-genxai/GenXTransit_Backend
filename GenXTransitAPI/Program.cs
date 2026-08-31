@@ -47,10 +47,9 @@ builder.Services.AddCors(options =>
 //    options.AddPolicy("GenxAIPolicy", policy =>
 //    {
 //        policy
-//            .WithOrigins("https://localhost:7101")
+//            .WithOrigins("http://localhost:5173")
 //            .AllowAnyHeader()
-//            .AllowAnyMethod()
-//            .AllowCredentials();
+//            .AllowAnyMethod();
 //    });
 //});
 // Register Repositories & Services
@@ -112,7 +111,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseCors("GenxAIPolicy");
 app.UseMiddleware<ExceptionMiddleware>();
