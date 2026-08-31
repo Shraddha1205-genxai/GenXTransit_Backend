@@ -23,8 +23,8 @@ namespace GenXTransitAPI.Models.Entities
 
         public string? LastName { get; set; }
 
-        public int RoleId { get; set; }
-        public int RoleName { get; set; }
+        public string RoleId { get; set; }
+        public string RoleName { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -34,7 +34,7 @@ namespace GenXTransitAPI.Models.Entities
 
         public bool IsFirstLogin { get; set; }
 
-        public DateTime? PasswordChangedDate { get; set; }
+        //public DateTime? PasswordChangedDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
@@ -66,7 +66,7 @@ namespace GenXTransitAPI.Models.Entities
         public string LastName { get; set; }
 
         //[Required(ErrorMessage = "Role is required.")]
-        //public int RoleId { get; set; }
+        public int RoleId { get; set; }
     }
 
 }

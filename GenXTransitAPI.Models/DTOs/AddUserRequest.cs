@@ -23,7 +23,8 @@ namespace GenXTransitAPI.Models.DTOs
 
         [Required(ErrorMessage = "Last name is required.")]
         public string LastName { get; set; }
-        // public int RoleId { get; set; }
+        public string RoleId { get; set; }
+        //public string RoleName { get; set; }
     }
 
     public class AddUserResponse
@@ -31,6 +32,8 @@ namespace GenXTransitAPI.Models.DTOs
         public int UserId { get; set; }
 
         public string UserName { get; set; } = string.Empty;
+        public string RoleId { get; set; }
+       // public string RoleName { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;
 
@@ -41,6 +44,9 @@ namespace GenXTransitAPI.Models.DTOs
        
         public int UserId { get; set; }
         public string UserName { get; set; } = string.Empty;
+
+        public int RoleId { get; set; }
+        //public string RoleName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string? MobileNo { get; set; }
         public string? FirstName { get; set; }

@@ -59,7 +59,7 @@ namespace GenXTransitAPI.DataAccess.Services
                 FirstName = request.FirstName,
                 LastName = request.LastName,
 
-                //RoleId = request.RoleId,
+                RoleId = request.RoleId,
 
                 PasswordHash = passwordHash,
 
@@ -69,7 +69,7 @@ namespace GenXTransitAPI.DataAccess.Services
 
                 IsFirstLogin = true,
 
-                PasswordChangedDate = null,
+                //PasswordChangedDate = null,
 
                 CreatedDate = DateTime.UtcNow,
 
@@ -89,6 +89,8 @@ namespace GenXTransitAPI.DataAccess.Services
             {
                 UserId = newUserId,
                 UserName = request.UserName,
+                RoleId= request.RoleId,
+                //RoleName= newUserId.Data.RoleName,
                 Email = request.Email,
                 Message =
                     "User registered successfully. " +
@@ -146,6 +148,7 @@ namespace GenXTransitAPI.DataAccess.Services
                 MobileNo = request.MobileNo,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
+                RoleId=request.RoleId,
                 Message = "User details updated successfully."
             };
 

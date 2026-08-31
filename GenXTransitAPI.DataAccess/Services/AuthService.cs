@@ -41,7 +41,7 @@ namespace GenXTransitAPI.DataAccess.Services
 
         public async Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.LoginId))
+            if (string.IsNullOrWhiteSpace(request.UserName))
             {
                 return ApiResponse<LoginResponse>.Fail(
                     "Login ID is required.");
@@ -55,7 +55,7 @@ namespace GenXTransitAPI.DataAccess.Services
 
             var user =
                 await _authRepo.GetUserForLoginAsync(
-                    request.LoginId.Trim());
+                    request.UserName.Trim());
 
             if (user == null)
             {
