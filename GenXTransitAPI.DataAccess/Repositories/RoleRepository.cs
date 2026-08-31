@@ -30,8 +30,8 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 parameters.Add("@Description",
                     request.Description?.Trim());
 
-                parameters.Add("@IsActive",
-                    request.IsActive);
+                //parameters.Add("@IsActive",
+                //    request.IsActive);
 
                 parameters.Add("@CreatedBy",
                     userId);
