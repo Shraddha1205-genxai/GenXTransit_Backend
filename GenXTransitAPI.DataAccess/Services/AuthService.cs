@@ -27,11 +27,13 @@ namespace GenXTransitAPI.DataAccess.Services
 
         public AuthService(
        IAuthRepository authRepo,
+        IUserRepository userRepo,
        IPasswordService passwordService,
        IEmailService emailService,
        IJwtService jwtService)
         {
             _authRepo = authRepo;
+            _userRepo = userRepo;
             _passwordService = passwordService;
             _emailService = emailService;
             _jwtService = jwtService;

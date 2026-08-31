@@ -19,13 +19,20 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
 
         Task<bool> UpdateUserAsync(int userId, UpdateUserRequest request);
 
-    //    Task<ApiResponse<List<User>>> GetAllUsersAsync(string? searchText,
-    //bool? isActive,
-    //int currentUserId,
-    //int pageNumber,
-    //int pageSize);
+        //    Task<ApiResponse<List<User>>> GetAllUsersAsync(string? searchText,
+        //bool? isActive,
+        //int currentUserId,
+        //int pageNumber,
+        //int pageSize);
 
-        Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
+        //    Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
+        //string? searchText,
+        //bool? isActive,
+        //int currentUserId,
+        //int pageNumber,
+        //int pageSize);
+
+        Task<ApiResponse<User>> GetAllUsersAsync(
     string? searchText,
     bool? isActive,
     int currentUserId,
