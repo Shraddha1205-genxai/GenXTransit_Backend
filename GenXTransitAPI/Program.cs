@@ -33,13 +33,25 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("GenxAIPolicy", policy =>
+//        policy.SetIsOriginAllowed(origin => true)
+//              .AllowAnyHeader()
+//              .AllowAnyMethod()
+//              .AllowCredentials());
+//});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("GenxAIPolicy", policy =>
-        policy.SetIsOriginAllowed(origin => true)
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials());
+    {
+        policy
+            .WithOrigins("https://localhost:7101")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
 // Register Repositories & Services
 builder.Services.AddRepositories(builder.Configuration);
@@ -100,11 +112,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseHttpsRedirection();
 
 app.UseCors("GenxAIPolicy");
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseHttpsRedirection();
+
 
 app.UseAuthentication();
 
