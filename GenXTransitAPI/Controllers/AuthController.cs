@@ -22,57 +22,6 @@ namespace GenXTransitAPI.Controllers
             _authService = authService;
         }
 
-        [HttpPost("register")]
-       // [Authorize(Policy = "USER_CREATE")]
-        public async Task<IActionResult> Register(
-            [FromBody] RegisterUserRequest request)
-        {
-            var result =
-                await _authService.RegisterAsync(request);
-
-            return Ok(new ApiResponse<RegisterUserResponse>
-            {
-                Success = true,
-                Message = "User registered successfully.",
-                Data = result
-            });
-        }
-
-       // [Authorize]
-        [HttpPost("update-profile")]
-        public async Task<IActionResult> UpdateProfile( [FromBody] UpdateUserRequest request)
-        {
-            var userIdClaim = User.FindFirst(
-                ClaimTypes.NameIdentifier);
-
-            if (userIdClaim == null)
-            {
-                return Unauthorized(
-                    ApiResponse<UpdateUserResponse>.Fail(
-                        "User is not authenticated."));
-            }
-
-            if (!int.TryParse(
-                userIdClaim.Value,
-                out int userId))
-            {
-                return Unauthorized(
-                    ApiResponse<UpdateUserResponse>.Fail(
-                        "Invalid user identity."));
-            }
-
-            var result =
-                await _authService.UpdateUserAsync(
-                    request,
-                    userId);
-
-            if (!result.Success)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
 
         [HttpPost("login")]
         [AllowAnonymous]

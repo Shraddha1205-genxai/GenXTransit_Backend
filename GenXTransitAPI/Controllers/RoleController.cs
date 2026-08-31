@@ -1,5 +1,6 @@
 ﻿using GenXTransitAPI.DataAccess.Interface.IServices;
 using GenXTransitAPI.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace GenXTransitAPI.Controllers
         }
 
         // POST: api/roles
+        [AllowAnonymous]
         [HttpPost("create")]
         public async Task<IActionResult> CreateRole(
             [FromBody] CreateRoleRequest request)
@@ -32,6 +34,7 @@ namespace GenXTransitAPI.Controllers
 
         // PUT: api/roles/1
         [HttpPost("update")]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleRequest request)
         {
             //var userId = GetUserId();
@@ -45,6 +48,7 @@ namespace GenXTransitAPI.Controllers
         }
 
         // GET: api/roles
+        [AllowAnonymous]
         [HttpGet("getall")]
         public async Task<IActionResult> GetAllRoles()
         {
@@ -55,7 +59,8 @@ namespace GenXTransitAPI.Controllers
         }
 
         // GET: api/roles/1
-        [HttpGet("{id:int}")]
+        [AllowAnonymous]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetRoleById(
             int id)
         {
@@ -66,6 +71,7 @@ namespace GenXTransitAPI.Controllers
         }
 
         // DELETE: api/roles/1
+        [AllowAnonymous]
         [HttpPost("delete")]
         public async Task<IActionResult> DeleteRole([FromBody] DeleteRoleRequest request)
         {

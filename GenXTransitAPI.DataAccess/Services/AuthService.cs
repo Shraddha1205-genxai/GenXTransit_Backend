@@ -20,6 +20,7 @@ namespace GenXTransitAPI.DataAccess.Services
     public class AuthService : IAuthService
     {
         private readonly IAuthRepository _authRepo;
+        private readonly IUserRepository _userRepo;
         private readonly IPasswordService _passwordService;
         private readonly IEmailService _emailService;
         private readonly IJwtService _jwtService;
@@ -34,136 +35,6 @@ namespace GenXTransitAPI.DataAccess.Services
             _passwordService = passwordService;
             _emailService = emailService;
             _jwtService = jwtService;
-        }
-
-        public async Task<RegisterUserResponse> RegisterAsync(
-       RegisterUserRequest request)
-        {
-            if (await _authRepo.EmailExistsAsync(request.Email))
-            {
-                throw new Exception("Email already exists.");
-            }
-
-            if (await _authRepo.UserNameExistsAsync(request.UserName))
-            {
-                throw new Exception("Username already exists.");
-            }
-
-            var temporaryPassword =
-                _passwordService.GenerateTemporaryPassword();
-
-            var passwordHash =
-                _passwordService.HashPassword(
-                    temporaryPassword);
-
-            var user = new User
-            {
-                UserName = request.UserName,
-                Email = request.Email,
-                MobileNo = request.MobileNo,
-
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-
-                //RoleId = request.RoleId,
-
-                PasswordHash = passwordHash,
-
-                IsActive = true,
-                IsEmailVerified = false,
-                IsMobileVerified = false,
-
-                IsFirstLogin = true,
-
-                PasswordChangedDate = null,
-
-                CreatedDate = DateTime.UtcNow,
-
-                // Replace with current logged-in admin ID
-                CreatedBy = 1
-            };
-
-            var userId =
-                await _authRepo.RegisterUserAsync(user);
-
-            await _emailService.SendUserCreatedEmail(
-                request.Email,
-                request.UserName,
-                temporaryPassword);
-
-            return new RegisterUserResponse
-            {
-                UserId = userId,
-                UserName = request.UserName,
-                Email = request.Email,
-                Message =
-                    "User registered successfully. " +
-                    "Login credentials have been sent to the registered email."
-            };
-        }
-
-        public async Task<ApiResponse<UpdateUserResponse>> UpdateUserAsync(
-    UpdateUserRequest request,
-    int userId)
-        {
-            if (userId <= 0)
-            {
-                return ApiResponse<UpdateUserResponse>.Fail(
-                    "Invalid user.");
-            }
-
-            var existingUser =
-                await _authRepo.GetUserByIdAsync(userId);
-
-            if (existingUser == null)
-            {
-                return ApiResponse<UpdateUserResponse>.Fail(
-                    "User not found.");
-            }
-
-            if (!existingUser.IsActive)
-            {
-                return ApiResponse<UpdateUserResponse>.Fail(
-                    "User account is inactive.");
-            }
-
-            if (string.IsNullOrWhiteSpace(request.UserName))
-            {
-                return ApiResponse<UpdateUserResponse>.Fail(
-                    "User name is required.");
-            }
-
-            if (string.IsNullOrWhiteSpace(request.Email))
-            {
-                return ApiResponse<UpdateUserResponse>.Fail(
-                    "Email is required.");
-            }
-
-            var updated =
-                await _authRepo.UpdateUserAsync(
-                    userId,
-                    request);
-
-            if (!updated)
-            {
-                return ApiResponse<UpdateUserResponse>.Fail(
-                    "Unable to update user details.");
-            }
-
-            var response = new UpdateUserResponse
-            {
-                UserId = userId,
-                UserName = request.UserName,
-                Email = request.Email,
-                MobileNo = request.MobileNo,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Message = "User details updated successfully."
-            };
-
-            return ApiResponse<UpdateUserResponse>.Ok(
-                response,
-                "User details updated successfully.");
         }
 
         public async Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request)
@@ -284,7 +155,7 @@ namespace GenXTransitAPI.DataAccess.Services
 
             // Get user
             var user =
-                await _authRepo.GetUserByIdAsync(userId);
+                await _userRepo.GetUserByIdAsync(userId);
 
             if (user == null)
             {
@@ -295,7 +166,7 @@ namespace GenXTransitAPI.DataAccess.Services
             // Verify old password using PBKDF2 PasswordService
             var oldPasswordValid = _passwordService.VerifyPassword(
                 request.OldPassword,
-                user.PasswordHash);
+                user.Data.PasswordHash);
 
             if (!oldPasswordValid)
             {
@@ -306,7 +177,7 @@ namespace GenXTransitAPI.DataAccess.Services
             // Prevent same password
             var samePassword = _passwordService.VerifyPassword(
                 request.NewPassword,
-                user.PasswordHash);
+                user.Data.PasswordHash);
 
             if (samePassword)
             {
@@ -646,7 +517,7 @@ namespace GenXTransitAPI.DataAccess.Services
 
                 // 5. Get user from database
                 var user =
-                    await _authRepo.GetUserByIdAsync(userId);
+                    await _userRepo.GetUserByIdAsync(userId);
 
                 if (user == null)
                 {
@@ -655,7 +526,7 @@ namespace GenXTransitAPI.DataAccess.Services
                 }
 
                 // 6. Check whether user is active
-                if (!user.IsActive)
+                if (!user.Data.IsActive)
                 {
                     return ApiResponse<RefreshTokenResponse>.Fail(
                         "Your account is inactive. Please contact administrator.");
@@ -663,16 +534,16 @@ namespace GenXTransitAPI.DataAccess.Services
 
                 // 7. Generate new Access Token
                 var newAccessToken =
-                    _jwtService.GenerateAccessToken(user);
+                    _jwtService.GenerateAccessToken(user.Data);
 
                 // 8. Generate new Refresh Token
                 var newRefreshToken =
-                    _jwtService.GenerateRefreshToken(user);
+                    _jwtService.GenerateRefreshToken(user.Data);
 
                 // 9. Create response
                 var response = new RefreshTokenResponse
                 {
-                    UserId = user.UserId,
+                    UserId = user.Data.UserId,
 
                     AccessToken = newAccessToken,
 

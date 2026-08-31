@@ -10,14 +10,7 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
 {
     public interface IAuthRepository
     {
-        Task<bool> EmailExistsAsync(string email);
-
-        Task<bool> UserNameExistsAsync(string userName);
-
-        Task<int> RegisterUserAsync(User user);
-        Task<User?> GetUserByIdAsync(int userId);
-
-        Task<bool> UpdateUserAsync( int userId,UpdateUserRequest request);
+      
         Task<User?> GetUserForLoginAsync(string loginId);
         Task<User?> GetUserByEmailAsync(string email);
         Task<bool> ChangePasswordAsync( int userId, string newPassword);
