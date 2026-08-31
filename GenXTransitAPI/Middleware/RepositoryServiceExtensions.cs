@@ -41,6 +41,11 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IStageRepository, StageRepository>();
             services.AddScoped<IFarePolicyRepository, FarePolicyRepository>();
             services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
+            services.AddScoped<IPaymentModeRepository, PaymentModeRepository>();
+            services.AddScoped<ISeatLayoutRepository, SeatLayoutRepository>();
+            services.AddScoped<INotificationTemplateRepository, NotificationTemplateRepository>();
+            services.AddScoped<IComplaintCategoryRepository, ComplaintCategoryRepository>();
+            services.AddScoped<ITaxConfigurationRepository, TaxConfigurationRepository>();
 
 
 
@@ -63,6 +68,13 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IStageService, StageService>();
             services.AddScoped<IFarePolicyService, FarePolicyService>();
             services.AddScoped<ITicketTypeService, TicketTypeService>();
+            services.AddScoped<IPaymentModeService, PaymentModeService>();
+            services.AddScoped<ISeatLayoutService, SeatLayoutService>();
+            services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
+            services.AddScoped<IComplaintCategoryService, ComplaintCategoryService>();
+            services.AddScoped<ITaxConfigurationService, TaxConfigurationService>();
+
+
 
 
 
