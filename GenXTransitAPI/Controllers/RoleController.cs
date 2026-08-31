@@ -19,7 +19,7 @@ namespace GenXTransitAPI.Controllers
 
         // POST: api/roles
         [AllowAnonymous]
-        [HttpPost("create")]
+        [HttpPost("insert")]
         public async Task<IActionResult> CreateRole(
             [FromBody] CreateRoleRequest request)
         {
@@ -49,7 +49,7 @@ namespace GenXTransitAPI.Controllers
 
         // GET: api/roles
         [AllowAnonymous]
-        [HttpGet("getall")]
+        [HttpGet]
         public async Task<IActionResult> GetAllRoles()
         {
             var response =
