@@ -171,7 +171,31 @@ namespace GenXTransitAPI.DataAccess.Services
         //        }
         //    }
 
-        public async Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
+    //    public async Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
+    //string? searchText,
+    //bool? isActive,
+    //int currentUserId,
+    //int pageNumber,
+    //int pageSize)
+    //    {
+    //        try
+    //        {
+                
+    //            return await _userRepository.GetAllUsersAsync(
+    //                searchText,
+    //                isActive,
+    //                currentUserId,
+    //                pageNumber,
+    //                pageSize);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            return ApiResponse<PagedResponse<User>>.Fail(
+    //                $"Error while fetching users: {ex.Message}");
+    //        }
+    //    }
+
+        public async Task<ApiResponse<User>> GetAllUsersAsync(
     string? searchText,
     bool? isActive,
     int currentUserId,
@@ -180,7 +204,6 @@ namespace GenXTransitAPI.DataAccess.Services
         {
             try
             {
-                
                 return await _userRepository.GetAllUsersAsync(
                     searchText,
                     isActive,
@@ -190,7 +213,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<PagedResponse<User>>.Fail(
+                return ApiResponse<User>.Fail(
                     $"Error while fetching users: {ex.Message}");
             }
         }

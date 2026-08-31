@@ -20,12 +20,19 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
         //int currentUserId,
         //int pageNumber,
         //int pageSize);
-        Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
-        string? searchText,
-        bool? isActive,
-        int currentUserId,
-        int pageNumber,
-        int pageSize);
+        //Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
+        //string? searchText,
+        //bool? isActive,
+        //int currentUserId,
+        //int pageNumber,
+        //int pageSize);
+
+        Task<ApiResponse<User>> GetAllUsersAsync(
+    string? searchText,
+    bool? isActive,
+    int currentUserId,
+    int pageNumber,
+    int pageSize);
 
         Task<ApiResponse<User>> GetUserByIdAsync(int userId);
 

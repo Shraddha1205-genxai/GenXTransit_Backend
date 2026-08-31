@@ -24,6 +24,7 @@ namespace GenXTransitAPI.Models.Entities
         public string? LastName { get; set; }
 
         public int RoleId { get; set; }
+        public int RoleName { get; set; }
 
         public bool IsActive { get; set; }
 
