@@ -174,49 +174,47 @@ namespace GenXTransitAPI.DataAccess.Services
         //        }
         //    }
 
-    //    public async Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
-    //string? searchText,
-    //bool? isActive,
-    //int currentUserId,
-    //int pageNumber,
-    //int pageSize)
-    //    {
-    //        try
-    //        {
-                
-    //            return await _userRepository.GetAllUsersAsync(
-    //                searchText,
-    //                isActive,
-    //                currentUserId,
-    //                pageNumber,
-    //                pageSize);
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            return ApiResponse<PagedResponse<User>>.Fail(
-    //                $"Error while fetching users: {ex.Message}");
-    //        }
-    //    }
+        //    public async Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
+        //string? searchText,
+        //bool? isActive,
+        //int currentUserId,
+        //int pageNumber,
+        //int pageSize)
+        //    {
+        //        try
+        //        {
 
-        public async Task<ApiResponse<User>> GetAllUsersAsync(
-    string? searchText,
-    bool? isActive,
-    int currentUserId,
-    int pageNumber,
-    int pageSize)
+        //            return await _userRepository.GetAllUsersAsync(
+        //                searchText,
+        //                isActive,
+        //                currentUserId,
+        //                pageNumber,
+        //                pageSize);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return ApiResponse<PagedResponse<User>>.Fail(
+        //                $"Error while fetching users: {ex.Message}");
+        //        }
+        //    }
+
+        public async Task<ApiResponse<List<User>>> GetAllUsersAsync(
+       string? searchText,
+       bool? isActive,
+       int pageNumber,
+       int pageSize)
         {
             try
             {
                 return await _userRepository.GetAllUsersAsync(
                     searchText,
                     isActive,
-                    currentUserId,
                     pageNumber,
                     pageSize);
             }
             catch (Exception ex)
             {
-                return ApiResponse<User>.Fail(
+                return ApiResponse<List<User>>.Fail(
                     $"Error while fetching users: {ex.Message}");
             }
         }

@@ -86,7 +86,7 @@ namespace GenXTransitAPI.Controllers
             {
                 var result = await _userService.GetAllUsersAsync(searchText,
             isActive,
-            CurrentUserId,
+            //CurrentUserId,
             pageNumber,
             pageSize);
 

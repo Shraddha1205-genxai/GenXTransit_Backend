@@ -32,12 +32,11 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
         //int pageNumber,
         //int pageSize);
 
-        Task<ApiResponse<User>> GetAllUsersAsync(
-    string? searchText,
-    bool? isActive,
-    int currentUserId,
-    int pageNumber,
-    int pageSize);
+        Task<ApiResponse<List<User>>> GetAllUsersAsync(
+          string? searchText,
+          bool? isActive,
+          int pageNumber,
+          int pageSize);
 
         Task<ApiResponse<User>> GetUserByIdAsync(int userId);
 
