@@ -76,63 +76,62 @@ namespace GenXTransitAPI.DataAccess.Repositories
          commandType: CommandType.StoredProcedure);
         }
 
-       // public async Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
-       //string? searchText,
-       //bool? isActive,
-       //int currentUserId,
-       //int pageNumber,
-       //int pageSize)
-       // {
-       //     try
-       //     {
-       //         using var conn = _db.CreateConnection();
+        // public async Task<ApiResponse<PagedResponse<User>>> GetAllUsersAsync(
+        //string? searchText,
+        //bool? isActive,
+        //int currentUserId,
+        //int pageNumber,
+        //int pageSize)
+        // {
+        //     try
+        //     {
+        //         using var conn = _db.CreateConnection();
 
-       //         var parameters = new DynamicParameters();
+        //         var parameters = new DynamicParameters();
 
-       //         parameters.Add("@SearchText", searchText);
-       //         parameters.Add("@IsActive", isActive);
-       //         parameters.Add("@CurrentUserId", currentUserId);
-       //         parameters.Add("@PageNumber", pageNumber);
-       //         parameters.Add("@PageSize", pageSize);
+        //         parameters.Add("@SearchText", searchText);
+        //         parameters.Add("@IsActive", isActive);
+        //         parameters.Add("@CurrentUserId", currentUserId);
+        //         parameters.Add("@PageNumber", pageNumber);
+        //         parameters.Add("@PageSize", pageSize);
 
-       //         using var multi = await conn.QueryMultipleAsync(
-       //             "usp_User_GetAll",
-       //             parameters,
-       //             commandType: CommandType.StoredProcedure);
+        //         using var multi = await conn.QueryMultipleAsync(
+        //             "usp_User_GetAll",
+        //             parameters,
+        //             commandType: CommandType.StoredProcedure);
 
-       //         // First result set = Total Records
-       //         var totalRecords = await multi.ReadFirstOrDefaultAsync<int>();
+        //         // First result set = Total Records
+        //         var totalRecords = await multi.ReadFirstOrDefaultAsync<int>();
 
-       //         // Second result set = Users
-       //         var users = (await multi.ReadAsync<User>()).ToList();
+        //         // Second result set = Users
+        //         var users = (await multi.ReadAsync<User>()).ToList();
 
-       //         var response = new PagedResponse<User>
-       //         {
-       //             Items = users,
-       //             TotalRecords = totalRecords,
-       //             PageNumber = pageNumber,
-       //             PageSize = pageSize,
-       //             TotalPages = (int)Math.Ceiling(
-       //                 totalRecords / (double)pageSize)
-       //         };
+        //         var response = new PagedResponse<User>
+        //         {
+        //             Items = users,
+        //             TotalRecords = totalRecords,
+        //             PageNumber = pageNumber,
+        //             PageSize = pageSize,
+        //             TotalPages = (int)Math.Ceiling(
+        //                 totalRecords / (double)pageSize)
+        //         };
 
-       //         return ApiResponse<PagedResponse<User>>.Ok(
-       //             response,
-       //             "Users fetched successfully.");
-       //     }
-       //     catch (Exception ex)
-       //     {
-       //         return ApiResponse<PagedResponse<User>>.Fail(
-       //             $"Error while fetching users: {ex.Message}");
-       //     }
-       // }
+        //         return ApiResponse<PagedResponse<User>>.Ok(
+        //             response,
+        //             "Users fetched successfully.");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return ApiResponse<PagedResponse<User>>.Fail(
+        //             $"Error while fetching users: {ex.Message}");
+        //     }
+        // }
 
-        public async Task<ApiResponse<User>> GetAllUsersAsync(
-    string? searchText,
-    bool? isActive,
-    int currentUserId,
-    int pageNumber,
-    int pageSize)
+        public async Task<ApiResponse<List<User>>> GetAllUsersAsync(
+      string? searchText,
+      bool? isActive,
+      int pageNumber,
+      int pageSize)
         {
             try
             {
@@ -142,7 +141,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
                 parameters.Add("@SearchText", searchText);
                 parameters.Add("@IsActive", isActive);
-                parameters.Add("@CurrentUserId", currentUserId);
                 parameters.Add("@PageNumber", pageNumber);
                 parameters.Add("@PageSize", pageSize);
 
@@ -152,25 +150,24 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     commandType: CommandType.StoredProcedure);
 
                 // Read total records
-                await multi.ReadFirstOrDefaultAsync<int>();
+                var totalRecords = await multi.ReadFirstOrDefaultAsync<int>();
 
-                // Read users
+                // Read all users
                 var users = (await multi.ReadAsync<User>()).ToList();
 
-                if (users == null || users.Count == 0)
+                if (users.Count == 0)
                 {
-                    return ApiResponse<User>.Fail(
+                    return ApiResponse<List<User>>.Fail(
                         "No users found.");
                 }
 
-                // Return first user
-                return ApiResponse<User>.Ok(
-                    users.First(),
+                return ApiResponse<List<User>>.Ok(
+                    users,
                     "Users fetched successfully.");
             }
             catch (Exception ex)
             {
-                return ApiResponse<User>.Fail(
+                return ApiResponse<List<User>>.Fail(
                     $"Error while fetching users: {ex.Message}");
             }
         }
