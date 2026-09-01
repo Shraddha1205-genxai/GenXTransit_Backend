@@ -83,23 +83,22 @@ namespace GenXTransitAPI.Controllers
             if (string.IsNullOrWhiteSpace(request.type))
                 return BadRequest(new { success = false, message = "Type is required." });
 
-            if (request.distance <= 0)
+            // ✅ distance is already decimal? - just check if it has value
+            if (!request.distance.HasValue || request.distance.Value <= 0)
                 return BadRequest(new { success = false, message = "Distance must be greater than 0." });
 
             if (string.IsNullOrWhiteSpace(request.fareModel))
                 return BadRequest(new { success = false, message = "Fare Model is required." });
 
-            if (request.duration == null || request.duration == TimeSpan.Zero)
+            if (string.IsNullOrWhiteSpace(request.duration))
                 return BadRequest(new { success = false, message = "Duration is required." });
 
-            // Validate IDs
             if (!int.TryParse(request.fromStationId, out int fromStationId))
                 return BadRequest(new { success = false, message = "Invalid From Station ID format." });
 
             if (!int.TryParse(request.toStationId, out int toStationId))
                 return BadRequest(new { success = false, message = "Invalid To Station ID format." });
 
-            // Check if From and To stations are different
             if (fromStationId == toStationId)
                 return BadRequest(new { success = false, message = "From and To stations cannot be the same." });
 
@@ -110,7 +109,7 @@ namespace GenXTransitAPI.Controllers
                 fromStationId = request.fromStationId,
                 toStationId = request.toStationId,
                 type = request.type,
-                distance = request.distance,
+                distance = request.distance.Value, // ✅ Use the decimal value
                 fareModel = request.fareModel,
                 duration = request.duration,
                 isActive = request.isActive
@@ -151,23 +150,22 @@ namespace GenXTransitAPI.Controllers
             if (string.IsNullOrWhiteSpace(request.type))
                 return BadRequest(new { success = false, message = "Type is required." });
 
-            if (request.distance <= 0)
+            // ✅ distance is already decimal? - just check if it has value
+            if (!request.distance.HasValue || request.distance.Value <= 0)
                 return BadRequest(new { success = false, message = "Distance must be greater than 0." });
 
             if (string.IsNullOrWhiteSpace(request.fareModel))
                 return BadRequest(new { success = false, message = "Fare Model is required." });
 
-            if (request.duration == null || request.duration == TimeSpan.Zero)
+            if (string.IsNullOrWhiteSpace(request.duration))
                 return BadRequest(new { success = false, message = "Duration is required." });
 
-            // Validate IDs
             if (!int.TryParse(request.fromStationId, out int fromStationId))
                 return BadRequest(new { success = false, message = "Invalid From Station ID format." });
 
             if (!int.TryParse(request.toStationId, out int toStationId))
                 return BadRequest(new { success = false, message = "Invalid To Station ID format." });
 
-            // Check if From and To stations are different
             if (fromStationId == toStationId)
                 return BadRequest(new { success = false, message = "From and To stations cannot be the same." });
 
@@ -179,7 +177,7 @@ namespace GenXTransitAPI.Controllers
                 fromStationId = request.fromStationId,
                 toStationId = request.toStationId,
                 type = request.type,
-                distance = request.distance,
+                distance = request.distance.Value, // ✅ Use the decimal value
                 fareModel = request.fareModel,
                 duration = request.duration,
                 isActive = request.isActive

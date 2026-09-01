@@ -73,9 +73,9 @@ namespace GenXTransitAPI.Controllers
                 return BadRequest(new { success = false, message = "Mode Status is required." });
 
             // Validate Mode Status
-            var validStatuses = new[] { "Active", "Inactive", "Suspended" };
+            var validStatuses = new[] { "Live", "Under Maintenance", "Disabled" };
             if (!validStatuses.Contains(request.modeStatus))
-                return BadRequest(new { success = false, message = "Invalid Mode Status. Valid statuses are: Active, Inactive, Suspended." });
+                return BadRequest(new { success = false, message = "Invalid Mode Status. Valid statuses are: Live , Under Maintenance , Disabled." });
 
             var entity = new PaymentModeDTO
             {
@@ -112,9 +112,9 @@ namespace GenXTransitAPI.Controllers
                 return BadRequest(new { success = false, message = "Mode Status is required." });
 
             // Validate Mode Status
-            var validStatuses = new[] { "Active", "Inactive", "Suspended" };
+            var validStatuses = new[] { "Live", "Under Maintenance", "Disabled" };
             if (!validStatuses.Contains(request.modeStatus))
-                return BadRequest(new { success = false, message = "Invalid Mode Status. Valid statuses are: Active, Inactive, Suspended." });
+                return BadRequest(new { success = false, message = "Invalid Mode Status. Valid statuses are: Live , Under Maintenance , Disabled." });
 
             var entity = new PaymentModeDTO
             {
