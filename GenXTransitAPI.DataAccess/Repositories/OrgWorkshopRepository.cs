@@ -156,7 +156,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while inserting workshop: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -188,7 +188,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while updating workshop: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -213,7 +213,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while deleting workshop: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

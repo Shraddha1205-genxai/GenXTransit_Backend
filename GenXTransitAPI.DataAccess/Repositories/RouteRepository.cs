@@ -162,7 +162,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while inserting route: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -196,7 +196,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while updating route: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -221,7 +221,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while deleting route: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

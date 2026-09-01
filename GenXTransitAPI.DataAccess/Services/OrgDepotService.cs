@@ -37,7 +37,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<OrgDepotDTO>>.Fail($"Error retrieving depots: {ex.Message}");
+                return ApiResponse<IEnumerable<OrgDepotDTO>>.Fail(ex.Message);
             }
         }
 
@@ -53,7 +53,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<OrgDepotDTO>.Fail($"Error retrieving depot: {ex.Message}");
+                return ApiResponse<OrgDepotDTO>.Fail(ex.Message);
             }
         }
 
@@ -66,7 +66,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -111,7 +111,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating depot. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -165,7 +165,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating depot. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -181,7 +181,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting depot. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

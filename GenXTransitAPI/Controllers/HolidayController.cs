@@ -29,6 +29,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, type, startDate, endDate, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -36,8 +40,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -46,6 +56,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -53,22 +67,27 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertHolidayRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.holidayName))
-                return BadRequest(ApiResponse<int>.Fail("Holiday Name is required."));
+                return BadRequest(new { success = false, message = "Holiday Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.occasion))
-                return BadRequest(ApiResponse<int>.Fail("Occasion is required."));
+                return BadRequest(new { success = false, message = "Occasion is required." });
 
             if (string.IsNullOrWhiteSpace(request.date))
-                return BadRequest(ApiResponse<int>.Fail("Date is required."));
+                return BadRequest(new { success = false, message = "Date is required." });
 
             if (string.IsNullOrWhiteSpace(request.type))
-                return BadRequest(ApiResponse<int>.Fail("Type is required."));
+                return BadRequest(new { success = false, message = "Type is required." });
 
             if (!DateTime.TryParse(request.date, out _))
-                return BadRequest(ApiResponse<int>.Fail("Invalid date format. Please use yyyy-MM-dd."));
+                return BadRequest(new { success = false, message = "Invalid date format. Please use yyyy-MM-dd." });
+
+            // Validate Holiday Type
+            var validTypes = new[] { "National", "Regional", "Festival", "Optional" };
+            if (!validTypes.Contains(request.type))
+                return BadRequest(new { success = false, message = "Invalid Type. Valid types are: National, Regional, Festival, Optional." });
 
             var entity = new HolidayDTO
             {
@@ -81,39 +100,44 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateHolidayRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.holidayId))
-                return BadRequest(ApiResponse<bool>.Fail("Holiday ID is required."));
+                return BadRequest(new { success = false, message = "Holiday ID is required." });
 
-            if (!int.TryParse(request.holidayId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Holiday ID format."));
+            if (!int.TryParse(request.holidayId, out int holidayId))
+                return BadRequest(new { success = false, message = "Invalid Holiday ID format." });
 
             if (string.IsNullOrWhiteSpace(request.holidayName))
-                return BadRequest(ApiResponse<bool>.Fail("Holiday Name is required."));
+                return BadRequest(new { success = false, message = "Holiday Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.occasion))
-                return BadRequest(ApiResponse<bool>.Fail("Occasion is required."));
+                return BadRequest(new { success = false, message = "Occasion is required." });
 
             if (string.IsNullOrWhiteSpace(request.date))
-                return BadRequest(ApiResponse<bool>.Fail("Date is required."));
+                return BadRequest(new { success = false, message = "Date is required." });
 
             if (string.IsNullOrWhiteSpace(request.type))
-                return BadRequest(ApiResponse<bool>.Fail("Type is required."));
+                return BadRequest(new { success = false, message = "Type is required." });
 
             if (!DateTime.TryParse(request.date, out _))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid date format. Please use yyyy-MM-dd."));
+                return BadRequest(new { success = false, message = "Invalid date format. Please use yyyy-MM-dd." });
+
+            // Validate Holiday Type
+            var validTypes = new[] { "National", "Regional", "Festival", "Optional" };
+            if (!validTypes.Contains(request.type))
+                return BadRequest(new { success = false, message = "Invalid Type. Valid types are: National, Regional, Festival, Optional." });
 
             var entity = new HolidayDTO
             {
@@ -127,12 +151,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -140,18 +167,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteHolidayRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.holidayId))
-                return BadRequest(ApiResponse<bool>.Fail("Holiday ID is required."));
+                return BadRequest(new { success = false, message = "Holiday ID is required." });
 
             if (!int.TryParse(request.holidayId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Holiday ID format."));
+                return BadRequest(new { success = false, message = "Invalid Holiday ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

@@ -36,7 +36,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<OrgCorporationDTO>>.Fail($"Error retrieving corporations: {ex.Message}");
+                return ApiResponse<IEnumerable<OrgCorporationDTO>>.Fail(ex.Message);
             }
         }
 
@@ -52,7 +52,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<OrgCorporationDTO>.Fail($"Error retrieving corporation: {ex.Message}");
+                return ApiResponse<OrgCorporationDTO>.Fail(ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -91,7 +91,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating corporation. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -126,7 +126,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating corporation. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -142,7 +142,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting corporation. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

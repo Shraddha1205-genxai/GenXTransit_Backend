@@ -36,7 +36,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<HolidayDTO>>.Fail($"Error retrieving holidays: {ex.Message}");
+                return ApiResponse<IEnumerable<HolidayDTO>>.Fail(ex.Message);
             }
         }
 
@@ -52,7 +52,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<HolidayDTO>.Fail($"Error retrieving holiday: {ex.Message}");
+                return ApiResponse<HolidayDTO>.Fail(ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -95,7 +95,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating holiday. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -134,7 +134,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating holiday. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -150,7 +150,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting holiday. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

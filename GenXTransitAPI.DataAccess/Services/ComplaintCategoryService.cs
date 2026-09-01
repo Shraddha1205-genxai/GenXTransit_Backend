@@ -35,7 +35,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<ComplaintCategoryDTO>>.Fail($"Error retrieving complaint categories: {ex.Message}");
+                return ApiResponse<IEnumerable<ComplaintCategoryDTO>>.Fail(ex.Message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<ComplaintCategoryDTO>.Fail($"Error retrieving complaint category: {ex.Message}");
+                return ApiResponse<ComplaintCategoryDTO>.Fail(ex.Message);
             }
         }
 
@@ -64,7 +64,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -97,7 +97,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating complaint category. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -139,7 +139,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating complaint category. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -155,7 +155,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting complaint category. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

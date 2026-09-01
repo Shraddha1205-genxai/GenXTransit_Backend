@@ -36,7 +36,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<OrgParkingYardDTO>>.Fail($"Error retrieving parking yards: {ex.Message}");
+                return ApiResponse<IEnumerable<OrgParkingYardDTO>>.Fail(ex.Message);
             }
         }
 
@@ -52,7 +52,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<OrgParkingYardDTO>.Fail($"Error retrieving parking yard: {ex.Message}");
+                return ApiResponse<OrgParkingYardDTO>.Fail(ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -110,7 +110,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating parking yard. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -164,7 +164,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating parking yard. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -180,7 +180,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting parking yard. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

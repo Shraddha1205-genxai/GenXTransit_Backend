@@ -128,7 +128,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while inserting seat layout: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -156,7 +156,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while updating seat layout: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -181,7 +181,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while deleting seat layout: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

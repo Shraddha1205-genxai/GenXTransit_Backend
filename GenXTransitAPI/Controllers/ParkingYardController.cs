@@ -28,6 +28,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, regionId, divisionId, depotId, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -35,8 +39,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -45,6 +55,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -52,28 +66,38 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertParkingYardRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.yardName))
-                return BadRequest(ApiResponse<int>.Fail("Parking Yard Name is required."));
+                return BadRequest(new { success = false, message = "Parking Yard Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.regionId))
-                return BadRequest(ApiResponse<int>.Fail("Region is required."));
+                return BadRequest(new { success = false, message = "Region is required." });
 
             if (string.IsNullOrWhiteSpace(request.divisionId))
-                return BadRequest(ApiResponse<int>.Fail("Division is required."));
+                return BadRequest(new { success = false, message = "Division is required." });
 
             if (string.IsNullOrWhiteSpace(request.depotId))
-                return BadRequest(ApiResponse<int>.Fail("Depot is required."));
+                return BadRequest(new { success = false, message = "Depot is required." });
 
             if (request.capacity < 0)
-                return BadRequest(ApiResponse<int>.Fail("Capacity cannot be negative."));
+                return BadRequest(new { success = false, message = "Capacity cannot be negative." });
 
             if (request.occupied < 0)
-                return BadRequest(ApiResponse<int>.Fail("Occupied cannot be negative."));
+                return BadRequest(new { success = false, message = "Occupied cannot be negative." });
 
             if (request.occupied > request.capacity)
-                return BadRequest(ApiResponse<int>.Fail("Occupied cannot exceed Capacity."));
+                return BadRequest(new { success = false, message = "Occupied cannot exceed Capacity." });
+
+            // Validate IDs
+            if (!int.TryParse(request.regionId, out int regionId))
+                return BadRequest(new { success = false, message = "Invalid Region ID format." });
+
+            if (!int.TryParse(request.divisionId, out int divisionId))
+                return BadRequest(new { success = false, message = "Invalid Division ID format." });
+
+            if (!int.TryParse(request.depotId, out int depotId))
+                return BadRequest(new { success = false, message = "Invalid Depot ID format." });
 
             var entity = new OrgParkingYardDTO
             {
@@ -87,45 +111,55 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateParkingYardRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.yardId))
-                return BadRequest(ApiResponse<bool>.Fail("Parking Yard ID is required."));
+                return BadRequest(new { success = false, message = "Parking Yard ID is required." });
 
-            if (!int.TryParse(request.yardId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Parking Yard ID format."));
+            if (!int.TryParse(request.yardId, out int yardId))
+                return BadRequest(new { success = false, message = "Invalid Parking Yard ID format." });
 
             if (string.IsNullOrWhiteSpace(request.yardName))
-                return BadRequest(ApiResponse<bool>.Fail("Parking Yard Name is required."));
+                return BadRequest(new { success = false, message = "Parking Yard Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.regionId))
-                return BadRequest(ApiResponse<bool>.Fail("Region is required."));
+                return BadRequest(new { success = false, message = "Region is required." });
 
             if (string.IsNullOrWhiteSpace(request.divisionId))
-                return BadRequest(ApiResponse<bool>.Fail("Division is required."));
+                return BadRequest(new { success = false, message = "Division is required." });
 
             if (string.IsNullOrWhiteSpace(request.depotId))
-                return BadRequest(ApiResponse<bool>.Fail("Depot is required."));
+                return BadRequest(new { success = false, message = "Depot is required." });
 
             if (request.capacity < 0)
-                return BadRequest(ApiResponse<bool>.Fail("Capacity cannot be negative."));
+                return BadRequest(new { success = false, message = "Capacity cannot be negative." });
 
             if (request.occupied < 0)
-                return BadRequest(ApiResponse<bool>.Fail("Occupied cannot be negative."));
+                return BadRequest(new { success = false, message = "Occupied cannot be negative." });
 
             if (request.occupied > request.capacity)
-                return BadRequest(ApiResponse<bool>.Fail("Occupied cannot exceed Capacity."));
+                return BadRequest(new { success = false, message = "Occupied cannot exceed Capacity." });
+
+            // Validate IDs
+            if (!int.TryParse(request.regionId, out int regionId))
+                return BadRequest(new { success = false, message = "Invalid Region ID format." });
+
+            if (!int.TryParse(request.divisionId, out int divisionId))
+                return BadRequest(new { success = false, message = "Invalid Division ID format." });
+
+            if (!int.TryParse(request.depotId, out int depotId))
+                return BadRequest(new { success = false, message = "Invalid Depot ID format." });
 
             var entity = new OrgParkingYardDTO
             {
@@ -140,12 +174,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -153,18 +190,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteParkingYardRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.yardId))
-                return BadRequest(ApiResponse<bool>.Fail("Parking Yard ID is required."));
+                return BadRequest(new { success = false, message = "Parking Yard ID is required." });
 
             if (!int.TryParse(request.yardId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Parking Yard ID format."));
+                return BadRequest(new { success = false, message = "Invalid Parking Yard ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

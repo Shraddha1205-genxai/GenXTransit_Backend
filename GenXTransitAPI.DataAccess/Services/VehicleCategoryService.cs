@@ -35,7 +35,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<VehicleCategoryDTO>>.Fail($"Error retrieving vehicle categories: {ex.Message}");
+                return ApiResponse<IEnumerable<VehicleCategoryDTO>>.Fail(ex.Message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<VehicleCategoryDTO>.Fail($"Error retrieving vehicle category: {ex.Message}");
+                return ApiResponse<VehicleCategoryDTO>.Fail(ex.Message);
             }
         }
 
@@ -64,7 +64,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -90,7 +90,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating vehicle category. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -125,7 +125,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating vehicle category. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -141,7 +141,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting vehicle category. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }
