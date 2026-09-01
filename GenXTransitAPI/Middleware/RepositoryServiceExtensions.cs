@@ -52,6 +52,8 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<INotificationTemplateRepository, NotificationTemplateRepository>();
             services.AddScoped<IComplaintCategoryRepository, ComplaintCategoryRepository>();
             services.AddScoped<ITaxConfigurationRepository, TaxConfigurationRepository>();
+            services.AddScoped<IHolidayRepository, HolidayRepository>();
+
 
 
 
@@ -79,6 +81,7 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
             services.AddScoped<IComplaintCategoryService, ComplaintCategoryService>();
             services.AddScoped<ITaxConfigurationService, TaxConfigurationService>();
+            services.AddScoped<IHolidayService, HolidayService>();
 
 
 

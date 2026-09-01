@@ -53,21 +53,18 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 type = x.Type,
                 distance = x.Distance,
                 fareModel = x.Fare_Model,
-                duration = x.Duration,
+                duration = x.Duration, // ✅ String
                 isActive = x.IsActive,
                 createdBy = x.Created_By,
                 createdDate = x.Created_Date,
                 modifiedBy = x.Modified_By,
                 modifiedDate = x.Modified_Date,
-                // From Station details
                 fromStationId = x.FromStationId?.ToString(),
                 fromStationCode = x.FromStationCode,
                 fromStationName = x.FromStationName,
-                // To Station details
                 toStationId = x.ToStationId?.ToString(),
                 toStationCode = x.ToStationCode,
                 toStationName = x.ToStationName,
-                // Region details
                 regionId = x.RegionId?.ToString(),
                 regionCode = x.RegionCode,
                 regionName = x.RegionName,
@@ -96,21 +93,18 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 type = dbResult.Type,
                 distance = dbResult.Distance,
                 fareModel = dbResult.Fare_Model,
-                duration = dbResult.Duration,
+                duration = dbResult.Duration, // ✅ String
                 isActive = dbResult.IsActive,
                 createdBy = dbResult.Created_By,
                 createdDate = dbResult.Created_Date,
                 modifiedBy = dbResult.Modified_By,
                 modifiedDate = dbResult.Modified_Date,
-                // From Station details
                 fromStationId = dbResult.FromStationId?.ToString(),
                 fromStationCode = dbResult.FromStationCode,
                 fromStationName = dbResult.FromStationName,
-                // To Station details
                 toStationId = dbResult.ToStationId?.ToString(),
                 toStationCode = dbResult.ToStationCode,
                 toStationName = dbResult.ToStationName,
-                // Region details
                 regionId = dbResult.RegionId?.ToString(),
                 regionCode = dbResult.RegionCode,
                 regionName = dbResult.RegionName,
@@ -148,7 +142,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 p.Add("@Type", entity.type);
                 p.Add("@Distance", entity.distance);
                 p.Add("@Fare_Model", entity.fareModel);
-                p.Add("@Duration", entity.duration);
+                p.Add("@Duration", entity.duration); // ✅ String
                 p.Add("@IsActive", entity.isActive);
                 p.Add("@UserId", userId);
                 p.Add("@NewId", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -182,7 +176,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 p.Add("@Type", entity.type);
                 p.Add("@Distance", entity.distance);
                 p.Add("@Fare_Model", entity.fareModel);
-                p.Add("@Duration", entity.duration);
+                p.Add("@Duration", entity.duration); // ✅ String
                 p.Add("@IsActive", entity.isActive);
                 p.Add("@UserId", userId);
                 p.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);

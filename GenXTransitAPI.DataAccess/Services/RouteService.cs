@@ -94,7 +94,7 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (string.IsNullOrWhiteSpace(entity.fareModel))
                     return ApiResponse<int>.Fail("Fare Model is required.");
 
-                if (entity.duration == null || entity.duration == TimeSpan.Zero)
+                if (string.IsNullOrWhiteSpace(entity.duration))
                     return ApiResponse<int>.Fail("Duration is required.");
 
                 // Parse IDs
@@ -104,7 +104,6 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (!int.TryParse(entity.toStationId, out int toStationId))
                     return ApiResponse<int>.Fail("Invalid To Station ID format.");
 
-                // Check if From and To stations are different
                 if (fromStationId == toStationId)
                     return ApiResponse<int>.Fail("From and To stations cannot be the same.");
 
@@ -121,7 +120,6 @@ namespace GenXTransitAPI.DataAccess.Services
         {
             try
             {
-                // Validations
                 if (string.IsNullOrEmpty(entity.routeId))
                     return ApiResponse<bool>.Fail("Route ID is required.");
 
@@ -149,17 +147,15 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (string.IsNullOrWhiteSpace(entity.fareModel))
                     return ApiResponse<bool>.Fail("Fare Model is required.");
 
-                if (entity.duration == null || entity.duration == TimeSpan.Zero)
+                if (string.IsNullOrWhiteSpace(entity.duration))
                     return ApiResponse<bool>.Fail("Duration is required.");
 
-                // Parse IDs
                 if (!int.TryParse(entity.fromStationId, out int fromStationId))
                     return ApiResponse<bool>.Fail("Invalid From Station ID format.");
 
                 if (!int.TryParse(entity.toStationId, out int toStationId))
                     return ApiResponse<bool>.Fail("Invalid To Station ID format.");
 
-                // Check if From and To stations are different
                 if (fromStationId == toStationId)
                     return ApiResponse<bool>.Fail("From and To stations cannot be the same.");
 

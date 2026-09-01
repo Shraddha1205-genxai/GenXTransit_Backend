@@ -5,7 +5,6 @@ namespace GenXTransitAPI.Models.DTO_s
     // ✅ Main Route DTO matching UI (camelCase)
     public class RouteDTO
     {
-        // UI Properties (camelCase)
         public string? routeId { get; set; }
         public string? routeCode { get; set; }
         public string? routeName { get; set; }
@@ -22,10 +21,9 @@ namespace GenXTransitAPI.Models.DTO_s
         public string? type { get; set; }
         public decimal distance { get; set; }
         public string? fareModel { get; set; }
-        public TimeSpan? duration { get; set; }
+        public string? duration { get; set; }
         public bool isActive { get; set; } = true;
 
-        // Audit fields
         public int? createdBy { get; set; }
         public DateTime? createdDate { get; set; }
         public int? modifiedBy { get; set; }
@@ -41,9 +39,9 @@ namespace GenXTransitAPI.Models.DTO_s
         public string? fromStationId { get; set; }
         public string? toStationId { get; set; }
         public string? type { get; set; }
-        public decimal distance { get; set; }
+        public decimal? distance { get; set; }
         public string? fareModel { get; set; }
-        public TimeSpan? duration { get; set; }
+        public string? duration { get; set; }
         public bool isActive { get; set; } = true;
     }
 
@@ -56,9 +54,9 @@ namespace GenXTransitAPI.Models.DTO_s
         public string? fromStationId { get; set; }
         public string? toStationId { get; set; }
         public string? type { get; set; }
-        public decimal distance { get; set; }
+        public decimal? distance { get; set; }
         public string? fareModel { get; set; }
-        public TimeSpan? duration { get; set; }
+        public string? duration { get; set; }
         public bool isActive { get; set; } = true;
     }
 
@@ -76,9 +74,9 @@ namespace GenXTransitAPI.Models.DTO_s
         public string? Route_Name { get; set; }
         public string? Service { get; set; }
         public string? Type { get; set; }
-        public decimal Distance { get; set; }
+        public decimal Distance { get; set; } // ✅ This should exist
         public string? Fare_Model { get; set; }
-        public TimeSpan? Duration { get; set; }
+        public string? Duration { get; set; }
         public bool IsActive { get; set; } = true;
         public int? Created_By { get; set; }
         public DateTime? Created_Date { get; set; }
