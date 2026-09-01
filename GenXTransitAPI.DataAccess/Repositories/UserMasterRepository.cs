@@ -232,6 +232,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 using var conn = _db.CreateConnection();
 
                 parameters.Add("@UserId", userId);
+                //parameters.Add("@ModifiedBy", userId);
 
                 var result = await conn.QueryFirstOrDefaultAsync<dynamic>(
                     "usp_User_Delete",
