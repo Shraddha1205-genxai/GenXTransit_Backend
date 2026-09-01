@@ -29,6 +29,10 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IUserService, UserMasterService>();
             services.AddScoped<ISectionRepository, SectionRepository>();
             services.AddScoped<ISectionService, SectionService>();
+            services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<ITabRepository, TabRepository>();
+            services.AddScoped<ITabService, TabService>();
             services.AddScoped<IOrgCorporationRepository, OrgCorporationRepository>();
             services.AddScoped<IOrgDivisionRepository, OrgDivisionRepository>();
             services.AddScoped<IOrgRegionRepository, OrgRegionRepository>();
