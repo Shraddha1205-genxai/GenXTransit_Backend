@@ -25,6 +25,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -32,8 +36,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -42,6 +52,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -49,10 +63,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertTicketTypeRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.ticketName))
-                return BadRequest(ApiResponse<int>.Fail("Ticket Name is required."));
+                return BadRequest(new { success = false, message = "Ticket Name is required." });
 
             var entity = new TicketTypeDTO
             {
@@ -62,27 +76,27 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateTicketTypeRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.ticketId))
-                return BadRequest(ApiResponse<bool>.Fail("Ticket ID is required."));
+                return BadRequest(new { success = false, message = "Ticket ID is required." });
 
-            if (!int.TryParse(request.ticketId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Ticket ID format."));
+            if (!int.TryParse(request.ticketId, out int ticketId))
+                return BadRequest(new { success = false, message = "Invalid Ticket ID format." });
 
             if (string.IsNullOrWhiteSpace(request.ticketName))
-                return BadRequest(ApiResponse<bool>.Fail("Ticket Name is required."));
+                return BadRequest(new { success = false, message = "Ticket Name is required." });
 
             var entity = new TicketTypeDTO
             {
@@ -93,12 +107,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -106,18 +123,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteTicketTypeRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.ticketId))
-                return BadRequest(ApiResponse<bool>.Fail("Ticket ID is required."));
+                return BadRequest(new { success = false, message = "Ticket ID is required." });
 
             if (!int.TryParse(request.ticketId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Ticket ID format."));
+                return BadRequest(new { success = false, message = "Invalid Ticket ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

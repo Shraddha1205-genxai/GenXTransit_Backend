@@ -2,6 +2,7 @@
 using GenXTransitAPI.Models;
 using GenXTransitAPI.Models.DTO_s;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace GenXTransitAPI.Controllers
@@ -27,6 +28,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, service, type, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -34,8 +39,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -44,6 +55,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -51,31 +66,42 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertRouteRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.routeName))
-                return BadRequest(ApiResponse<int>.Fail("Route Name is required."));
+                return BadRequest(new { success = false, message = "Route Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.service))
-                return BadRequest(ApiResponse<int>.Fail("Service is required."));
+                return BadRequest(new { success = false, message = "Service is required." });
 
             if (string.IsNullOrWhiteSpace(request.fromStationId))
-                return BadRequest(ApiResponse<int>.Fail("From Station is required."));
+                return BadRequest(new { success = false, message = "From Station is required." });
 
             if (string.IsNullOrWhiteSpace(request.toStationId))
-                return BadRequest(ApiResponse<int>.Fail("To Station is required."));
+                return BadRequest(new { success = false, message = "To Station is required." });
 
             if (string.IsNullOrWhiteSpace(request.type))
-                return BadRequest(ApiResponse<int>.Fail("Type is required."));
+                return BadRequest(new { success = false, message = "Type is required." });
 
             if (request.distance <= 0)
-                return BadRequest(ApiResponse<int>.Fail("Distance must be greater than 0."));
+                return BadRequest(new { success = false, message = "Distance must be greater than 0." });
 
             if (string.IsNullOrWhiteSpace(request.fareModel))
-                return BadRequest(ApiResponse<int>.Fail("Fare Model is required."));
+                return BadRequest(new { success = false, message = "Fare Model is required." });
 
             if (request.duration == null || request.duration == TimeSpan.Zero)
-                return BadRequest(ApiResponse<int>.Fail("Duration is required."));
+                return BadRequest(new { success = false, message = "Duration is required." });
+
+            // Validate IDs
+            if (!int.TryParse(request.fromStationId, out int fromStationId))
+                return BadRequest(new { success = false, message = "Invalid From Station ID format." });
+
+            if (!int.TryParse(request.toStationId, out int toStationId))
+                return BadRequest(new { success = false, message = "Invalid To Station ID format." });
+
+            // Check if From and To stations are different
+            if (fromStationId == toStationId)
+                return BadRequest(new { success = false, message = "From and To stations cannot be the same." });
 
             var entity = new RouteDTO
             {
@@ -91,48 +117,59 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateRouteRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.routeId))
-                return BadRequest(ApiResponse<bool>.Fail("Route ID is required."));
+                return BadRequest(new { success = false, message = "Route ID is required." });
 
-            if (!int.TryParse(request.routeId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Route ID format."));
+            if (!int.TryParse(request.routeId, out int routeId))
+                return BadRequest(new { success = false, message = "Invalid Route ID format." });
 
             if (string.IsNullOrWhiteSpace(request.routeName))
-                return BadRequest(ApiResponse<bool>.Fail("Route Name is required."));
+                return BadRequest(new { success = false, message = "Route Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.service))
-                return BadRequest(ApiResponse<bool>.Fail("Service is required."));
+                return BadRequest(new { success = false, message = "Service is required." });
 
             if (string.IsNullOrWhiteSpace(request.fromStationId))
-                return BadRequest(ApiResponse<bool>.Fail("From Station is required."));
+                return BadRequest(new { success = false, message = "From Station is required." });
 
             if (string.IsNullOrWhiteSpace(request.toStationId))
-                return BadRequest(ApiResponse<bool>.Fail("To Station is required."));
+                return BadRequest(new { success = false, message = "To Station is required." });
 
             if (string.IsNullOrWhiteSpace(request.type))
-                return BadRequest(ApiResponse<bool>.Fail("Type is required."));
+                return BadRequest(new { success = false, message = "Type is required." });
 
             if (request.distance <= 0)
-                return BadRequest(ApiResponse<bool>.Fail("Distance must be greater than 0."));
+                return BadRequest(new { success = false, message = "Distance must be greater than 0." });
 
             if (string.IsNullOrWhiteSpace(request.fareModel))
-                return BadRequest(ApiResponse<bool>.Fail("Fare Model is required."));
+                return BadRequest(new { success = false, message = "Fare Model is required." });
 
             if (request.duration == null || request.duration == TimeSpan.Zero)
-                return BadRequest(ApiResponse<bool>.Fail("Duration is required."));
+                return BadRequest(new { success = false, message = "Duration is required." });
+
+            // Validate IDs
+            if (!int.TryParse(request.fromStationId, out int fromStationId))
+                return BadRequest(new { success = false, message = "Invalid From Station ID format." });
+
+            if (!int.TryParse(request.toStationId, out int toStationId))
+                return BadRequest(new { success = false, message = "Invalid To Station ID format." });
+
+            // Check if From and To stations are different
+            if (fromStationId == toStationId)
+                return BadRequest(new { success = false, message = "From and To stations cannot be the same." });
 
             var entity = new RouteDTO
             {
@@ -149,12 +186,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -162,18 +202,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteRouteRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.routeId))
-                return BadRequest(ApiResponse<bool>.Fail("Route ID is required."));
+                return BadRequest(new { success = false, message = "Route ID is required." });
 
             if (!int.TryParse(request.routeId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Route ID format."));
+                return BadRequest(new { success = false, message = "Invalid Route ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

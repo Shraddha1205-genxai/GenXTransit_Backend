@@ -34,7 +34,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<NotificationTemplateDTO>>.Fail($"Error retrieving notification templates: {ex.Message}");
+                return ApiResponse<IEnumerable<NotificationTemplateDTO>>.Fail(ex.Message);
             }
         }
 
@@ -50,7 +50,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<NotificationTemplateDTO>.Fail($"Error retrieving notification template: {ex.Message}");
+                return ApiResponse<NotificationTemplateDTO>.Fail(ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -88,7 +88,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating notification template. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -122,7 +122,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating notification template. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -138,7 +138,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting notification template. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

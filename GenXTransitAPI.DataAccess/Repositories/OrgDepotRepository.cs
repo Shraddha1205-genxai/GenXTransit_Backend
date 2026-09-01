@@ -183,7 +183,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while inserting depot: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -215,7 +215,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while updating depot: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -240,7 +240,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while deleting depot: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

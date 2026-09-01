@@ -34,7 +34,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<OrgDivisionDTO>>.Fail($"Error retrieving divisions: {ex.Message}");
+                return ApiResponse<IEnumerable<OrgDivisionDTO>>.Fail(ex.Message);
             }
         }
 
@@ -50,7 +50,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<OrgDivisionDTO>.Fail($"Error retrieving division: {ex.Message}");
+                return ApiResponse<OrgDivisionDTO>.Fail(ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -86,7 +86,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating division. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -118,7 +118,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating division. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -134,7 +134,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting division. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

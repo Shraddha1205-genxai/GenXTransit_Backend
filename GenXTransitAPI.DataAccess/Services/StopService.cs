@@ -34,7 +34,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<StopDTO>>.Fail($"Error retrieving stops: {ex.Message}");
+                return ApiResponse<IEnumerable<StopDTO>>.Fail(ex.Message);
             }
         }
 
@@ -50,7 +50,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<StopDTO>.Fail($"Error retrieving stop: {ex.Message}");
+                return ApiResponse<StopDTO>.Fail(ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -90,7 +90,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating stop. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -126,7 +126,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating stop. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -142,7 +142,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting stop. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

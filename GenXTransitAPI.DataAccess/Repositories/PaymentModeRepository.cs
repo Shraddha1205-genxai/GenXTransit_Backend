@@ -125,7 +125,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while inserting payment mode: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -154,7 +154,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while updating payment mode: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -179,7 +179,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while deleting payment mode: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

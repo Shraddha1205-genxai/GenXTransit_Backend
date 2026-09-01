@@ -34,7 +34,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<PaymentModeDTO>>.Fail($"Error retrieving payment modes: {ex.Message}");
+                return ApiResponse<IEnumerable<PaymentModeDTO>>.Fail(ex.Message);
             }
         }
 
@@ -50,7 +50,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<PaymentModeDTO>.Fail($"Error retrieving payment mode: {ex.Message}");
+                return ApiResponse<PaymentModeDTO>.Fail(ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -83,7 +83,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating payment mode. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -112,7 +112,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating payment mode. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -128,7 +128,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting payment mode. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

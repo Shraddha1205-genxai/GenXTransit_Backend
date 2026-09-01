@@ -34,7 +34,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<StageDTO>>.Fail($"Error retrieving stages: {ex.Message}");
+                return ApiResponse<IEnumerable<StageDTO>>.Fail(ex.Message);
             }
         }
 
@@ -50,7 +50,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<StageDTO>.Fail($"Error retrieving stage: {ex.Message}");
+                return ApiResponse<StageDTO>.Fail(ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -106,7 +106,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating stage. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -158,7 +158,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating stage. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -174,7 +174,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting stage. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

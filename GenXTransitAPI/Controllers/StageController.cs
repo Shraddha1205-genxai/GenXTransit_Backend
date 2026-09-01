@@ -26,6 +26,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, routeId, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -33,8 +37,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -43,6 +53,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -50,22 +64,36 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertStageRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.stageName))
-                return BadRequest(ApiResponse<int>.Fail("Stage Name is required."));
+                return BadRequest(new { success = false, message = "Stage Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.routeId))
-                return BadRequest(ApiResponse<int>.Fail("Route is required."));
+                return BadRequest(new { success = false, message = "Route is required." });
 
             if (string.IsNullOrWhiteSpace(request.sectionFromId))
-                return BadRequest(ApiResponse<int>.Fail("Section From is required."));
+                return BadRequest(new { success = false, message = "Section From is required." });
 
             if (string.IsNullOrWhiteSpace(request.sectionToId))
-                return BadRequest(ApiResponse<int>.Fail("Section To is required."));
+                return BadRequest(new { success = false, message = "Section To is required." });
 
             if (request.distance <= 0)
-                return BadRequest(ApiResponse<int>.Fail("Distance must be greater than 0."));
+                return BadRequest(new { success = false, message = "Distance must be greater than 0." });
+
+            // Validate IDs
+            if (!int.TryParse(request.routeId, out int routeId))
+                return BadRequest(new { success = false, message = "Invalid Route ID format." });
+
+            if (!int.TryParse(request.sectionFromId, out int sectionFromId))
+                return BadRequest(new { success = false, message = "Invalid Section From ID format." });
+
+            if (!int.TryParse(request.sectionToId, out int sectionToId))
+                return BadRequest(new { success = false, message = "Invalid Section To ID format." });
+
+            // Check if From and To are different
+            if (sectionFromId == sectionToId)
+                return BadRequest(new { success = false, message = "Section From and Section To cannot be the same." });
 
             var entity = new StageDTO
             {
@@ -78,39 +106,53 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateStageRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.stageId))
-                return BadRequest(ApiResponse<bool>.Fail("Stage ID is required."));
+                return BadRequest(new { success = false, message = "Stage ID is required." });
 
-            if (!int.TryParse(request.stageId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Stage ID format."));
+            if (!int.TryParse(request.stageId, out int stageId))
+                return BadRequest(new { success = false, message = "Invalid Stage ID format." });
 
             if (string.IsNullOrWhiteSpace(request.stageName))
-                return BadRequest(ApiResponse<bool>.Fail("Stage Name is required."));
+                return BadRequest(new { success = false, message = "Stage Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.routeId))
-                return BadRequest(ApiResponse<bool>.Fail("Route is required."));
+                return BadRequest(new { success = false, message = "Route is required." });
 
             if (string.IsNullOrWhiteSpace(request.sectionFromId))
-                return BadRequest(ApiResponse<bool>.Fail("Section From is required."));
+                return BadRequest(new { success = false, message = "Section From is required." });
 
             if (string.IsNullOrWhiteSpace(request.sectionToId))
-                return BadRequest(ApiResponse<bool>.Fail("Section To is required."));
+                return BadRequest(new { success = false, message = "Section To is required." });
 
             if (request.distance <= 0)
-                return BadRequest(ApiResponse<bool>.Fail("Distance must be greater than 0."));
+                return BadRequest(new { success = false, message = "Distance must be greater than 0." });
+
+            // Validate IDs
+            if (!int.TryParse(request.routeId, out int routeId))
+                return BadRequest(new { success = false, message = "Invalid Route ID format." });
+
+            if (!int.TryParse(request.sectionFromId, out int sectionFromId))
+                return BadRequest(new { success = false, message = "Invalid Section From ID format." });
+
+            if (!int.TryParse(request.sectionToId, out int sectionToId))
+                return BadRequest(new { success = false, message = "Invalid Section To ID format." });
+
+            // Check if From and To are different
+            if (sectionFromId == sectionToId)
+                return BadRequest(new { success = false, message = "Section From and Section To cannot be the same." });
 
             var entity = new StageDTO
             {
@@ -124,12 +166,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -137,18 +182,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteStageRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.stageId))
-                return BadRequest(ApiResponse<bool>.Fail("Stage ID is required."));
+                return BadRequest(new { success = false, message = "Stage ID is required." });
 
             if (!int.TryParse(request.stageId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Stage ID format."));
+                return BadRequest(new { success = false, message = "Invalid Stage ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

@@ -129,7 +129,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while inserting tax configuration: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -158,7 +158,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while updating tax configuration: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -183,7 +183,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while deleting tax configuration: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

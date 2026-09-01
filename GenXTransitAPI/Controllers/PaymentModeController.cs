@@ -26,6 +26,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, modeStatus, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -33,8 +37,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -43,6 +53,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -50,13 +64,18 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertPaymentModeRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.modeName))
-                return BadRequest(ApiResponse<int>.Fail("Mode Name is required."));
+                return BadRequest(new { success = false, message = "Mode Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.modeStatus))
-                return BadRequest(ApiResponse<int>.Fail("Mode Status is required."));
+                return BadRequest(new { success = false, message = "Mode Status is required." });
+
+            // Validate Mode Status
+            var validStatuses = new[] { "Active", "Inactive", "Suspended" };
+            if (!validStatuses.Contains(request.modeStatus))
+                return BadRequest(new { success = false, message = "Invalid Mode Status. Valid statuses are: Active, Inactive, Suspended." });
 
             var entity = new PaymentModeDTO
             {
@@ -67,30 +86,35 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdatePaymentModeRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.modeId))
-                return BadRequest(ApiResponse<bool>.Fail("Mode ID is required."));
+                return BadRequest(new { success = false, message = "Mode ID is required." });
 
-            if (!int.TryParse(request.modeId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Mode ID format."));
+            if (!int.TryParse(request.modeId, out int modeId))
+                return BadRequest(new { success = false, message = "Invalid Mode ID format." });
 
             if (string.IsNullOrWhiteSpace(request.modeName))
-                return BadRequest(ApiResponse<bool>.Fail("Mode Name is required."));
+                return BadRequest(new { success = false, message = "Mode Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.modeStatus))
-                return BadRequest(ApiResponse<bool>.Fail("Mode Status is required."));
+                return BadRequest(new { success = false, message = "Mode Status is required." });
+
+            // Validate Mode Status
+            var validStatuses = new[] { "Active", "Inactive", "Suspended" };
+            if (!validStatuses.Contains(request.modeStatus))
+                return BadRequest(new { success = false, message = "Invalid Mode Status. Valid statuses are: Active, Inactive, Suspended." });
 
             var entity = new PaymentModeDTO
             {
@@ -102,12 +126,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -115,18 +142,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeletePaymentModeRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.modeId))
-                return BadRequest(ApiResponse<bool>.Fail("Mode ID is required."));
+                return BadRequest(new { success = false, message = "Mode ID is required." });
 
             if (!int.TryParse(request.modeId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Mode ID format."));
+                return BadRequest(new { success = false, message = "Invalid Mode ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

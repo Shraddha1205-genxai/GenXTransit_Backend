@@ -130,7 +130,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while inserting vehicle category: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -160,7 +160,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while updating vehicle category: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -185,7 +185,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while deleting vehicle category: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

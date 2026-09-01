@@ -33,7 +33,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<OrgRegionDTO>>.Fail($"Error retrieving regions: {ex.Message}");
+                return ApiResponse<IEnumerable<OrgRegionDTO>>.Fail(ex.Message);
             }
         }
 
@@ -49,7 +49,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<OrgRegionDTO>.Fail($"Error retrieving region: {ex.Message}");
+                return ApiResponse<OrgRegionDTO>.Fail(ex.Message);
             }
         }
 
@@ -62,7 +62,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -79,7 +79,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating region. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -105,7 +105,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating region. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -121,7 +121,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting region. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

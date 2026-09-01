@@ -36,6 +36,10 @@ namespace GenXTransitAPI.Controllers
                 GetCurrentUserId(),
                 pageNumber,
                 pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -43,8 +47,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -53,6 +63,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -60,19 +74,19 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertCorporationRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.corporationName))
-                return BadRequest(ApiResponse<int>.Fail("Corporation Name is required."));
+                return BadRequest(new { success = false, message = "Corporation Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.stateName))
-                return BadRequest(ApiResponse<int>.Fail("State Name is required."));
+                return BadRequest(new { success = false, message = "State Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.districtName))
-                return BadRequest(ApiResponse<int>.Fail("District Name is required."));
+                return BadRequest(new { success = false, message = "District Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.cityName))
-                return BadRequest(ApiResponse<int>.Fail("City Name is required."));
+                return BadRequest(new { success = false, message = "City Name is required." });
 
             var entity = new OrgCorporationDTO
             {
@@ -84,8 +98,9 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
-                return BadRequest(result);
+                return BadRequest(new { success = false, message = result.Message });
 
             return Ok(result);
         }
@@ -94,25 +109,25 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateCorporationRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.corporationId))
-                return BadRequest(ApiResponse<bool>.Fail("Corporation ID is required."));
+                return BadRequest(new { success = false, message = "Corporation ID is required." });
 
             if (!int.TryParse(request.corporationId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Corporation ID format."));
+                return BadRequest(new { success = false, message = "Invalid Corporation ID format." });
 
             if (string.IsNullOrWhiteSpace(request.corporationName))
-                return BadRequest(ApiResponse<bool>.Fail("Corporation Name is required."));
+                return BadRequest(new { success = false, message = "Corporation Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.stateName))
-                return BadRequest(ApiResponse<bool>.Fail("State Name is required."));
+                return BadRequest(new { success = false, message = "State Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.districtName))
-                return BadRequest(ApiResponse<bool>.Fail("District Name is required."));
+                return BadRequest(new { success = false, message = "District Name is required." });
 
             if (string.IsNullOrWhiteSpace(request.cityName))
-                return BadRequest(ApiResponse<bool>.Fail("City Name is required."));
+                return BadRequest(new { success = false, message = "City Name is required." });
 
             var entity = new OrgCorporationDTO
             {
@@ -125,12 +140,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -138,18 +156,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteCorporationRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.corporationId))
-                return BadRequest(ApiResponse<bool>.Fail("Corporation ID is required."));
+                return BadRequest(new { success = false, message = "Corporation ID is required." });
 
             if (!int.TryParse(request.corporationId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Corporation ID format."));
+                return BadRequest(new { success = false, message = "Invalid Corporation ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

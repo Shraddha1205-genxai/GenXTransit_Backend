@@ -28,6 +28,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, taxType, rateFrom, rateTo, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -35,8 +39,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -45,6 +55,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -52,18 +66,18 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertTaxConfigurationRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.taxType))
-                return BadRequest(ApiResponse<int>.Fail("Tax Type is required."));
+                return BadRequest(new { success = false, message = "Tax Type is required." });
 
             if (request.rate < 0)
-                return BadRequest(ApiResponse<int>.Fail("Tax rate cannot be negative."));
+                return BadRequest(new { success = false, message = "Tax rate cannot be negative." });
 
             // Validate Tax Type
             var validTaxTypes = new[] { "GST", "Service Tax", "VAT", "Cess", "Others" };
             if (!validTaxTypes.Contains(request.taxType))
-                return BadRequest(ApiResponse<int>.Fail("Invalid Tax Type. Valid types are: GST, Service Tax, VAT, Cess, Others."));
+                return BadRequest(new { success = false, message = "Invalid Tax Type. Valid types are: GST, Service Tax, VAT, Cess, Others." });
 
             var entity = new TaxConfigurationDTO
             {
@@ -74,35 +88,35 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateTaxConfigurationRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.taxId))
-                return BadRequest(ApiResponse<bool>.Fail("Tax ID is required."));
+                return BadRequest(new { success = false, message = "Tax ID is required." });
 
-            if (!int.TryParse(request.taxId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Tax ID format."));
+            if (!int.TryParse(request.taxId, out int taxId))
+                return BadRequest(new { success = false, message = "Invalid Tax ID format." });
 
             if (string.IsNullOrWhiteSpace(request.taxType))
-                return BadRequest(ApiResponse<bool>.Fail("Tax Type is required."));
+                return BadRequest(new { success = false, message = "Tax Type is required." });
 
             if (request.rate < 0)
-                return BadRequest(ApiResponse<bool>.Fail("Tax rate cannot be negative."));
+                return BadRequest(new { success = false, message = "Tax rate cannot be negative." });
 
             // Validate Tax Type
             var validTaxTypes = new[] { "GST", "Service Tax", "VAT", "Cess", "Others" };
             if (!validTaxTypes.Contains(request.taxType))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Tax Type. Valid types are: GST, Service Tax, VAT, Cess, Others."));
+                return BadRequest(new { success = false, message = "Invalid Tax Type. Valid types are: GST, Service Tax, VAT, Cess, Others." });
 
             var entity = new TaxConfigurationDTO
             {
@@ -114,12 +128,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -127,18 +144,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteTaxConfigurationRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.taxId))
-                return BadRequest(ApiResponse<bool>.Fail("Tax ID is required."));
+                return BadRequest(new { success = false, message = "Tax ID is required." });
 
             if (!int.TryParse(request.taxId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Tax ID format."));
+                return BadRequest(new { success = false, message = "Invalid Tax ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

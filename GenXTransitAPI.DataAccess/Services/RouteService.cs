@@ -35,7 +35,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<RouteDTO>>.Fail($"Error retrieving routes: {ex.Message}");
+                return ApiResponse<IEnumerable<RouteDTO>>.Fail(ex.Message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<RouteDTO>.Fail($"Error retrieving route: {ex.Message}");
+                return ApiResponse<RouteDTO>.Fail(ex.Message);
             }
         }
 
@@ -64,7 +64,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -113,7 +113,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating route. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -171,7 +171,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating route. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -187,7 +187,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting route. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

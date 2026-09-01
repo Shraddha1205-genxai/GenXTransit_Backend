@@ -36,7 +36,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<OrgWorkshopDTO>>.Fail($"Error retrieving workshops: {ex.Message}");
+                return ApiResponse<IEnumerable<OrgWorkshopDTO>>.Fail(ex.Message);
             }
         }
 
@@ -52,7 +52,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<OrgWorkshopDTO>.Fail($"Error retrieving workshop: {ex.Message}");
+                return ApiResponse<OrgWorkshopDTO>.Fail(ex.Message);
             }
         }
 
@@ -65,7 +65,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -107,7 +107,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating workshop. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -158,7 +158,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating workshop. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -174,7 +174,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting workshop. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

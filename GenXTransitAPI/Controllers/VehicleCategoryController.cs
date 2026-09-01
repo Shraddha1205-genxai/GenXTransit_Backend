@@ -27,6 +27,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, type, vehicleClass, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -34,8 +38,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -44,6 +54,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -51,19 +65,24 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertVehicleCategoryRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.categoryName))
-                return BadRequest(ApiResponse<int>.Fail("Category Name is required."));
+                return BadRequest(new { success = false, message = "Category Name is required." });
 
             if (request.capacity < 0)
-                return BadRequest(ApiResponse<int>.Fail("Capacity cannot be negative."));
+                return BadRequest(new { success = false, message = "Capacity cannot be negative." });
 
             if (string.IsNullOrWhiteSpace(request.type))
-                return BadRequest(ApiResponse<int>.Fail("Type is required."));
+                return BadRequest(new { success = false, message = "Type is required." });
 
             if (string.IsNullOrWhiteSpace(request.@class))
-                return BadRequest(ApiResponse<int>.Fail("Vehicle Class is required."));
+                return BadRequest(new { success = false, message = "Vehicle Class is required." });
+
+            // Validate Type
+            var validTypes = new[] { "AC", "Non-AC" };
+            if (!validTypes.Contains(request.type))
+                return BadRequest(new { success = false, message = "Invalid Type. Valid types are: AC, Non-AC." });
 
             var entity = new VehicleCategoryDTO
             {
@@ -75,36 +94,41 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateVehicleCategoryRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.categoryId))
-                return BadRequest(ApiResponse<bool>.Fail("Category ID is required."));
+                return BadRequest(new { success = false, message = "Category ID is required." });
 
-            if (!int.TryParse(request.categoryId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Category ID format."));
+            if (!int.TryParse(request.categoryId, out int categoryId))
+                return BadRequest(new { success = false, message = "Invalid Category ID format." });
 
             if (string.IsNullOrWhiteSpace(request.categoryName))
-                return BadRequest(ApiResponse<bool>.Fail("Category Name is required."));
+                return BadRequest(new { success = false, message = "Category Name is required." });
 
             if (request.capacity < 0)
-                return BadRequest(ApiResponse<bool>.Fail("Capacity cannot be negative."));
+                return BadRequest(new { success = false, message = "Capacity cannot be negative." });
 
             if (string.IsNullOrWhiteSpace(request.type))
-                return BadRequest(ApiResponse<bool>.Fail("Type is required."));
+                return BadRequest(new { success = false, message = "Type is required." });
 
             if (string.IsNullOrWhiteSpace(request.@class))
-                return BadRequest(ApiResponse<bool>.Fail("Vehicle Class is required."));
+                return BadRequest(new { success = false, message = "Vehicle Class is required." });
+
+            // Validate Type
+            var validTypes = new[] { "AC", "Non-AC" };
+            if (!validTypes.Contains(request.type))
+                return BadRequest(new { success = false, message = "Invalid Type. Valid types are: AC, Non-AC." });
 
             var entity = new VehicleCategoryDTO
             {
@@ -117,12 +141,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -130,18 +157,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteVehicleCategoryRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.categoryId))
-                return BadRequest(ApiResponse<bool>.Fail("Category ID is required."));
+                return BadRequest(new { success = false, message = "Category ID is required." });
 
             if (!int.TryParse(request.categoryId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Category ID format."));
+                return BadRequest(new { success = false, message = "Invalid Category ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 

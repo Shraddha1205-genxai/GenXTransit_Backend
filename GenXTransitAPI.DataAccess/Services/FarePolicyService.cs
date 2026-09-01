@@ -37,7 +37,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<IEnumerable<FarePolicyDTO>>.Fail($"Error retrieving fare policies: {ex.Message}");
+                return ApiResponse<IEnumerable<FarePolicyDTO>>.Fail(ex.Message);
             }
         }
 
@@ -53,7 +53,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<FarePolicyDTO>.Fail($"Error retrieving fare policy: {ex.Message}");
+                return ApiResponse<FarePolicyDTO>.Fail(ex.Message);
             }
         }
 
@@ -66,7 +66,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail($"Error generating next code: {ex.Message}");
+                return ApiResponse<string>.Fail(ex.Message);
             }
         }
 
@@ -102,7 +102,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<int>.Fail($"An error occurred while creating fare policy. {ex.Message}");
+                return ApiResponse<int>.Fail(ex.Message);
             }
         }
 
@@ -147,7 +147,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while updating fare policy. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
 
@@ -163,7 +163,7 @@ namespace GenXTransitAPI.DataAccess.Services
             }
             catch (Exception ex)
             {
-                return ApiResponse<bool>.Fail($"An error occurred while deleting fare policy. {ex.Message}");
+                return ApiResponse<bool>.Fail(ex.Message);
             }
         }
     }

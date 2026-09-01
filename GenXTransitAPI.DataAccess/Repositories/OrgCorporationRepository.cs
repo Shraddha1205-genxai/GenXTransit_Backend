@@ -135,7 +135,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while inserting corporation: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -165,7 +165,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while updating corporation: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -190,7 +190,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error while deleting corporation: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
     }

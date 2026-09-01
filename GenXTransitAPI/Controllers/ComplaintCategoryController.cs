@@ -27,6 +27,10 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageSize = 10)
         {
             var result = await _svc.GetAllAsync(searchText, complaintCategory, sla, isActive, GetCurrentUserId(), pageNumber, pageSize);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -34,8 +38,14 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _svc.GetByIdAsync(id);
+
             if (!result.Success)
-                return NotFound(result);
+            {
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
+            }
 
             return Ok(result);
         }
@@ -44,6 +54,10 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> GetNextCode()
         {
             var result = await _svc.GetNextCodeAsync();
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
             return Ok(result);
         }
 
@@ -51,26 +65,26 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Insert([FromBody] InsertComplaintCategoryRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<int>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrWhiteSpace(request.complaintTitle))
-                return BadRequest(ApiResponse<int>.Fail("Complaint Title is required."));
+                return BadRequest(new { success = false, message = "Complaint Title is required." });
 
             if (string.IsNullOrWhiteSpace(request.complaintCategory))
-                return BadRequest(ApiResponse<int>.Fail("Complaint Category is required."));
+                return BadRequest(new { success = false, message = "Complaint Category is required." });
 
             if (string.IsNullOrWhiteSpace(request.sla))
-                return BadRequest(ApiResponse<int>.Fail("SLA is required."));
+                return BadRequest(new { success = false, message = "SLA is required." });
 
             // Validate Complaint Category
             var validCategories = new[] { "General", "Technical", "Billing", "Service", "Other" };
             if (!validCategories.Contains(request.complaintCategory))
-                return BadRequest(ApiResponse<int>.Fail("Invalid Complaint Category. Valid categories are: General, Technical, Billing, Service, Other."));
+                return BadRequest(new { success = false, message = "Invalid Complaint Category. Valid categories are: General, Technical, Billing, Service, Other." });
 
             // Validate SLA
             var validSLAs = new[] { "24 Hours", "48 Hours", "72 Hours", "1 Week", "2 Weeks" };
             if (!validSLAs.Contains(request.sla))
-                return BadRequest(ApiResponse<int>.Fail("Invalid SLA. Valid SLAs are: 24 Hours, 48 Hours, 72 Hours, 1 Week, 2 Weeks."));
+                return BadRequest(new { success = false, message = "Invalid SLA. Valid SLAs are: 24 Hours, 48 Hours, 72 Hours, 1 Week, 2 Weeks." });
 
             var entity = new ComplaintCategoryDTO
             {
@@ -82,43 +96,43 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.InsertAsync(entity, GetCurrentUserId());
-            if (result.Success && result.Data > 0)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(result);
         }
 
         [HttpPost("update")]
         public async Task<IActionResult> Update([FromBody] UpdateComplaintCategoryRequest request)
         {
             if (request == null)
-                return BadRequest(ApiResponse<bool>.Fail("Invalid request data."));
+                return BadRequest(new { success = false, message = "Invalid request data." });
 
             if (string.IsNullOrEmpty(request.complaintId))
-                return BadRequest(ApiResponse<bool>.Fail("Complaint ID is required."));
+                return BadRequest(new { success = false, message = "Complaint ID is required." });
 
-            if (!int.TryParse(request.complaintId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Complaint ID format."));
+            if (!int.TryParse(request.complaintId, out int complaintId))
+                return BadRequest(new { success = false, message = "Invalid Complaint ID format." });
 
             if (string.IsNullOrWhiteSpace(request.complaintTitle))
-                return BadRequest(ApiResponse<bool>.Fail("Complaint Title is required."));
+                return BadRequest(new { success = false, message = "Complaint Title is required." });
 
             if (string.IsNullOrWhiteSpace(request.complaintCategory))
-                return BadRequest(ApiResponse<bool>.Fail("Complaint Category is required."));
+                return BadRequest(new { success = false, message = "Complaint Category is required." });
 
             if (string.IsNullOrWhiteSpace(request.sla))
-                return BadRequest(ApiResponse<bool>.Fail("SLA is required."));
+                return BadRequest(new { success = false, message = "SLA is required." });
 
             // Validate Complaint Category
             var validCategories = new[] { "General", "Technical", "Billing", "Service", "Other" };
             if (!validCategories.Contains(request.complaintCategory))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Complaint Category. Valid categories are: General, Technical, Billing, Service, Other."));
+                return BadRequest(new { success = false, message = "Invalid Complaint Category. Valid categories are: General, Technical, Billing, Service, Other." });
 
             // Validate SLA
             var validSLAs = new[] { "24 Hours", "48 Hours", "72 Hours", "1 Week", "2 Weeks" };
             if (!validSLAs.Contains(request.sla))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid SLA. Valid SLAs are: 24 Hours, 48 Hours, 72 Hours, 1 Week, 2 Weeks."));
+                return BadRequest(new { success = false, message = "Invalid SLA. Valid SLAs are: 24 Hours, 48 Hours, 72 Hours, 1 Week, 2 Weeks." });
 
             var entity = new ComplaintCategoryDTO
             {
@@ -131,12 +145,15 @@ namespace GenXTransitAPI.Controllers
             };
 
             var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
@@ -144,18 +161,21 @@ namespace GenXTransitAPI.Controllers
         public async Task<IActionResult> Delete([FromBody] DeleteComplaintCategoryRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.complaintId))
-                return BadRequest(ApiResponse<bool>.Fail("Complaint ID is required."));
+                return BadRequest(new { success = false, message = "Complaint ID is required." });
 
             if (!int.TryParse(request.complaintId, out int id))
-                return BadRequest(ApiResponse<bool>.Fail("Invalid Complaint ID format."));
+                return BadRequest(new { success = false, message = "Invalid Complaint ID format." });
 
             var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+
             if (!result.Success)
             {
-                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
-                    return NotFound(result);
-                return BadRequest(result);
+                if (result.Message != null && result.Message.Contains("not found"))
+                    return NotFound(new { success = false, message = result.Message });
+
+                return BadRequest(new { success = false, message = result.Message });
             }
+
             return Ok(result);
         }
 
