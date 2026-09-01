@@ -76,6 +76,7 @@ namespace GenXTransitAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllUsers([FromQuery] string? searchText,
     [FromQuery] bool? isActive,
     [FromQuery] int pageNumber = 1,
@@ -106,6 +107,7 @@ namespace GenXTransitAPI.Controllers
         }
 
         [HttpGet("{userId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUserById(int userId)
         {
             try
@@ -129,6 +131,7 @@ namespace GenXTransitAPI.Controllers
         }
 
         [HttpPost("delete")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteUser(DeleteUserRequest request )
         {
             try
