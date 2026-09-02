@@ -1,6 +1,7 @@
 ﻿using GenXTransitAPI.DataAccess.Interface.IServices;
 using GenXTransitAPI.Models;
 using GenXTransitAPI.Models.DTO_s;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -8,7 +9,8 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/corporation")]
     [ApiController]
-    public class CorporationController : ControllerBase
+    [AllowAnonymous]
+    public class CorporationController : BaseController 
     {
         private readonly IOrgCorporationService _svc;
 
@@ -33,7 +35,7 @@ namespace GenXTransitAPI.Controllers
                 districtName,
                 cityName,
                 isActive,
-                GetCurrentUserId(),
+                CurrentUserId, 
                 pageNumber,
                 pageSize);
 
@@ -97,7 +99,7 @@ namespace GenXTransitAPI.Controllers
                 isActive = request.isActive
             };
 
-            var result = await _svc.InsertAsync(entity, GetCurrentUserId());
+            var result = await _svc.InsertAsync(entity, CurrentUserId);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });
@@ -139,11 +141,11 @@ namespace GenXTransitAPI.Controllers
                 isActive = request.isActive
             };
 
-            var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+            var result = await _svc.UpdateAsync(entity, CurrentUserId);  
 
             if (!result.Success)
             {
-                if (result.Message != null && result.Message.Contains("not found"))
+                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
                     return NotFound(new { success = false, message = result.Message });
 
                 return BadRequest(new { success = false, message = result.Message });
@@ -161,11 +163,11 @@ namespace GenXTransitAPI.Controllers
             if (!int.TryParse(request.corporationId, out int id))
                 return BadRequest(new { success = false, message = "Invalid Corporation ID format." });
 
-            var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+            var result = await _svc.DeleteAsync(id, CurrentUserId);  // ✅ Use CurrentUserId
 
             if (!result.Success)
             {
-                if (result.Message != null && result.Message.Contains("not found"))
+                if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("not found"))
                     return NotFound(new { success = false, message = result.Message });
 
                 return BadRequest(new { success = false, message = result.Message });
@@ -174,9 +176,5 @@ namespace GenXTransitAPI.Controllers
             return Ok(result);
         }
 
-        private int GetCurrentUserId()
-        {
-            return 1;
-        }
     }
 }

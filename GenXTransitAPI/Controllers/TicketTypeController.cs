@@ -1,6 +1,7 @@
 ﻿using GenXTransitAPI.DataAccess.Interface.IServices;
 using GenXTransitAPI.Models;
 using GenXTransitAPI.Models.DTO_s;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -8,7 +9,8 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/tickettype")]
     [ApiController]
-    public class TicketTypeController : ControllerBase
+    [AllowAnonymous]  
+    public class TicketTypeController : BaseController  
     {
         private readonly ITicketTypeService _svc;
 
@@ -24,7 +26,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, isActive, GetCurrentUserId(), pageNumber, pageSize);
+            var result = await _svc.GetAllAsync(searchText, isActive, CurrentUserId, pageNumber, pageSize);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });
@@ -75,7 +77,7 @@ namespace GenXTransitAPI.Controllers
                 isActive = request.isActive
             };
 
-            var result = await _svc.InsertAsync(entity, GetCurrentUserId());
+            var result = await _svc.InsertAsync(entity, CurrentUserId);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });
@@ -106,7 +108,7 @@ namespace GenXTransitAPI.Controllers
                 isActive = request.isActive
             };
 
-            var result = await _svc.UpdateAsync(entity, GetCurrentUserId());
+            var result = await _svc.UpdateAsync(entity, CurrentUserId); 
 
             if (!result.Success)
             {
@@ -128,7 +130,7 @@ namespace GenXTransitAPI.Controllers
             if (!int.TryParse(request.ticketId, out int id))
                 return BadRequest(new { success = false, message = "Invalid Ticket ID format." });
 
-            var result = await _svc.DeleteAsync(id, GetCurrentUserId());
+            var result = await _svc.DeleteAsync(id, CurrentUserId);  
 
             if (!result.Success)
             {
@@ -141,9 +143,5 @@ namespace GenXTransitAPI.Controllers
             return Ok(result);
         }
 
-        private int GetCurrentUserId()
-        {
-            return 1;
-        }
     }
 }
