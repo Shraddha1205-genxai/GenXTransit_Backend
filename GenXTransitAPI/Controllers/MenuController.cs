@@ -1,5 +1,6 @@
 ﻿using GenXTransitAPI.DataAccess.Interface.IServices;
 using GenXTransitAPI.Models.DTOs;
+using GenXTransitAPI.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,10 +40,12 @@ namespace GenXTransitAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllMenus(
             [FromQuery] string? searchText = null,
+            [FromQuery] int? sectionId = null,
             [FromQuery] bool? isActive = null)
         {
             var response = await _menuService.GetAllMenusAsync(
                 searchText,
+                sectionId,
                 isActive);
 
             return Ok(response);
@@ -50,11 +53,11 @@ namespace GenXTransitAPI.Controllers
 
 
         // GET BY ID
-        [HttpGet("{id}")]
+        [HttpGet("{menuId}")]
         public async Task<IActionResult> GetMenuById(
-            int id)
+            int menuId)
         {
-            var response = await _menuService.GetMenuByIdAsync(id);
+            var response = await _menuService.GetMenuByIdAsync(menuId);
 
             return Ok(response);
         }
@@ -65,7 +68,7 @@ namespace GenXTransitAPI.Controllers
        
          public async Task<IActionResult> DeleteMenu(DeleteMenuRequest request)
         {
-            var response = await _menuService.DeleteMenuAsync(request.Id,CurrentUserId);
+            var response = await _menuService.DeleteMenuAsync(request.MenuId,CurrentUserId);
 
             return Ok(response);
         }

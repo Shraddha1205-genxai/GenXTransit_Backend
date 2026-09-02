@@ -3,6 +3,7 @@ using GenXTransitAPI.DataAccess.Data;
 using GenXTransitAPI.DataAccess.Interface.IRepositories;
 using GenXTransitAPI.Models;
 using GenXTransitAPI.Models.DTOs;
+using GenXTransitAPI.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -68,7 +69,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
                 var parameters = new DynamicParameters();
 
-                parameters.Add("@Id", request.Id);
+                parameters.Add("@Id", request.MenuId);
                 parameters.Add("@IconName", request.IconName);
                 parameters.Add("@SectionId", request.SectionId);
                 parameters.Add("@SortOrder", request.SortOrder);
@@ -85,7 +86,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 {
                     Success = result?.Status == 1,
                     Message = result?.Message,
-                    Data = result?.Id ?? request.Id
+                    Data = result?.Id ?? request.MenuId
                 };
             }
             catch (Exception ex)
@@ -94,13 +95,14 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 {
                     Success = false,
                     Message = ex.Message,
-                    Data = request.Id
+                    Data = request.MenuId
                 };
             }
         }
         // GET ALL
         public async Task<ApiResponse<List<MenuResponseDto>>> GetAllMenusAsync(
             string? searchText,
+            int? sectionId,
             bool? isActive)
         {
             try
@@ -110,6 +112,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 var parameters = new DynamicParameters();
 
                 parameters.Add("@SearchText", searchText);
+                parameters.Add("@SectionId", sectionId);
                 parameters.Add("@IsActive", isActive);
 
                 var result = await conn.QueryAsync<MenuResponseDto>(
@@ -137,7 +140,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
         // GET BY ID
         public async Task<ApiResponse<MenuResponseDto>> GetMenuByIdAsync(
-            int id)
+            int menuId)
         {
             try
             {
@@ -145,7 +148,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
                 var parameters = new DynamicParameters();
 
-                parameters.Add("@Id", id);
+                parameters.Add("@MenuId", menuId);
 
                 var result = await conn.QueryFirstOrDefaultAsync<MenuResponseDto>(
                     "usp_Menu_GetById",
@@ -182,7 +185,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
         // DELETE
 
                 public async Task<ApiResponse<bool>> DeleteMenuAsync(
-            int id, int modifiedBy)
+            int menuId, int modifiedBy)
         {
             try
             {
@@ -190,8 +193,8 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 var parameters = new DynamicParameters();
 
                 parameters.Add(
-                    "@Id",
-                    id,
+                    "@MenuId",
+                    menuId,
                     DbType.Int32);
                 parameters.Add(
                    "@ModifiedBy",
