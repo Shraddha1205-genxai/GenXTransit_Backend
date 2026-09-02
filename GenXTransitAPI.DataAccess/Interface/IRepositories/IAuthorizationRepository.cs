@@ -12,13 +12,16 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
         Task<IEnumerable<AuthorizationRowDto>> GetByRoleAsync(
       int roleId,
       string? searchText);
+        Task<bool> SaveAllAsync(
+           List<AuthorizationItem> items,
+           int userId);
 
-        Task<bool> SaveAsync(
-         AuthorizationSaveDto request,
-         int userId);
+        //Task<bool> SaveAsync(
+        // AuthorizationSaveDto request,
+        // int userId);
 
-        Task<bool> UpdateAsync(
-            AuthorizationUpdateDto request,
-            int userId);
+        //Task<bool> UpdateAsync(
+        //    AuthorizationUpdateDto request,
+        //    int userId);
     }
 }

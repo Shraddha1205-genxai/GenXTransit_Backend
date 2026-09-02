@@ -21,21 +21,43 @@ namespace GenXTransitAPI.DataAccess.Repositories
             _db = db;
         }
 
-        public async Task<ApiResponse<List<Tab>>> GetAllTabsAsync()
+        public async Task<ApiResponse<List<Tab>>> GetAllTabsAsync(
+    int? menuId,
+    int? sectionId,
+    bool? isActive,
+    string? searchText,
+    int pageNumber,
+    int pageSize)
         {
             try
             {
                 using var conn = _db.CreateConnection();
 
-                var result = await conn.QueryAsync<Tab>(
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@MenuId", menuId);
+                parameters.Add("@SectionId", sectionId);
+                parameters.Add("@IsActive", isActive);
+                parameters.Add("@SearchText", searchText);
+                parameters.Add("@PageNumber", pageNumber);
+                parameters.Add("@PageSize", pageSize);
+
+                using var multi = await conn.QueryMultipleAsync(
                     "usp_Tab_GetAll",
+                    parameters,
                     commandType: System.Data.CommandType.StoredProcedure);
+
+                // First result set - Total Records
+                await multi.ReadFirstAsync<int>();
+
+                // Second result set - Tab data
+                var result = (await multi.ReadAsync<Tab>()).ToList();
 
                 return new ApiResponse<List<Tab>>
                 {
                     Success = true,
                     Message = "Tabs retrieved successfully.",
-                    Data = result.ToList()
+                    Data = result
                 };
             }
             catch (Exception ex)

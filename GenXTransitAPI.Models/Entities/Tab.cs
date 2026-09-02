@@ -10,7 +10,9 @@ namespace GenXTransitAPI.Models.Entities
     {
         public int TabId { get; set; }
         public int SectionId { get; set; }
+        public string? SectionName { get; set; }
         public int MenuId { get; set; }
+        public string? MenuName { get; set; }
         public string? TabName { get; set; }
         public int? SortOrder { get; set; }
         public string? URL { get; set; }
