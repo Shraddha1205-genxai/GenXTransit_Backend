@@ -20,9 +20,17 @@ namespace GenXTransitAPI.Controllers
 
         // GET: api/tab
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+     
+          public async Task<IActionResult> GetAll(
+            [FromQuery] int? menuId,
+            [FromQuery] int? sectionId, 
+            [FromQuery] bool? isActive, 
+            [FromQuery] string? searchText,
+            [FromQuery] int pageNumber = 1,  
+            [FromQuery] int pageSize = 10)
         {
-            var response = await _tabService.GetAllTabsAsync();
+            var response = await _tabService.GetAllTabsAsync(menuId, sectionId, isActive, searchText, pageNumber,
+            pageSize);
 
             return Ok(response);
         }

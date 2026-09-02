@@ -13,12 +13,16 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
        int roleId,
        string? searchText);
 
-        Task<bool> SaveAsync(
-        AuthorizationSaveDto request,
-        int userId);
-
-        Task<bool> UpdateAsync(
-            AuthorizationUpdateDto request,
+        Task<bool> SaveAllAsync(
+            List<AuthorizationItem> items,
             int userId);
+
+        //Task<bool> SaveAsync(
+        //AuthorizationSaveDto request,
+        //int userId);
+
+        //Task<bool> UpdateAsync(
+        //    AuthorizationUpdateDto request,
+        //    int userId);
     }
 }

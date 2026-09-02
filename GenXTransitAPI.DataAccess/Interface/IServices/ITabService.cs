@@ -11,7 +11,12 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
 {
     public interface ITabService
     {
-        Task<ApiResponse<List<Tab>>> GetAllTabsAsync();
+        Task<ApiResponse<List<Tab>>> GetAllTabsAsync(int? menuId,
+    int? sectionId,
+    bool? isActive,
+    string? searchText,
+    int pageNumber,
+    int pageSize);
 
         Task<ApiResponse<Tab>> GetTabByIdAsync(int tabId);
 

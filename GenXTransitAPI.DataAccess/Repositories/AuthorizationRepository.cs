@@ -37,79 +37,118 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 commandType: CommandType.StoredProcedure);
         }
 
-
-        public async Task<bool> SaveAsync(
-        AuthorizationSaveDto request,
-        int userId)
+        public async Task<bool> SaveAllAsync(
+       List<AuthorizationItem> items,
+       int userId)
         {
             using var conn = _db.CreateConnection();
 
-            var result = await conn.QueryFirstAsync<dynamic>(
-                "usp_Authorization_Save",
-                new
-                {
-                    request.RoleId,
-                    request.SectionId,
-                    request.MenuId,
-                    request.TabId,
+            foreach (var item in items)
+            {
+                await conn.ExecuteAsync(
+                    "usp_Authorization_SaveNew",
+                    new
+                    {
+                        item.AuthId,
+                        item.RoleId,
+                        item.SectionId,
+                        item.MenuId,
+                        item.TabId,
 
-                    request.CanView,
-                    request.CanAdd,
-                    request.CanEdit,
-                    request.CanDelete,
+                        item.CanView,
+                        item.CanAdd,
+                        item.CanEdit,
+                        item.CanDelete,
 
-                    //request.IsDisableView,
-                    //request.IsDisableEdit,
-                    //request.IsDisableAdd,
-                    //request.IsDisableDelete,
+                        //item.IsDisableView,
+                        //item.IsDisableEdit,
+                        //item.IsDisableAdd,
+                        //item.IsDisableDelete,
 
-                    request.CanAction,
-                    request.IsDisableAction,
+                        item.CanAction,
+                        item.IsDefault,
 
-                    UserId = userId
-                },
-                commandType: CommandType.StoredProcedure);
+                        UserId = userId
+                    },
+                    commandType: CommandType.StoredProcedure);
+            }
 
-            return result.Status == 1;
-        }
-
-
-        public async Task<bool> UpdateAsync(
-            AuthorizationUpdateDto request,
-            int userId)
-        {
-            using var conn = _db.CreateConnection();
-
-            var result = await conn.QueryFirstAsync<dynamic>(
-                "usp_Authorization_Update",
-                new
-                {
-                    request.AuthId,
-
-                    request.RoleId,
-                    request.SectionId,
-                    request.MenuId,
-                    request.TabId,
-
-                    request.CanView,
-                    request.CanAdd,
-                    request.CanEdit,
-                    request.CanDelete,
-
-                    //request.IsDisableView,
-                    //request.IsDisableEdit,
-                    //request.IsDisableAdd,
-                    //request.IsDisableDelete,
-
-                    request.CanAction,
-                    request.IsDisableAction,
-
-                    UserId = userId
-                },
-                commandType: CommandType.StoredProcedure);
-
-            return result.Status == 1;
+            return true;
         }
     }
+
+    //public async Task<bool> SaveAsync(
+    //AuthorizationSaveDto request,
+    //int userId)
+    //{
+    //    using var conn = _db.CreateConnection();
+
+    //    var result = await conn.QueryFirstAsync<dynamic>(
+    //        "usp_Authorization_Save",
+    //        new
+    //        {
+    //            request.RoleId,
+    //            request.SectionId,
+    //            request.MenuId,
+    //            request.TabId,
+
+    //            request.CanView,
+    //            request.CanAdd,
+    //            request.CanEdit,
+    //            request.CanDelete,
+
+    //            //request.IsDisableView,
+    //            //request.IsDisableEdit,
+    //            //request.IsDisableAdd,
+    //            //request.IsDisableDelete,
+
+    //            request.CanAction,
+    //            request.IsDisableAction,
+
+    //            UserId = userId
+    //        },
+    //        commandType: CommandType.StoredProcedure);
+
+    //    return result.Status == 1;
+    //}
+
+
+    //public async Task<bool> UpdateAsync(
+    //    AuthorizationUpdateDto request,
+    //    int userId)
+    //{
+    //    using var conn = _db.CreateConnection();
+
+    //    var result = await conn.QueryFirstAsync<dynamic>(
+    //        "usp_Authorization_Update",
+    //        new
+    //        {
+    //            request.AuthId,
+
+    //            request.RoleId,
+    //            request.SectionId,
+    //            request.MenuId,
+    //            request.TabId,
+
+    //            request.CanView,
+    //            request.CanAdd,
+    //            request.CanEdit,
+    //            request.CanDelete,
+
+    //            //request.IsDisableView,
+    //            //request.IsDisableEdit,
+    //            //request.IsDisableAdd,
+    //            //request.IsDisableDelete,
+
+    //            request.CanAction,
+    //            request.IsDisableAction,
+
+    //            UserId = userId
+    //        },
+    //        commandType: CommandType.StoredProcedure);
+
+    //    return result.Status == 1;
+    //}
 }
+
 

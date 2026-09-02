@@ -28,24 +28,33 @@ namespace GenXTransitAPI.DataAccess.Services
                 searchText);
         }
 
-
-        public async Task<bool> SaveAsync(
-        AuthorizationSaveDto request,
+        public async Task<bool> SaveAllAsync(
+        List<AuthorizationItem> items,
         int userId)
         {
-            return await _repo.SaveAsync(
-                request,
+            return await _repo.SaveAllAsync(
+                items,
                 userId);
         }
 
 
-        public async Task<bool> UpdateAsync(
-            AuthorizationUpdateDto request,
-            int userId)
-        {
-            return await _repo.UpdateAsync(
-                request,
-                userId);
-        }
+        //public async Task<bool> SaveAsync(
+        //AuthorizationSaveDto request,
+        //int userId)
+        //{
+        //    return await _repo.SaveAsync(
+        //        request,
+        //        userId);
+        //}
+
+
+        //public async Task<bool> UpdateAsync(
+        //    AuthorizationUpdateDto request,
+        //    int userId)
+        //{
+        //    return await _repo.UpdateAsync(
+        //        request,
+        //        userId);
+        //}
     }
 }

@@ -19,7 +19,7 @@ namespace GenXTransitAPI.Controllers
         {
             _svc = svc;
         }
-        [HttpGet("{roleId}")]
+        [HttpGet]
         public async Task<IActionResult> GetByRole(
            int roleId,
            string? searchText)
@@ -34,64 +34,85 @@ namespace GenXTransitAPI.Controllers
         }
 
 
-        // SAVE
-        [HttpPost("save")]
-        public async Task<IActionResult> Save(
-            [FromBody] AuthorizationSaveDto request)
+        //// SAVE
+        [HttpPost("saveall")]
+        public async Task<IActionResult> SaveAll(
+             [FromBody] List<AuthorizationItem> items)
         {
-            if (request == null)
+            if (items == null || !items.Any())
             {
                 return BadRequest(
                     ApiResponse<bool>.Fail(
-                        "Authorization details are required."));
+                        "Authorization items are required."));
             }
 
-            var result = await _svc.SaveAsync(
-                request,
+            var result = await _svc.SaveAllAsync(
+                items,
                 CurrentUserId);
-
-            if (!result)
-            {
-                return BadRequest(
-                    ApiResponse<bool>.Fail(
-                        "Authorization already exists."));
-            }
 
             return Ok(
                 ApiResponse<bool>.Ok(
-                    true,
-                    "Authorization saved successfully."));
-        }
-
-
-        // UPDATE
-        [HttpPost("update")]
-        public async Task<IActionResult> Update(
-            [FromBody] AuthorizationUpdateDto request)
-        {
-            if (request == null || request.AuthId <= 0)
-            {
-                return BadRequest(
-                    ApiResponse<bool>.Fail(
-                        "Valid AuthId is required."));
-            }
-
-            var result = await _svc.UpdateAsync(
-                request,
-                CurrentUserId);
-
-            if (!result)
-            {
-                return BadRequest(
-                    ApiResponse<bool>.Fail(
-                        "Authorization not found or already exists."));
-            }
-
-            return Ok(
-                ApiResponse<bool>.Ok(
-                    true,
-                    "Authorization updated successfully."));
+                    result,
+                    "Permissions saved successfully."));
         }
     }
+
+    //[HttpPost("save")]
+    //public async Task<IActionResult> Save(
+    //    [FromBody] AuthorizationSaveDto request)
+    //{
+    //    if (request == null)
+    //    {
+    //        return BadRequest(
+    //            ApiResponse<bool>.Fail(
+    //                "Authorization details are required."));
+    //    }
+
+    //    var result = await _svc.SaveAsync(
+    //        request,
+    //        CurrentUserId);
+
+    //    if (!result)
+    //    {
+    //        return BadRequest(
+    //            ApiResponse<bool>.Fail(
+    //                "Authorization already exists."));
+    //    }
+
+    //    return Ok(
+    //        ApiResponse<bool>.Ok(
+    //            true,
+    //            "Authorization saved successfully."));
+    //}
+
+
+    //// UPDATE
+    //[HttpPost("update")]
+    //public async Task<IActionResult> Update(
+    //    [FromBody] AuthorizationUpdateDto request)
+    //{
+    //    if (request == null || request.AuthId <= 0)
+    //    {
+    //        return BadRequest(
+    //            ApiResponse<bool>.Fail(
+    //                "Valid AuthId is required."));
+    //    }
+
+    //    var result = await _svc.UpdateAsync(
+    //        request,
+    //        CurrentUserId);
+
+    //    if (!result)
+    //    {
+    //        return BadRequest(
+    //            ApiResponse<bool>.Fail(
+    //                "Authorization not found or already exists."));
+    //    }
+
+    //    return Ok(
+    //        ApiResponse<bool>.Ok(
+    //            true,
+    //            "Authorization updated successfully."));
+    //}
 }
    

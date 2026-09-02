@@ -3,11 +3,14 @@ using GenXTransitAPI.DataAccess.Interface.IServices;
 using GenXTransitAPI.Models;
 using GenXTransitAPI.Models.DTOs;
 using GenXTransitAPI.Models.Entities;
+using MailKit.Search;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace GenXTransitAPI.DataAccess.Services
 {
@@ -20,9 +23,15 @@ namespace GenXTransitAPI.DataAccess.Services
             _tabRepository = tabRepository;
         }
 
-        public async Task<ApiResponse<List<Tab>>> GetAllTabsAsync()
+        public async Task<ApiResponse<List<Tab>>> GetAllTabsAsync( int? menuId,
+            int? sectionId,
+            bool? isActive,
+            string? searchText,
+            int pageNumber,
+             int pageSize )
         {
-            return await _tabRepository.GetAllTabsAsync();
+            return await _tabRepository.GetAllTabsAsync(menuId, sectionId, isActive, searchText, pageNumber,
+            pageSize);
         }
 
         public async Task<ApiResponse<Tab>> GetTabByIdAsync(int tabId)
