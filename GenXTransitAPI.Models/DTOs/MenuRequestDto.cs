@@ -23,7 +23,7 @@ namespace GenXTransitAPI.Models.DTOs
 
     public class MenuResponseDto
     {
-        public int Id { get; set; }
+        public int MenuId { get; set; }
 
         public string? IconName { get; set; }
 
@@ -55,7 +55,7 @@ namespace GenXTransitAPI.Models.DTOs
     }
     public class MenuUpdateDto
     {
-        public int Id { get; set; }
+        public int MenuId { get; set; }
         public string? IconName { get; set; }
         public int SectionId { get; set; }
         public int? SortOrder { get; set; }
@@ -65,6 +65,6 @@ namespace GenXTransitAPI.Models.DTOs
     }
     public class DeleteMenuRequest
     {
-        public int Id { get; set; }
+        public int MenuId { get; set; }
     }
 }

@@ -16,11 +16,12 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
 
         Task<ApiResponse<List<MenuResponseDto>>> GetAllMenusAsync(
             string? searchText,
+            int? sectionId,
             bool? isActive);
 
-        Task<ApiResponse<MenuResponseDto>> GetMenuByIdAsync(int id);
+        Task<ApiResponse<MenuResponseDto>> GetMenuByIdAsync(int menuId);
 
         Task<ApiResponse<bool>> DeleteMenuAsync(
-            int id, int modifiedBy);
+            int menuId, int modifiedBy);
     }
 }

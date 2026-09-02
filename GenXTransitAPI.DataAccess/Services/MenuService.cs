@@ -32,18 +32,20 @@ namespace GenXTransitAPI.DataAccess.Services
         }
         public async Task<ApiResponse<List<MenuResponseDto>>> GetAllMenusAsync(
            string? searchText,
+           int? sectionId,
            bool? isActive)
         {
             return await _menuRepo.GetAllMenusAsync(
                 searchText,
+                sectionId,
                 isActive);
         }
 
 
         public async Task<ApiResponse<MenuResponseDto>> GetMenuByIdAsync(
-            int id)
+            int menuId)
         {
-            return await _menuRepo.GetMenuByIdAsync(id);
+            return await _menuRepo.GetMenuByIdAsync(menuId);
         }
 
 
