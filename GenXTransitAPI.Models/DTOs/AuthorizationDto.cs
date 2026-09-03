@@ -11,6 +11,7 @@ namespace GenXTransitAPI.Models.DTOs
         public int AuthId { get; set; }
 
         public int RoleId { get; set; }
+        public string? RoleName { get; set; }
 
         public int SectionId { get; set; }
         public string? SectionName { get; set; }
@@ -34,7 +35,7 @@ namespace GenXTransitAPI.Models.DTOs
 
         public bool IsDisableDelete { get; set; }
 
-        public bool CanAction { get; set; }
+        //public bool CanAction { get; set; }
 
         public bool IsDefault { get; set; }
     }
@@ -68,7 +69,7 @@ namespace GenXTransitAPI.Models.DTOs
 
         //public bool IsDisableDelete { get; set; }
 
-        public bool CanAction { get; set; }
+        //public bool CanAction { get; set; }
 
         public bool IsDefault { get; set; }
     }
