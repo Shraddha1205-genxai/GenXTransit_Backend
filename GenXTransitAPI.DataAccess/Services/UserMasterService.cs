@@ -43,7 +43,7 @@ namespace GenXTransitAPI.DataAccess.Services
                 throw new Exception("Username already exists.");
             }
 
-            var temporaryPassword = "GenxAI@123";
+            var temporaryPassword = "Genxai@123";
 
             //var temporaryPassword =
             //    _passwordService.GenerateTemporaryPassword();
