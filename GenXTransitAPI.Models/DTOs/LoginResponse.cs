@@ -14,15 +14,21 @@ namespace GenXTransitAPI.Models.DTOs
 
         public string Email { get; set; } = string.Empty;
 
-       // public int RoleId { get; set; }
+        // public int RoleId { get; set; }
+        public int RoleId { get; set; }
+
+        public string RoleName { get; set; } = string.Empty;
 
         public string AccessToken { get; set; } = string.Empty;
 
         public string RefreshToken { get; set; } = string.Empty;
 
-       // public bool IsFirstLogin { get; set; }
+        public List<LoginPermissionResponse> Permissions { get; set; }
+       = new List<LoginPermissionResponse>();
 
-       // public string Message { get; set; } = string.Empty;
+        // public bool IsFirstLogin { get; set; }
+
+        // public string Message { get; set; } = string.Empty;
     }
 
     public class LoginRequest
@@ -30,5 +36,23 @@ namespace GenXTransitAPI.Models.DTOs
         public string UserName { get; set; } = string.Empty;
 
         public string Password { get; set; } = string.Empty;
+    }
+
+    public class LoginPermissionResponse
+    {
+        public int MenuId { get; set; }
+        public string? IconName { get; set; }
+
+        public int? SortOrder { get; set; }
+
+        public string? MenuName { get; set; }
+
+        public bool CanView { get; set; }
+
+        public bool CanAdd { get; set; }
+
+        public bool CanEdit { get; set; }
+
+        public bool CanDelete { get; set; }
     }
 }

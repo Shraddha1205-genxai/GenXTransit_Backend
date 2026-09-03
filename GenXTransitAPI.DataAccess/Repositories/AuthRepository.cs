@@ -120,6 +120,21 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 },
                 commandType: CommandType.StoredProcedure);
         }
+        public async Task<List<LoginPermissionResponse>> GetUserPermissionsAsync(
+    int userId)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result = await conn.QueryAsync<LoginPermissionResponse>(
+                "usp_User_GetPermissions",
+                new
+                {
+                    UserId = userId
+                },
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
+        }
 
         public async Task<User?> GetUserByEmailAsync(string email)
         {
