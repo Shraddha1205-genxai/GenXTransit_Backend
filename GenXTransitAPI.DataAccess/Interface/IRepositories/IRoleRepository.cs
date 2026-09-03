@@ -17,7 +17,7 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
             UpdateRoleRequest request,
             int? userId);
 
-        Task<ApiResponse<List<RoleResponse>>> GetAllRolesAsync();
+        Task<ApiResponse<List<RoleResponse>>> GetAllRolesAsync(string? searchText, string? isActive);
 
         Task<ApiResponse<RoleResponse>> GetRoleByIdAsync(
             int roleId);
