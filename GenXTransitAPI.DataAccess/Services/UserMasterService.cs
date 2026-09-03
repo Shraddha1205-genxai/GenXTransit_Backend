@@ -43,8 +43,10 @@ namespace GenXTransitAPI.DataAccess.Services
                 throw new Exception("Username already exists.");
             }
 
-            var temporaryPassword =
-                _passwordService.GenerateTemporaryPassword();
+            var temporaryPassword = "GenxAI@123";
+
+            //var temporaryPassword =
+            //    _passwordService.GenerateTemporaryPassword();
 
             var passwordHash =
                 _passwordService.HashPassword(
@@ -80,10 +82,10 @@ namespace GenXTransitAPI.DataAccess.Services
             var newUserId =
                 await _userRepository.AddUserAsync(user,userId);
 
-            await _emailService.SendUserCreatedEmail(
-                request.Email,
-                request.UserName,
-                temporaryPassword);
+            //await _emailService.SendUserCreatedEmail(
+            //    request.Email,
+            //    request.UserName,
+            //    temporaryPassword);
 
             return new AddUserResponse
             {
