@@ -80,6 +80,10 @@ namespace GenXTransitAPI.DataAccess.Services
                     "Invalid login ID or password.");
             }
 
+            // Get permissions
+            var permissions =
+                await _authRepo.GetUserPermissionsAsync(user.UserId);
+
             // Generate Access Token
             var accessToken =
                 _jwtService.GenerateAccessToken(user);
@@ -96,7 +100,8 @@ namespace GenXTransitAPI.DataAccess.Services
 
                 Email = user.Email,
 
-                //RoleId = user.RoleId,
+                RoleId = user.RoleId,
+                RoleName = user.RoleName ?? string.Empty,
 
                 AccessToken = accessToken,
 
