@@ -65,7 +65,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                         //item.IsDisableAdd,
                         //item.IsDisableDelete,
 
-                        item.CanAction,
                         item.IsDefault,
 
                         UserId = userId
