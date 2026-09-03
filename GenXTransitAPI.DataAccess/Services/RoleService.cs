@@ -83,9 +83,9 @@ namespace GenXTransitAPI.DataAccess.Services
                 userId);
         }
 
-        public async Task<ApiResponse<List<RoleResponse>>> GetAllRolesAsync()
+        public async Task<ApiResponse<List<RoleResponse>>> GetAllRolesAsync(string? searchText, string? isActive)
         {
-            return await _roleRepository.GetAllRolesAsync();
+            return await _roleRepository.GetAllRolesAsync(searchText, isActive);
         }
 
         public async Task<ApiResponse<RoleResponse>> GetRoleByIdAsync(

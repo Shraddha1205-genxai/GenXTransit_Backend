@@ -50,10 +50,10 @@ namespace GenXTransitAPI.Controllers
         // GET: api/roles
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetAllRoles()
+        public async Task<IActionResult> GetAllRoles([FromQuery] string? searchText, [FromQuery] string? isActive)
         {
             var response =
-                await _roleService.GetAllRolesAsync();
+                await _roleService.GetAllRolesAsync(searchText, isActive);
 
             return Ok(response);
         }

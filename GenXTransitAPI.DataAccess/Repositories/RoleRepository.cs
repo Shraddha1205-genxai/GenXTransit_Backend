@@ -114,13 +114,14 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
         }
 
-        public async Task<ApiResponse<List<RoleResponse>>> GetAllRolesAsync()
+        public async Task<ApiResponse<List<RoleResponse>>> GetAllRolesAsync(string? searchText, string? isActive)
         {
             try
             {
                 var parameters = new DynamicParameters();
                 using var conn = _db.CreateConnection();
-
+                parameters.Add("@SearchText", searchText);
+                parameters.Add("@IsActive", isActive);
                 var result = await conn.QueryAsync<RoleResponse>(
                     "usp_Role_GetAll",
                     parameters,
