@@ -69,7 +69,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
                 var parameters = new DynamicParameters();
 
-                parameters.Add("@Id", request.MenuId);
+                parameters.Add("@MenuId", request.MenuId);
                 parameters.Add("@IconName", request.IconName);
                 parameters.Add("@SectionId", request.SectionId);
                 parameters.Add("@SortOrder", request.SortOrder);
