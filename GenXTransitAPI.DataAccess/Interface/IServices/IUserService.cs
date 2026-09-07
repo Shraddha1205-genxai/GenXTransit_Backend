@@ -13,7 +13,7 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
     {
         Task<AddUserResponse> AddUserAsync(
             AddUserRequest request, int userId);
-        Task<ApiResponse<UpdateUserResponse>> UpdateUserAsync(UpdateUserRequest request, int userId);
+        Task<ApiResponse<UpdateUserResponse>> UpdateUserAsync(UpdateUserRequest request);
 
         //    Task<ApiResponse<List<User>>> GetAllUsersAsync(string? searchText,
         //bool? isActive,

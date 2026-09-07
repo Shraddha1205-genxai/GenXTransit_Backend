@@ -24,6 +24,10 @@ namespace GenXTransitAPI.Models.DTOs
         [Required(ErrorMessage = "Last name is required.")]
         public string LastName { get; set; }
         public int RoleId { get; set; }
+        public string Address { get; set; }
+        public int RegionId { get; set; }
+        public int DivisionId { get; set; }
+        public int DepotId { get; set; }
         //public string RoleName { get; set; }
     }
 

@@ -43,29 +43,29 @@ namespace GenXTransitAPI.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
         {
-            var userIdClaim = User.FindFirst(
-                ClaimTypes.NameIdentifier);
+            //var userIdClaim = User.FindFirst(
+               // ClaimTypes.NameIdentifier);
 
-            if (userIdClaim == null)
-            {
-                return Unauthorized(
-                    ApiResponse<UpdateUserResponse>.Fail(
-                        "User is not authenticated."));
-            }
+            //if (userIdClaim == null)
+            //{
+            //    return Unauthorized(
+            //        ApiResponse<UpdateUserResponse>.Fail(
+            //            "User is not authenticated."));
+            //}
 
-            if (!int.TryParse(
-                userIdClaim.Value,
-                out int userId))
-            {
-                return Unauthorized(
-                    ApiResponse<UpdateUserResponse>.Fail(
-                        "Invalid user identity."));
-            }
+            //if (!int.TryParse(
+            //    userIdClaim.Value,
+            //    out int userId))
+            //{
+            //    return Unauthorized(
+            //        ApiResponse<UpdateUserResponse>.Fail(
+            //            "Invalid user identity."));
+            //}
 
             var result =
                 await _userService.UpdateUserAsync(
-                    request,
-                    userId);
+                    request
+                    );
 
             if (!result.Success)
             {

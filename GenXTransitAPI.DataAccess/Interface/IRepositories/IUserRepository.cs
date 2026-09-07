@@ -17,7 +17,7 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
 
         Task<int> AddUserAsync(User user, int userId);
 
-        Task<bool> UpdateUserAsync(int userId, UpdateUserRequest request);
+        Task<bool> UpdateUserAsync(UpdateUserRequest request);
 
         //    Task<ApiResponse<List<User>>> GetAllUsersAsync(string? searchText,
         //bool? isActive,
