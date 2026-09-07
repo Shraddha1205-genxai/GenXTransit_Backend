@@ -9,19 +9,32 @@ namespace GenXTransitAPI.Models.DTO_s
         // UI Properties (camelCase)
         public string? tripId { get; set; }
         public string? tripCode { get; set; }
+
+        // Depot details
+        public string? depotId { get; set; }
+        public string? depotCode { get; set; }
+        public string? depotName { get; set; }
+
+        // Route details
         public string? routeId { get; set; }
         public string? routeCode { get; set; }
         public string? routeName { get; set; }
+
+        // Fleet details
         public string? fleetId { get; set; }
         public string? vehicleNumber { get; set; }
         public string? fleetStatus { get; set; }
+
+        // Driver & Conductor (using UserId and UserName from Users table)
         public string? driverId { get; set; }
         public string? driverName { get; set; }
         public string? conductorId { get; set; }
         public string? conductorName { get; set; }
+
+        // Time & Status
         public string? scheduleTime { get; set; }
         public string? actualTime { get; set; }
-        public string? tripStatus { get; set; } // Scheduled, OnTime, Delayed, Completed, Cancelled
+        public string? tripStatus { get; set; }
         public bool isActive { get; set; } = true;
 
         // Audit fields
@@ -36,6 +49,7 @@ namespace GenXTransitAPI.Models.DTO_s
     public class InsertTripRequest
     {
         public string? routeId { get; set; }
+        public string? depotId { get; set; }
         public string? fleetId { get; set; }
         public string? driverId { get; set; }
         public string? conductorId { get; set; }
@@ -50,6 +64,7 @@ namespace GenXTransitAPI.Models.DTO_s
     {
         public string? tripId { get; set; }
         public string? routeId { get; set; }
+        public string? depotId { get; set; }
         public string? fleetId { get; set; }
         public string? driverId { get; set; }
         public string? conductorId { get; set; }
@@ -79,6 +94,11 @@ namespace GenXTransitAPI.Models.DTO_s
         public int? Modified_By { get; set; }
         public DateTime? Modified_Date { get; set; }
 
+        // Depot details
+        public int? Depot_Id { get; set; }
+        public string? Depot_Code { get; set; }
+        public string? Depot_Name { get; set; }
+
         // Route details
         public int? Route_Id { get; set; }
         public string? Route_Code { get; set; }
@@ -89,11 +109,11 @@ namespace GenXTransitAPI.Models.DTO_s
         public string? Vehicle_Number { get; set; }
         public string? Fleet_Status { get; set; }
 
-        // Driver details (from Users table)
+        // ✅ Driver details (UserId, UserName from Users table)
         public int? UserId_Driver { get; set; }
         public string? DriverName { get; set; }
 
-        // Conductor details (from Users table)
+        // ✅ Conductor details (UserId, UserName from Users table)
         public int? UserId_Conductor { get; set; }
         public string? ConductorName { get; set; }
 

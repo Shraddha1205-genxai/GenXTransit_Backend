@@ -20,6 +20,7 @@ namespace GenXTransitAPI.DataAccess.Services
 
         public async Task<ApiResponse<IEnumerable<TripDTO>>> GetAllAsync(
             string? searchText,
+            int? depotId,
             int? routeId,
             int? fleetId,
             string? tripStatus,
@@ -32,7 +33,7 @@ namespace GenXTransitAPI.DataAccess.Services
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, routeId, fleetId, tripStatus, startDate, endDate, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, depotId, routeId, fleetId, tripStatus, startDate, endDate, isActive, scopeToUser, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<TripDTO>>.Ok(items, null, totalCount);
             }
@@ -63,6 +64,9 @@ namespace GenXTransitAPI.DataAccess.Services
             try
             {
                 // Validations
+                if (string.IsNullOrWhiteSpace(entity.depotId))
+                    return ApiResponse<int>.Fail("Depot is required.");
+
                 if (string.IsNullOrWhiteSpace(entity.routeId))
                     return ApiResponse<int>.Fail("Route is required.");
 
@@ -79,6 +83,9 @@ namespace GenXTransitAPI.DataAccess.Services
                     return ApiResponse<int>.Fail("Schedule Time is required.");
 
                 // Parse IDs
+                if (!int.TryParse(entity.depotId, out int depotId))
+                    return ApiResponse<int>.Fail("Invalid Depot ID format.");
+
                 if (!int.TryParse(entity.routeId, out int routeId))
                     return ApiResponse<int>.Fail("Invalid Route ID format.");
 
@@ -122,6 +129,9 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (!int.TryParse(entity.tripId, out int tripId))
                     return ApiResponse<bool>.Fail("Invalid Trip ID format.");
 
+                if (string.IsNullOrWhiteSpace(entity.depotId))
+                    return ApiResponse<bool>.Fail("Depot is required.");
+
                 if (string.IsNullOrWhiteSpace(entity.routeId))
                     return ApiResponse<bool>.Fail("Route is required.");
 
@@ -138,6 +148,9 @@ namespace GenXTransitAPI.DataAccess.Services
                     return ApiResponse<bool>.Fail("Schedule Time is required.");
 
                 // Parse IDs
+                if (!int.TryParse(entity.depotId, out int depotId))
+                    return ApiResponse<bool>.Fail("Invalid Depot ID format.");
+
                 if (!int.TryParse(entity.routeId, out int routeId))
                     return ApiResponse<bool>.Fail("Invalid Route ID format.");
 

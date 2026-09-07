@@ -10,6 +10,7 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
     {
         Task<ApiResponse<IEnumerable<TripDTO>>> GetAllAsync(
             string? searchText,
+            int? depotId,
             int? routeId,
             int? fleetId,
             string? tripStatus,
