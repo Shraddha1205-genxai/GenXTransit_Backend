@@ -126,7 +126,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 p.Add("@Category_Id", Convert.ToInt32(entity.categoryId));
                 p.Add("@Series_Type", entity.seriesType);
                 p.Add("@Depot_Id", Convert.ToInt32(entity.depotId));
-                p.Add("@Fleet_Status", entity.fleetStatus ?? "Available");
+                p.Add("@Fleet_Status", entity.fleetStatus ?? "Available"); 
                 p.Add("@Doc_Expiry", docExpiryJson);
                 p.Add("@IsActive", entity.isActive);
                 p.Add("@UserId", userId);
@@ -165,7 +165,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 p.Add("@Category_Id", Convert.ToInt32(entity.categoryId));
                 p.Add("@Series_Type", entity.seriesType);
                 p.Add("@Depot_Id", Convert.ToInt32(entity.depotId));
-                p.Add("@Fleet_Status", entity.fleetStatus);
+                p.Add("@Fleet_Status", entity.fleetStatus);  
                 p.Add("@Doc_Expiry", docExpiryJson);
                 p.Add("@IsActive", entity.isActive);
                 p.Add("@UserId", userId);

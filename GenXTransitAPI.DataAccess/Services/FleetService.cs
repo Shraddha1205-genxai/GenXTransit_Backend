@@ -94,11 +94,6 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (!validSeriesTypes.Contains(entity.seriesType))
                     return ApiResponse<int>.Fail("Invalid Series Type. Valid types are: BH, State.");
 
-                // Validate Fleet Status
-                var validStatuses = new[] { "Available", "Reserved", "Assigned", "Under Maintenance", "Decommissioned", "Accident/Damaged" };
-                if (!string.IsNullOrWhiteSpace(entity.fleetStatus) && !validStatuses.Contains(entity.fleetStatus))
-                    return ApiResponse<int>.Fail("Invalid Fleet Status. Valid statuses are: Available, Reserved, Assigned, Under Maintenance, Decommissioned, Accident/Damaged.");
-
                 // Validate IDs
                 if (!int.TryParse(entity.categoryId, out int categoryId))
                     return ApiResponse<int>.Fail("Invalid Category ID format.");
@@ -125,7 +120,6 @@ namespace GenXTransitAPI.DataAccess.Services
                 if (!int.TryParse(entity.fleetId, out int fleetId))
                     return ApiResponse<bool>.Fail("Invalid Fleet ID format.");
 
-                // Validate Vehicle Number format
                 if (string.IsNullOrWhiteSpace(entity.vehicleNumber))
                     return ApiResponse<bool>.Fail("Vehicle Number is required.");
 
@@ -145,11 +139,6 @@ namespace GenXTransitAPI.DataAccess.Services
                 var validSeriesTypes = new[] { "BH", "State" };
                 if (!validSeriesTypes.Contains(entity.seriesType))
                     return ApiResponse<bool>.Fail("Invalid Series Type. Valid types are: BH, State.");
-
-                // Validate Fleet Status
-                var validStatuses = new[] { "Available", "Reserved", "Assigned", "Under Maintenance", "Decommissioned", "Accident/Damaged" };
-                if (!string.IsNullOrWhiteSpace(entity.fleetStatus) && !validStatuses.Contains(entity.fleetStatus))
-                    return ApiResponse<bool>.Fail("Invalid Fleet Status. Valid statuses are: Available, Reserved, Assigned, Under Maintenance, Decommissioned, Accident/Damaged.");
 
                 // Validate IDs
                 if (!int.TryParse(entity.categoryId, out int categoryId))

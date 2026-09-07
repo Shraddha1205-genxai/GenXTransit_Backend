@@ -63,7 +63,6 @@ namespace GenXTransitAPI.Controllers
             if (string.IsNullOrWhiteSpace(request.vehicleNumber))
                 return BadRequest(new { success = false, message = "Vehicle Number is required." });
 
-            // Validate Vehicle Number format
             if (!Regex.IsMatch(request.vehicleNumber, @"^[A-Z]{2}-[0-9]{2}-[A-Z]{2}-[0-9]{4}$"))
                 return BadRequest(new { success = false, message = "Invalid vehicle number format. Expected format: XX-99-XX-9999 (e.g., MH-12-AB-1234)" });
 
@@ -81,11 +80,6 @@ namespace GenXTransitAPI.Controllers
             if (!validSeriesTypes.Contains(request.seriesType))
                 return BadRequest(new { success = false, message = "Invalid Series Type. Valid types are: BH, State." });
 
-            // Validate Fleet Status
-            var validStatuses = new[] { "Available", "Reserved", "Assigned", "Under Maintenance", "Decommissioned", "Accident/Damaged" };
-            if (!string.IsNullOrWhiteSpace(request.fleetStatus) && !validStatuses.Contains(request.fleetStatus))
-                return BadRequest(new { success = false, message = "Invalid Fleet Status. Valid statuses are: Available, Reserved, Assigned, Under Maintenance, Decommissioned, Accident/Damaged." });
-
             if (!int.TryParse(request.categoryId, out int categoryId))
                 return BadRequest(new { success = false, message = "Invalid Category ID format." });
 
@@ -98,7 +92,7 @@ namespace GenXTransitAPI.Controllers
                 categoryId = request.categoryId,
                 seriesType = request.seriesType,
                 depotId = request.depotId,
-                fleetStatus = request.fleetStatus ?? "Available",
+                fleetStatus = request.fleetStatus,  
                 docExpiry = request.docExpiry,
                 isActive = request.isActive
             };
@@ -126,7 +120,6 @@ namespace GenXTransitAPI.Controllers
             if (string.IsNullOrWhiteSpace(request.vehicleNumber))
                 return BadRequest(new { success = false, message = "Vehicle Number is required." });
 
-            // Validate Vehicle Number format
             if (!Regex.IsMatch(request.vehicleNumber, @"^[A-Z]{2}-[0-9]{2}-[A-Z]{2}-[0-9]{4}$"))
                 return BadRequest(new { success = false, message = "Invalid vehicle number format. Expected format: XX-99-XX-9999 (e.g., MH-12-AB-1234)" });
 
@@ -144,11 +137,6 @@ namespace GenXTransitAPI.Controllers
             if (!validSeriesTypes.Contains(request.seriesType))
                 return BadRequest(new { success = false, message = "Invalid Series Type. Valid types are: BH, State." });
 
-            // Validate Fleet Status
-            var validStatuses = new[] { "Available", "Reserved", "Assigned", "Under Maintenance", "Decommissioned", "Accident/Damaged" };
-            if (!string.IsNullOrWhiteSpace(request.fleetStatus) && !validStatuses.Contains(request.fleetStatus))
-                return BadRequest(new { success = false, message = "Invalid Fleet Status. Valid statuses are: Available, Reserved, Assigned, Under Maintenance, Decommissioned, Accident/Damaged." });
-
             if (!int.TryParse(request.categoryId, out int categoryId))
                 return BadRequest(new { success = false, message = "Invalid Category ID format." });
 
@@ -162,7 +150,7 @@ namespace GenXTransitAPI.Controllers
                 categoryId = request.categoryId,
                 seriesType = request.seriesType,
                 depotId = request.depotId,
-                fleetStatus = request.fleetStatus,
+                fleetStatus = request.fleetStatus,  
                 docExpiry = request.docExpiry,
                 isActive = request.isActive
             };
