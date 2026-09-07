@@ -10,7 +10,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/trip")]
     [ApiController]
-    [AllowAnonymous]  // ✅ Development: No auth required
+    [AllowAnonymous]  // Development: No auth required
     public class TripController : BaseController
     {
         private readonly ITripService _svc;
@@ -23,6 +23,7 @@ namespace GenXTransitAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(
             [FromQuery] string? searchText,
+            [FromQuery] int? depotId,
             [FromQuery] int? routeId,
             [FromQuery] int? fleetId,
             [FromQuery] string? tripStatus,
@@ -32,7 +33,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, routeId, fleetId, tripStatus, startDate, endDate, isActive, CurrentUserId, pageNumber, pageSize);
+            var result = await _svc.GetAllAsync(searchText, depotId, routeId, fleetId, tripStatus, startDate, endDate, isActive, CurrentUserId, pageNumber, pageSize);
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });
@@ -62,6 +63,9 @@ namespace GenXTransitAPI.Controllers
             if (request == null)
                 return BadRequest(new { success = false, message = "Invalid request data." });
 
+            if (string.IsNullOrWhiteSpace(request.depotId))
+                return BadRequest(new { success = false, message = "Depot is required." });
+
             if (string.IsNullOrWhiteSpace(request.routeId))
                 return BadRequest(new { success = false, message = "Route is required." });
 
@@ -76,6 +80,9 @@ namespace GenXTransitAPI.Controllers
 
             if (string.IsNullOrWhiteSpace(request.scheduleTime))
                 return BadRequest(new { success = false, message = "Schedule Time is required." });
+
+            if (!int.TryParse(request.depotId, out int depotId))
+                return BadRequest(new { success = false, message = "Invalid Depot ID format." });
 
             if (!int.TryParse(request.routeId, out int routeId))
                 return BadRequest(new { success = false, message = "Invalid Route ID format." });
@@ -95,13 +102,13 @@ namespace GenXTransitAPI.Controllers
             if (scheduleTime < DateTime.Now)
                 return BadRequest(new { success = false, message = "Schedule Time cannot be in the past." });
 
-            // Validate Trip Status
             var validStatuses = new[] { "Scheduled", "OnTime", "Delayed", "Completed", "Cancelled" };
             if (!string.IsNullOrWhiteSpace(request.tripStatus) && !validStatuses.Contains(request.tripStatus))
                 return BadRequest(new { success = false, message = "Invalid Trip Status. Valid statuses are: Scheduled, OnTime, Delayed, Completed, Cancelled." });
 
             var entity = new TripDTO
             {
+                depotId = request.depotId,
                 routeId = request.routeId,
                 fleetId = request.fleetId,
                 driverId = request.driverId,
@@ -132,6 +139,9 @@ namespace GenXTransitAPI.Controllers
             if (!int.TryParse(request.tripId, out int tripId))
                 return BadRequest(new { success = false, message = "Invalid Trip ID format." });
 
+            if (string.IsNullOrWhiteSpace(request.depotId))
+                return BadRequest(new { success = false, message = "Depot is required." });
+
             if (string.IsNullOrWhiteSpace(request.routeId))
                 return BadRequest(new { success = false, message = "Route is required." });
 
@@ -146,6 +156,9 @@ namespace GenXTransitAPI.Controllers
 
             if (string.IsNullOrWhiteSpace(request.scheduleTime))
                 return BadRequest(new { success = false, message = "Schedule Time is required." });
+
+            if (!int.TryParse(request.depotId, out int depotId))
+                return BadRequest(new { success = false, message = "Invalid Depot ID format." });
 
             if (!int.TryParse(request.routeId, out int routeId))
                 return BadRequest(new { success = false, message = "Invalid Route ID format." });
@@ -162,7 +175,6 @@ namespace GenXTransitAPI.Controllers
             if (!DateTime.TryParse(request.scheduleTime, out DateTime scheduleTime))
                 return BadRequest(new { success = false, message = "Invalid Schedule Time format." });
 
-            // Validate Trip Status
             var validStatuses = new[] { "Scheduled", "OnTime", "Delayed", "Completed", "Cancelled" };
             if (!string.IsNullOrWhiteSpace(request.tripStatus) && !validStatuses.Contains(request.tripStatus))
                 return BadRequest(new { success = false, message = "Invalid Trip Status. Valid statuses are: Scheduled, OnTime, Delayed, Completed, Cancelled." });
@@ -170,6 +182,7 @@ namespace GenXTransitAPI.Controllers
             var entity = new TripDTO
             {
                 tripId = request.tripId,
+                depotId = request.depotId,
                 routeId = request.routeId,
                 fleetId = request.fleetId,
                 driverId = request.driverId,
