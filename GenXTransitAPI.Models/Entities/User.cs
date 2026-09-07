@@ -25,6 +25,17 @@ namespace GenXTransitAPI.Models.Entities
 
         public int RoleId { get; set; }
         public string RoleName { get; set; }
+        public string Address { get; set; }
+       public int RegionId { get; set; }
+        public string RegionCode { get; set; }
+        public string RegionName { get; set; }
+        public int DivisionId { get; set; }
+        public string DivisionCode { get; set; }
+        public string DivisionName { get; set; }
+        public int DepotId { get; set; }
+        public string DepotCode { get; set; }
+        public string DepotName { get; set; }
+
 
         public bool IsActive { get; set; }
 
@@ -47,8 +58,8 @@ namespace GenXTransitAPI.Models.Entities
 
     public class UpdateUserRequest
     {
-        //[Required(ErrorMessage = "UserId is required.")]
-        //public int UserId { get; set; }
+        [Required(ErrorMessage = "UserId is required.")]
+        public int UserId { get; set; }
 
         [Required(ErrorMessage = "Username is required.")]
         public string UserName { get; set; }
@@ -67,6 +78,10 @@ namespace GenXTransitAPI.Models.Entities
 
         //[Required(ErrorMessage = "Role is required.")]
         public int RoleId { get; set; }
+        public string Address { get; set; }
+        public int RegionId { get; set; }
+        public int DivisionId { get; set; }
+        public int DepotId { get; set; }
     }
 
 }

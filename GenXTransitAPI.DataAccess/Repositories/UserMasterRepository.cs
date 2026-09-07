@@ -67,6 +67,10 @@ namespace GenXTransitAPI.DataAccess.Repositories
             p.Add("@IsEmailVerified", user.IsEmailVerified);
             p.Add("@IsMobileVerified", user.IsMobileVerified);
             p.Add("@IsFirstLogin", user.IsFirstLogin);
+            p.Add("@Address", user.Address);
+            p.Add("@RegionId", user.RegionId);
+            p.Add("@DivisionId", user.DivisionId);
+            p.Add("@DepotId", user.DepotId);
             //p.Add("@PasswordChangedDate", user.PasswordChangedDate);
             p.Add("@CreatedBy", userId);
 
@@ -202,7 +206,7 @@ namespace GenXTransitAPI.DataAccess.Repositories
             }
         }
 
-        public async Task<bool> UpdateUserAsync(int userId, UpdateUserRequest request)
+        public async Task<bool> UpdateUserAsync( UpdateUserRequest request)
         {
             using var conn = _db.CreateConnection();
 
@@ -210,13 +214,17 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 "usp_User_Update",
                 new
                 {
-                    UserId = userId,
+                    UserId = request.UserId,
                     UserName = request.UserName,
                     Email = request.Email,
                     MobileNo = request.MobileNo,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
-                    RoleId= request.RoleId
+                    RoleId= request.RoleId,
+                    Address= request.Address,
+                    RegionId= request.RegionId,
+                    DivisionId= request.DivisionId,
+                    DepotId= request.DepotId,
                 },
                 commandType: CommandType.StoredProcedure);
 

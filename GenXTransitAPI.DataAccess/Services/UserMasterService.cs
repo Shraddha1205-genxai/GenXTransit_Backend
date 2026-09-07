@@ -70,7 +70,10 @@ namespace GenXTransitAPI.DataAccess.Services
                 IsMobileVerified = false,
 
                 IsFirstLogin = true,
-
+                Address = request.Address,
+                RegionId = request.RegionId,
+                DivisionId = request.DivisionId,
+                DepotId = request.DepotId,
                 //PasswordChangedDate = null,
 
                 CreatedDate = DateTime.UtcNow,
@@ -101,17 +104,16 @@ namespace GenXTransitAPI.DataAccess.Services
         }
 
         public async Task<ApiResponse<UpdateUserResponse>> UpdateUserAsync(
-    UpdateUserRequest request,
-    int userId)
+    UpdateUserRequest request)
         {
-            if (userId <= 0)
+            if (request.UserId <= 0)
             {
                 return ApiResponse<UpdateUserResponse>.Fail(
                     "Invalid user.");
             }
 
             var existingUser =
-                await _userRepository.GetUserByIdAsync(userId);
+                await _userRepository.GetUserByIdAsync(request.UserId);
 
             if (existingUser == null)
             {
@@ -133,7 +135,6 @@ namespace GenXTransitAPI.DataAccess.Services
 
             var updated =
                 await _userRepository.UpdateUserAsync(
-                    userId,
                     request);
 
             if (!updated)
@@ -144,7 +145,7 @@ namespace GenXTransitAPI.DataAccess.Services
 
             var response = new UpdateUserResponse
             {
-                UserId = userId,
+                UserId = request.UserId,
                 UserName = request.UserName,
                 Email = request.Email,
                 MobileNo = request.MobileNo,
