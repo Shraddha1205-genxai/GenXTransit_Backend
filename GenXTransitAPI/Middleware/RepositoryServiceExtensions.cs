@@ -55,6 +55,10 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IComplaintCategoryRepository, ComplaintCategoryRepository>();
             services.AddScoped<ITaxConfigurationRepository, TaxConfigurationRepository>();
             services.AddScoped<IHolidayRepository, HolidayRepository>();
+            services.AddScoped<IFleetRepository, FleetRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<ITripRepository, TripRepository>();
+
 
 
 
@@ -84,6 +88,9 @@ namespace GenXTransitAPI.Middleware
             services.AddScoped<IComplaintCategoryService, ComplaintCategoryService>();
             services.AddScoped<ITaxConfigurationService, TaxConfigurationService>();
             services.AddScoped<IHolidayService, HolidayService>();
+            services.AddScoped<IFleetService, FleetService>();
+            services.AddScoped<IServiceService, ServiceService>();
+            services.AddScoped<ITripService, TripService>();
 
 
 
