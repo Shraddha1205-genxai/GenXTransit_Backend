@@ -342,8 +342,11 @@ namespace GenXTransitAPI.DataAccess.Services
                 }
 
                 // Create reset URL
+                //string resetUrl =
+                //    $"https://asset.genxai.com/reset-password?token={Uri.EscapeDataString(token)}";
+
                 string resetUrl =
-                    $"https://asset.genxai.com/reset-password?token={Uri.EscapeDataString(token)}";
+                    $"http://localhost:5173/reset-password?token={Uri.EscapeDataString(token)}";
 
                 // Send email
                 await _emailService.SendEmailAsync(
