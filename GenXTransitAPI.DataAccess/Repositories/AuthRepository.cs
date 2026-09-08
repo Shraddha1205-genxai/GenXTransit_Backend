@@ -136,6 +136,24 @@ namespace GenXTransitAPI.DataAccess.Repositories
             return result.ToList();
         }
 
+        public async Task<bool> RevokeRefreshTokenAsync( int userId, string refreshToken)
+        {
+            using var conn = _db.CreateConnection();
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", userId);
+            parameters.Add("@RefreshToken", refreshToken);
+
+            var result =
+                await conn.QueryFirstOrDefaultAsync<int>(
+                    "usp_RefreshToken_Revoke",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+            return result == 1;
+        }
+
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             using var conn = _db.CreateConnection();
@@ -149,6 +167,29 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 commandType: CommandType.StoredProcedure);
         }
 
+        public async Task<bool> SaveRefreshTokenAsync(
+    int userId,
+    string refreshToken,
+    DateTime expiryDate,
+    int createdBy)
+        {
+            using var conn = _db.CreateConnection();
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", userId);
+            parameters.Add("@RefreshToken", refreshToken);
+            parameters.Add("@ExpiryDate", expiryDate);
+            parameters.Add("@CreatedBy", createdBy);
+
+            var result =
+                await conn.QueryFirstOrDefaultAsync<int>(
+                    "usp_RefreshToken_Save",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+            return result == 1;
+        }
         public async Task<bool> ChangePasswordAsync( int userId, string newPassword)
         {
             using var conn = _db.CreateConnection();
@@ -165,7 +206,45 @@ namespace GenXTransitAPI.DataAccess.Repositories
 
             return result == 1;
         }
+        public async Task<bool> IsRefreshTokenValidAsync(
+    int userId,
+    string refreshToken)
+        {
+            using var conn = _db.CreateConnection();
 
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", userId);
+            parameters.Add("@RefreshToken", refreshToken);
+
+            var result =
+                await conn.QueryFirstOrDefaultAsync<int>(
+                    "usp_RefreshToken_Validate",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+            return result == 1;
+        }
+
+        public async Task<bool> ValidateRefreshTokenAsync(
+    int userId,
+    string refreshToken)
+        {
+            using var conn = _db.CreateConnection();
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserId", userId);
+            parameters.Add("@RefreshToken", refreshToken);
+
+            var result =
+                await conn.QueryFirstOrDefaultAsync<int>(
+                    "usp_RefreshToken_Validate",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+
+            return result == 1;
+        }
 
         public async Task<bool> UpdateUserPasswordAsync(
     int userId,

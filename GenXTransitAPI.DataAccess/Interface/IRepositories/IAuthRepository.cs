@@ -19,6 +19,21 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
         Task<bool> UpdateUserPasswordAsync( int userId,string newPasswordHash,  int modifiedBy);
 
         Task<bool> RevokeAllUserRefreshTokensAsync(int userId, int modifiedBy);
+
+        // Refresh Token
+        Task<bool> SaveRefreshTokenAsync(
+            int userId,
+            string refreshToken,
+            DateTime expiryDate,
+            int createdBy);
+
+        Task<bool> ValidateRefreshTokenAsync(
+            int userId,
+            string refreshToken);
+
+        Task<bool> RevokeRefreshTokenAsync(
+            int userId,
+            string refreshToken);
         Task<PasswordResetTokenResult> CreatePasswordResetTokenAsync(int userId, string tokenHash, DateTime tokenExpiry);
 
         Task<ResetPasswordResult> ResetUserPasswordAsync( string tokenHash,  string newPasswordHash);
