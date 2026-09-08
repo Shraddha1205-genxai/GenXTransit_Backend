@@ -10,7 +10,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/trip")]
     [ApiController]
-    [AllowAnonymous]  // Development: No auth required
+    [Authorize]  // Development: No auth required
     public class TripController : BaseController
     {
         private readonly ITripService _svc;
@@ -33,7 +33,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, depotId, routeId, fleetId, tripStatus, startDate, endDate, isActive, CurrentUserId, pageNumber, pageSize);
+            var result = await _svc.GetAllAsync(searchText, depotId, routeId, fleetId, tripStatus, startDate, endDate, isActive,  pageNumber, pageSize);
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });

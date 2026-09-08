@@ -27,13 +27,12 @@ namespace GenXTransitAPI.DataAccess.Services
             DateTime? startDate,
             DateTime? endDate,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, depotId, routeId, fleetId, tripStatus, startDate, endDate, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, depotId, routeId, fleetId, tripStatus, startDate, endDate, isActive, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<TripDTO>>.Ok(items, null, totalCount);
             }

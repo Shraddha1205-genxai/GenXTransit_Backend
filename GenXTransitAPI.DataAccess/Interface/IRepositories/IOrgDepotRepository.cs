@@ -13,7 +13,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
             int? divisionId,
             int? zoneId,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

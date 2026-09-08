@@ -25,7 +25,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
             DateTime? startDate,
             DateTime? endDate,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
@@ -40,7 +39,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     StartDate = startDate,
                     EndDate = endDate,
                     IsActive = isActive,
-                    ScopeToUser = scopeToUser,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },

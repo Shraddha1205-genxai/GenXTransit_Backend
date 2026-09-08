@@ -10,7 +10,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
             string? searchText,
             int? categoryId,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

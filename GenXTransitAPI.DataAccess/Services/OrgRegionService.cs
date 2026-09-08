@@ -21,13 +21,12 @@ namespace GenXTransitAPI.DataAccess.Services
         public async Task<ApiResponse<IEnumerable<OrgRegionDTO>>> GetAllAsync(
             string? searchText,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, isActive, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<OrgRegionDTO>>.Ok(items, null, totalCount);
             }

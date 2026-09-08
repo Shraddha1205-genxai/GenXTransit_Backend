@@ -25,7 +25,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
             decimal? rateFrom,
             decimal? rateTo,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
@@ -40,7 +39,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     RateFrom = rateFrom,
                     RateTo = rateTo,
                     IsActive = isActive,
-                    ScopeToUser = scopeToUser,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },

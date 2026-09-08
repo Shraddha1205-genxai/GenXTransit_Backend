@@ -13,7 +13,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
             int? depotId,
             string? fleetStatus,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

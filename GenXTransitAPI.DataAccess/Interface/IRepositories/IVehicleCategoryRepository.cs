@@ -11,7 +11,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
             string? type,
             string? vehicleClass,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

@@ -23,13 +23,12 @@ namespace GenXTransitAPI.DataAccess.Services
             string? type,
             string? vehicleClass,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, type, vehicleClass, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, type, vehicleClass, isActive, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<VehicleCategoryDTO>>.Ok(items, null, totalCount);
             }

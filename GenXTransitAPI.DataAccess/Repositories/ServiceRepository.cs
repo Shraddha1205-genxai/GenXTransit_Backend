@@ -24,7 +24,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
             int? fleetId,
             string? status,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
@@ -38,7 +37,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     FleetId = fleetId,
                     Status = status,
                     IsActive = isActive,
-                    ScopeToUser = scopeToUser,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },

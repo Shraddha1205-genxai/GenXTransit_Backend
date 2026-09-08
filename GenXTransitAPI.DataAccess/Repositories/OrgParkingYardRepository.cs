@@ -25,7 +25,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
             int? divisionId,
             int? depotId,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
@@ -40,7 +39,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     DivisionId = divisionId,
                     DepotId = depotId,
                     IsActive = isActive,
-                    ScopeToUser = scopeToUser,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },

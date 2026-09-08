@@ -14,7 +14,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
             DateTime? startDate,
             DateTime? endDate,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

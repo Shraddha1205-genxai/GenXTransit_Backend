@@ -10,7 +10,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/fleet")]
     [ApiController]
-    [AllowAnonymous]  // ✅ Development: No auth required
+    [Authorize]  // ✅ Development: No auth required
     public class FleetController : BaseController
     {
         private readonly IFleetService _svc;
@@ -30,7 +30,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, categoryId, depotId, fleetStatus, isActive, CurrentUserId, pageNumber, pageSize);
+            var result = await _svc.GetAllAsync(searchText, categoryId, depotId, fleetStatus, isActive, pageNumber, pageSize);
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });

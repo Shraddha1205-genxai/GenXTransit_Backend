@@ -10,7 +10,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
         Task<ApiResponse<IEnumerable<OrgRegionDTO>>> GetAllAsync(
             string? searchText,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

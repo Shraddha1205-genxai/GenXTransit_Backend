@@ -9,7 +9,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/taxconfiguration")]
     [ApiController]
-    [AllowAnonymous]  
+    [Authorize]  
     public class TaxConfigurationController : BaseController  
     {
         private readonly ITaxConfigurationService _svc;
@@ -29,7 +29,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, taxType, rateFrom, rateTo, isActive, CurrentUserId, pageNumber, pageSize);  
+            var result = await _svc.GetAllAsync(searchText, taxType, rateFrom, rateTo, isActive,  pageNumber, pageSize);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });

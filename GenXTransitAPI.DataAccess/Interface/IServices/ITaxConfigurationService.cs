@@ -13,7 +13,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
             decimal? rateFrom,
             decimal? rateTo,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

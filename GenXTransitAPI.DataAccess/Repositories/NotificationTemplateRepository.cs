@@ -23,7 +23,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
             string? searchText,
             string? channel,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
@@ -36,7 +35,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     SearchText = searchText,
                     Channel = channel,
                     IsActive = isActive,
-                    ScopeToUser = scopeToUser,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },

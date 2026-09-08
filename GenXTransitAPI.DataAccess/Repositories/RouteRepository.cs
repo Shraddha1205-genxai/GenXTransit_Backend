@@ -24,7 +24,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
             string? service,
             string? type,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
@@ -38,7 +37,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     Service = service,
                     Type = type,
                     IsActive = isActive,
-                    ScopeToUser = scopeToUser,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },

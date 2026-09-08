@@ -9,7 +9,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/farepolicy")]
     [ApiController]
-    [AllowAnonymous] 
+    [Authorize] 
     public class FarePolicyController : BaseController  
     {
         private readonly IFarePolicyService _svc;
@@ -30,7 +30,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, model, policyStatus, categoryId, routeId, isActive, CurrentUserId, pageNumber, pageSize);  
+            var result = await _svc.GetAllAsync(searchText, model, policyStatus, categoryId, routeId, isActive, pageNumber, pageSize);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });

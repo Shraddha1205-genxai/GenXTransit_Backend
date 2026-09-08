@@ -24,13 +24,12 @@ namespace GenXTransitAPI.DataAccess.Services
             int? divisionId,
             int? depotId,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, regionId, divisionId, depotId, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, regionId, divisionId, depotId, isActive, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<OrgStationDTO>>.Ok(items, null, totalCount);
             }
