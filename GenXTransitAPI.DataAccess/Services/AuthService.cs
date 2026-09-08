@@ -270,60 +270,56 @@ namespace GenXTransitAPI.DataAccess.Services
         //    return Convert.ToBase64String(hash);
         //}
 
-        public async Task<ApiResponse<string>> ForgotPasswordAsync( ForgotPasswordRequest request)
+        public async Task<ApiResponse<ForgotPasswordResponse>> ForgotPasswordAsync(
+    ForgotPasswordRequest request)
         {
             try
             {
                 if (request == null)
                 {
-                    return ApiResponse<string>.Fail(
+                    return ApiResponse<ForgotPasswordResponse>.Fail(
                         "Invalid request.");
                 }
 
                 if (string.IsNullOrWhiteSpace(request.Email))
                 {
-                    return ApiResponse<string>.Fail(
+                    return ApiResponse<ForgotPasswordResponse>.Fail(
                         "Email is required.");
                 }
 
                 string email = request.Email.Trim();
 
                 // Get user
-                var user =
-                    await _authRepo.GetUserByEmailAsync(email);
+                var user = await _authRepo.GetUserByEmailAsync(email);
 
-                // Do not reveal whether email exists
                 if (user == null)
                 {
-                    return ApiResponse<string>.Ok(
-                        "No account found with the provided email address.");
+                    return ApiResponse<ForgotPasswordResponse>.Ok(
+                        new ForgotPasswordResponse
+                        {
+                            Message = "No account found with the provided email address.",
+                            Token = null
+                        });
                 }
 
                 // Generate secure random token
-                string token =
-                    GenerateResetToken();
+                string token = GenerateResetToken();
 
                 // Hash token before saving in DB
-                string tokenHash =
-                    HashResetToken(token);
+                string tokenHash = HashResetToken(token);
 
-              
                 // Token valid for 30 minutes
-                DateTime tokenExpiry =
-                    DateTime.UtcNow.AddMinutes(30);
+                DateTime tokenExpiry = DateTime.UtcNow.AddMinutes(30);
 
                 // Save token hash
-                var result =
-                    await _authRepo.CreatePasswordResetTokenAsync(
-                        user.UserId,
-                        tokenHash,
-                        tokenExpiry);
+                var result = await _authRepo.CreatePasswordResetTokenAsync(
+                    user.UserId,
+                    tokenHash,
+                    tokenExpiry);
 
-                if (result == null ||
-                    result.RowsAffected <= 0)
+                if (result == null || result.RowsAffected <= 0)
                 {
-                  
-                    return ApiResponse<string>.Fail(
+                    return ApiResponse<ForgotPasswordResponse>.Fail(
                         "Unable to generate password reset link.");
                 }
 
@@ -332,7 +328,7 @@ namespace GenXTransitAPI.DataAccess.Services
                     $"https://asset.genxai.com/reset-password?token={Uri.EscapeDataString(token)}";
 
                 // Send email
-                _emailService.SendEmailAsync(
+                await _emailService.SendEmailAsync(
                     user.Email,
                     "Reset Your Password",
                     $@"
@@ -350,14 +346,13 @@ namespace GenXTransitAPI.DataAccess.Services
 
                 <p>
                     <a href='{resetUrl}'
-                       style='
-                       display:inline-block;
-                       padding:10px 20px;
-                       background-color:#007bff;
-                       color:white;
-                       text-decoration:none;
-                       border-radius:5px;'>
-                       Reset Password
+                       style='display:inline-block;
+                              padding:10px 20px;
+                              background-color:#007bff;
+                              color:white;
+                              text-decoration:none;
+                              border-radius:5px;'>
+                        Reset Password
                     </a>
                 </p>
 
@@ -378,15 +373,138 @@ namespace GenXTransitAPI.DataAccess.Services
             </html>"
                 );
 
-                return ApiResponse<string>.Ok(
-                    "Password reset link has been sent.");
+                // Return token in response
+                return ApiResponse<ForgotPasswordResponse>.Ok(
+                    new ForgotPasswordResponse
+                    {
+                        Message = "Password reset link has been sent.",
+                        Token = tokenHash
+                    });
             }
             catch (Exception ex)
             {
-                return ApiResponse<string>.Fail(
+                return ApiResponse<ForgotPasswordResponse>.Fail(
                     ex.Message);
             }
         }
+
+        //public async Task<ApiResponse<string>> ForgotPasswordAsync( ForgotPasswordRequest request)
+        //{
+        //    try
+        //    {
+        //        if (request == null)
+        //        {
+        //            return ApiResponse<string>.Fail(
+        //                "Invalid request.");
+        //        }
+
+        //        if (string.IsNullOrWhiteSpace(request.Email))
+        //        {
+        //            return ApiResponse<string>.Fail(
+        //                "Email is required.");
+        //        }
+
+        //        string email = request.Email.Trim();
+
+        //        // Get user
+        //        var user =
+        //            await _authRepo.GetUserByEmailAsync(email);
+
+        //        // Do not reveal whether email exists
+        //        if (user == null)
+        //        {
+        //            return ApiResponse<string>.Ok(
+        //                "No account found with the provided email address.");
+        //        }
+
+        //        // Generate secure random token
+        //        string token =
+        //            GenerateResetToken();
+
+        //        // Hash token before saving in DB
+        //        string tokenHash =
+        //            HashResetToken(token);
+
+
+        //        // Token valid for 30 minutes
+        //        DateTime tokenExpiry =
+        //            DateTime.UtcNow.AddMinutes(30);
+
+        //        // Save token hash
+        //        var result =
+        //            await _authRepo.CreatePasswordResetTokenAsync(
+        //                user.UserId,
+        //                tokenHash,
+        //                tokenExpiry);
+
+        //        if (result == null ||
+        //            result.RowsAffected <= 0)
+        //        {
+
+        //            return ApiResponse<string>.Fail(
+        //                "Unable to generate password reset link.");
+        //        }
+
+        //        // Create reset URL
+        //        string resetUrl =
+        //            $"https://asset.genxai.com/reset-password?token={Uri.EscapeDataString(token)}";
+
+        //        // Send email
+        //        _emailService.SendEmailAsync(
+        //            user.Email,
+        //            "Reset Your Password",
+        //            $@"
+        //    <html>
+        //    <body>
+        //        <p>Dear User,</p>
+
+        //        <p>
+        //            We received a request to reset your password.
+        //        </p>
+
+        //        <p>
+        //            Click the button below to reset your password:
+        //        </p>
+
+        //        <p>
+        //            <a href='{resetUrl}'
+        //               style='
+        //               display:inline-block;
+        //               padding:10px 20px;
+        //               background-color:#007bff;
+        //               color:white;
+        //               text-decoration:none;
+        //               border-radius:5px;'>
+        //               Reset Password
+        //            </a>
+        //        </p>
+
+        //        <p>
+        //            This link will expire in 30 minutes.
+        //        </p>
+
+        //        <p>
+        //            If you did not request a password reset,
+        //            please ignore this email.
+        //        </p>
+
+        //        <p>
+        //            Regards,<br/>
+        //            GenXAI Platform
+        //        </p>
+        //    </body>
+        //    </html>"
+        //        );
+
+        //        return ApiResponse<string>.Ok(
+        //            "Password reset link has been sent.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ApiResponse<string>.Fail(
+        //            ex.Message);
+        //    }
+        //}
 
 
         public async Task<ApiResponse<string>> ResetPasswordAsync( ResetPasswordRequest request)
