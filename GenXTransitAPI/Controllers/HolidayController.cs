@@ -10,7 +10,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/holiday")]
     [ApiController]
-    [AllowAnonymous]  
+    [Authorize]  
     public class HolidayController : BaseController  
     {
         private readonly IHolidayService _svc;
@@ -30,7 +30,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, type, startDate, endDate, isActive, CurrentUserId, pageNumber, pageSize);  
+            var result = await _svc.GetAllAsync(searchText, type, startDate, endDate, isActive, pageNumber, pageSize);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });

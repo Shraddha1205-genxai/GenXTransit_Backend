@@ -9,7 +9,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/paymentmode")]
     [ApiController]
-    [AllowAnonymous]  
+    [Authorize]  
     public class PaymentModeController : BaseController  
     {
         private readonly IPaymentModeService _svc;
@@ -27,7 +27,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, modeStatus, isActive, CurrentUserId, pageNumber, pageSize);  
+            var result = await _svc.GetAllAsync(searchText, modeStatus, isActive, pageNumber, pageSize);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });

@@ -26,7 +26,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
             string? districtName,
             string? cityName,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
@@ -41,7 +40,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                     DistrictName = districtName,
                     CityName = cityName,
                     IsActive = isActive,
-                    ScopeToUser = scopeToUser,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },

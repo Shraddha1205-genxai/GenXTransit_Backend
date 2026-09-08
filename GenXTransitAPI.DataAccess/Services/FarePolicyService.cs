@@ -25,13 +25,12 @@ namespace GenXTransitAPI.DataAccess.Services
             int? categoryId,
             int? routeId,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, model, policyStatus, categoryId, routeId, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, model, policyStatus, categoryId, routeId, isActive, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<FarePolicyDTO>>.Ok(items, null, totalCount);
             }

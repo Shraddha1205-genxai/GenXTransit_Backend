@@ -12,7 +12,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
             string? service,
             string? type,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

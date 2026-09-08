@@ -12,7 +12,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
             decimal? rateFrom,
             decimal? rateTo,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

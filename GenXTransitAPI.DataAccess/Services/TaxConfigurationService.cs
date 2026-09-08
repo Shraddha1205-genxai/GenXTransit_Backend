@@ -24,13 +24,12 @@ namespace GenXTransitAPI.DataAccess.Services
             decimal? rateFrom,
             decimal? rateTo,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, taxType, rateFrom, rateTo, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, taxType, rateFrom, rateTo, isActive, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<TaxConfigurationDTO>>.Ok(items, null, totalCount);
             }

@@ -11,7 +11,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IServices
             string? searchText,
             string? modeStatus,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

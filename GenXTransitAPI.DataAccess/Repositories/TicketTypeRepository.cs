@@ -22,7 +22,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
         public async Task<IEnumerable<TicketTypeDTO>> GetAllAsync(
             string? searchText,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
@@ -34,7 +33,6 @@ namespace GenXTransitAPI.DataAccess.Repositories
                 {
                     SearchText = searchText,
                     IsActive = isActive,
-                    ScopeToUser = scopeToUser,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },

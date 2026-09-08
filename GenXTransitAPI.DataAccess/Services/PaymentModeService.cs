@@ -22,13 +22,12 @@ namespace GenXTransitAPI.DataAccess.Services
             string? searchText,
             string? modeStatus,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, modeStatus, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, modeStatus, isActive, pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<PaymentModeDTO>>.Ok(items, null, totalCount);
             }

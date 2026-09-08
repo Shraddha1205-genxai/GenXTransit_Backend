@@ -9,7 +9,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/tickettype")]
     [ApiController]
-    [AllowAnonymous]  
+    [Authorize]  
     public class TicketTypeController : BaseController  
     {
         private readonly ITicketTypeService _svc;
@@ -26,7 +26,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, isActive, CurrentUserId, pageNumber, pageSize);  
+            var result = await _svc.GetAllAsync(searchText, isActive,  pageNumber, pageSize);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });

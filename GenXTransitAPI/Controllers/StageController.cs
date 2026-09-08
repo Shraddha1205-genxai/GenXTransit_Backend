@@ -9,7 +9,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/stage")]
     [ApiController]
-    [AllowAnonymous]  
+    [Authorize]  
     public class StageController : BaseController  
     {
         private readonly IStageService _svc;
@@ -27,7 +27,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, routeId, isActive, CurrentUserId, pageNumber, pageSize);  
+            var result = await _svc.GetAllAsync(searchText, routeId, isActive, pageNumber, pageSize);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });

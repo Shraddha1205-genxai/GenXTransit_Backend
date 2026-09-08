@@ -24,13 +24,12 @@ namespace GenXTransitAPI.DataAccess.Services
             DateTime? startDate,
             DateTime? endDate,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10)
         {
             try
             {
-                var items = await _repo.GetAllAsync(searchText, type, startDate, endDate, isActive, scopeToUser, pageNumber, pageSize);
+                var items = await _repo.GetAllAsync(searchText, type, startDate, endDate, isActive,  pageNumber, pageSize);
                 var totalCount = items.FirstOrDefault()?.totalCount ?? 0;
                 return ApiResponse<IEnumerable<HolidayDTO>>.Ok(items, null, totalCount);
             }

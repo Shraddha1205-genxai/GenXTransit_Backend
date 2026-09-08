@@ -9,7 +9,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/corporation")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize]
     public class CorporationController : BaseController 
     {
         private readonly IOrgCorporationService _svc;
@@ -35,7 +35,6 @@ namespace GenXTransitAPI.Controllers
                 districtName,
                 cityName,
                 isActive,
-                CurrentUserId, 
                 pageNumber,
                 pageSize);
 

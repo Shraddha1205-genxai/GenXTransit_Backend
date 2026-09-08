@@ -9,7 +9,6 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
         Task<IEnumerable<OrgRegionDTO>> GetAllAsync(
             string? searchText,
             bool? isActive,
-            int? scopeToUser,
             int pageNumber = 1,
             int pageSize = 10);
 

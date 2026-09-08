@@ -9,7 +9,7 @@ namespace GenXTransitAPI.Controllers
 {
     [Route("api/complaintcategory")]
     [ApiController]
-    [AllowAnonymous]  
+    [Authorize]  
     public class ComplaintCategoryController : BaseController  
     {
         private readonly IComplaintCategoryService _svc;
@@ -28,7 +28,7 @@ namespace GenXTransitAPI.Controllers
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 10)
         {
-            var result = await _svc.GetAllAsync(searchText, complaintCategory, sla, isActive, CurrentUserId, pageNumber, pageSize);  
+            var result = await _svc.GetAllAsync(searchText, complaintCategory, sla, isActive, pageNumber, pageSize);  
 
             if (!result.Success)
                 return BadRequest(new { success = false, message = result.Message });
