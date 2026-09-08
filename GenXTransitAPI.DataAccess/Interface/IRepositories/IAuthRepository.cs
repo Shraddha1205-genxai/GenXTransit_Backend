@@ -12,7 +12,8 @@ namespace GenXTransitAPI.DataAccess.Interface.IRepositories
     {
       
         Task<User?> GetUserForLoginAsync(string loginId);
-        Task<List<LoginPermissionResponse>> GetUserPermissionsAsync(int userId);
+        //Task<List<LoginPermissionResponse>> GetUserPermissionsAsync(int userId);
+        Task<List<UserPermissionDto>> GetUserPermissionsAsync(int userId);
         Task<User?> GetUserByEmailAsync(string email);
         Task<bool> ChangePasswordAsync( int userId, string newPassword);
 
