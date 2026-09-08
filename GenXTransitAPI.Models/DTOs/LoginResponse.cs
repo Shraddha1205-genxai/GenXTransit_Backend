@@ -40,14 +40,45 @@ namespace GenXTransitAPI.Models.DTOs
         public string Password { get; set; } = string.Empty;
     }
 
-    public class LoginPermissionResponse
+    //public class LoginPermissionResponse
+    //{
+    //    public int MenuId { get; set; }
+    //    public string? IconName { get; set; }
+
+    //    public int? SortOrder { get; set; }
+
+    //    public string? MenuName { get; set; }
+
+    //    public bool CanView { get; set; }
+
+    //    public bool CanAdd { get; set; }
+
+    //    public bool CanEdit { get; set; }
+
+    //    public bool CanDelete { get; set; }
+    //}
+
+    public class UserPermissionDto
     {
+        public int SectionId { get; set; }
+
+        public string? SectionName { get; set; }
+
         public int MenuId { get; set; }
+
         public string? IconName { get; set; }
 
-        public int? SortOrder { get; set; }
+        public int? MenuSortOrder { get; set; }
 
         public string? MenuName { get; set; }
+
+        public int TabId { get; set; }
+
+        public string? TabName { get; set; }
+
+        public int? TabSortOrder { get; set; }
+
+        public string? URL { get; set; }
 
         public bool CanView { get; set; }
 
@@ -56,5 +87,46 @@ namespace GenXTransitAPI.Models.DTOs
         public bool CanEdit { get; set; }
 
         public bool CanDelete { get; set; }
+    }
+
+    public class LoginPermissionResponse
+    {
+        public int SectionId { get; set; }
+
+        public string? SectionName { get; set; }
+
+        public List<PermissionMenuResponse> MenuList { get; set; } = new();
+    }
+
+    public class PermissionMenuResponse
+    {
+        public int MenuId { get; set; }
+
+        public string? IconName { get; set; }
+
+        public int? SortOrder { get; set; }
+
+        public string? MenuName { get; set; }
+
+        public List<PermissionTabResponse> TabList { get; set; } = new();
+    }
+
+    public class PermissionTabResponse
+    {
+        public int TabId { get; set; }
+
+        public string? TabName { get; set; }
+
+        public bool CanView { get; set; }
+
+        public bool CanAdd { get; set; }
+
+        public bool CanEdit { get; set; }
+
+        public bool CanDelete { get; set; }
+
+        public int? SortOrder { get; set; }
+
+        public string? Url { get; set; }
     }
 }

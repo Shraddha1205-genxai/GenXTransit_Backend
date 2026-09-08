@@ -86,8 +86,67 @@ namespace GenXTransitAPI.DataAccess.Services
             }
 
             // Get permissions
-            var permissions =
-                await _authRepo.GetUserPermissionsAsync(user.UserId);
+            //var permissions =
+            //    await _authRepo.GetUserPermissionsAsync(user.UserId);
+            var permissionRows =
+    await _authRepo.GetUserPermissionsAsync(user.UserId);
+
+            var permissions = permissionRows
+                .GroupBy(x => new
+                {
+                    x.SectionId,
+                    x.SectionName
+                })
+                .Select(section => new LoginPermissionResponse
+                {
+                    SectionId = section.Key.SectionId,
+
+                    SectionName = section.Key.SectionName,
+
+                    MenuList = section
+                        .GroupBy(x => new
+                        {
+                            x.MenuId,
+                            x.IconName,
+                            x.MenuSortOrder,
+                            x.MenuName
+                        })
+                        .Select(menu => new PermissionMenuResponse
+                        {
+                            MenuId = menu.Key.MenuId,
+
+                            IconName = menu.Key.IconName,
+
+                            SortOrder = menu.Key.MenuSortOrder,
+
+                            MenuName = menu.Key.MenuName,
+
+                            TabList = menu
+                                .Select(x => new PermissionTabResponse
+                                {
+                                    TabId = x.TabId,
+
+                                    TabName = x.TabName,
+
+                                    CanView = x.CanView,
+
+                                    CanAdd = x.CanAdd,
+
+                                    CanEdit = x.CanEdit,
+
+                                    CanDelete = x.CanDelete,
+
+                                    SortOrder = x.TabSortOrder,
+
+                                    Url = x.URL
+                                })
+                                .OrderBy(x => x.SortOrder)
+                                .ToList()
+                        })
+                        .OrderBy(x => x.SortOrder)
+                        .ToList()
+                })
+                .ToList();
 
             // Generate Access Token
             var accessToken =
