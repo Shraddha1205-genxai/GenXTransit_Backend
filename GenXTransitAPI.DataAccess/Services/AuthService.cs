@@ -458,7 +458,7 @@ namespace GenXTransitAPI.DataAccess.Services
                     new ForgotPasswordResponse
                     {
                         Message = "Password reset link has been sent.",
-                        Token = tokenHash
+                        Token = token,
                     });
             }
             catch (Exception ex)
@@ -789,6 +789,66 @@ namespace GenXTransitAPI.DataAccess.Services
             catch (Exception ex)
             {
                 return ApiResponse<RefreshTokenResponse>.Fail(
+                    ex.Message);
+            }
+        }
+
+        public async Task<ApiResponse<string>> LogoutAsync(
+    LogoutRequest request)
+        {
+            try
+            {
+                if (request == null ||
+                    string.IsNullOrWhiteSpace(request.RefreshToken))
+                {
+                    return ApiResponse<string>.Fail(
+                        "Refresh token is required.");
+                }
+
+                // Validate refresh token JWT
+                var principal =
+                    _jwtService.ValidateRefreshToken(
+                        request.RefreshToken);
+
+                if (principal == null)
+                {
+                    return ApiResponse<string>.Fail(
+                        "Invalid or expired refresh token.");
+                }
+
+                // Get UserId from refresh token
+                var userIdClaim =
+                    principal.FindFirst(
+                        ClaimTypes.NameIdentifier)?.Value;
+
+                if (!int.TryParse(
+                    userIdClaim,
+                    out int userId))
+                {
+                    return ApiResponse<string>.Fail(
+                        "Invalid user identity.");
+                }
+
+                // Revoke refresh token in database
+                var result =
+                    await _authRepo.RevokeRefreshTokenAsync(
+                        userId,
+                        request.RefreshToken);
+
+                if (!result)
+                {
+                    return ApiResponse<string>.Fail(
+                        "Refresh token is already revoked or invalid.");
+                }
+
+                return ApiResponse<string>.Ok(
+                "Logout successful.");
+
+
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<string>.Fail(
                     ex.Message);
             }
         }
