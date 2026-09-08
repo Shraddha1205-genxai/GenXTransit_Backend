@@ -22,9 +22,11 @@ namespace GenXTransitAPI.Models.DTOs
         public string AccessToken { get; set; } = string.Empty;
 
         public string RefreshToken { get; set; } = string.Empty;
+        public List<LoginPermissionResponse> Permissions { get; set; } = new();
 
-        public List<LoginPermissionResponse> Permissions { get; set; }
-       = new List<LoginPermissionResponse>();
+
+        // public List<LoginPermissionResponse> Permissions { get; set; }
+        //= new List<LoginPermissionResponse>();
 
         // public bool IsFirstLogin { get; set; }
 

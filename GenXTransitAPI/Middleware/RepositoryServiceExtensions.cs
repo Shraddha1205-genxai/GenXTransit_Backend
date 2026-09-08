@@ -20,23 +20,22 @@ namespace GenXTransitAPI.Middleware
 
 
             // DATA ACCESS
-            services.AddScoped<IAuthService, AuthService>();
+          
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
-            services.AddScoped<IRoleService, RoleService>();
+           
             services.AddScoped<IUserRepository, UserMasterRepository>();
-            services.AddScoped<IUserService, UserMasterService>();
+            
             services.AddScoped<ISectionRepository, SectionRepository>();
-            services.AddScoped<ISectionService, SectionService>();
+            
             services.AddScoped<IMenuRepository, MenuRepository>();
-            services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<ITabRepository, TabRepository>();
-            services.AddScoped<ITabService, TabService>();
+            
             services.AddScoped<IDriverConductorRepository, DriverConductorRepository>();
-            services.AddScoped<IDriverConductorService, DriverConductorService>();
+           
             services.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
-            services.AddScoped<DataAccess.Interface.IServices.IAuthorizationService, AuthorizationService>();
+            
             services.AddScoped<IOrgCorporationRepository, OrgCorporationRepository>();
             services.AddScoped<IOrgDivisionRepository, OrgDivisionRepository>();
             services.AddScoped<IOrgRegionRepository, OrgRegionRepository>();
@@ -67,8 +66,15 @@ namespace GenXTransitAPI.Middleware
 
 
 
-
-
+            // SERVICES
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IUserService, UserMasterService>();
+            services.AddScoped<ISectionService, SectionService>();
+            services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<ITabService, TabService>();
+            services.AddScoped<DataAccess.Interface.IServices.IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IDriverConductorService, DriverConductorService>();
 
             services.AddScoped<IOrgCorporationService, OrgCorporationService>();
             services.AddScoped<IOrgDivisionService, OrgDivisionService>();

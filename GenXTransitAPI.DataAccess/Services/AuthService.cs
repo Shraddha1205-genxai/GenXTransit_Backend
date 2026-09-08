@@ -5,6 +5,7 @@ using GenXTransitAPI.DataAccess.Security;
 using GenXTransitAPI.Models;
 using GenXTransitAPI.Models.DTO_s;
 using GenXTransitAPI.Models.DTOs;
+using Microsoft.Extensions.Options;
 using GenXTransitAPI.Models.Entities;
 using Org.BouncyCastle.Crypto.Generators;
 using System;
@@ -24,19 +25,23 @@ namespace GenXTransitAPI.DataAccess.Services
         private readonly IPasswordService _passwordService;
         private readonly IEmailService _emailService;
         private readonly IJwtService _jwtService;
+        private readonly JwtSettings _jwtSettings;
+
 
         public AuthService(
        IAuthRepository authRepo,
         IUserRepository userRepo,
        IPasswordService passwordService,
        IEmailService emailService,
-       IJwtService jwtService)
+       IJwtService jwtService,
+       IOptions<JwtSettings> jwtSettings)
         {
             _authRepo = authRepo;
             _userRepo = userRepo;
             _passwordService = passwordService;
             _emailService = emailService;
             _jwtService = jwtService;
+            _jwtSettings = jwtSettings.Value;
         }
 
         public async Task<ApiResponse<LoginResponse>> LoginAsync(LoginRequest request)
@@ -92,6 +97,18 @@ namespace GenXTransitAPI.DataAccess.Services
             var refreshToken =
                 _jwtService.GenerateRefreshToken(user);
 
+            // Save Refresh Token
+            var refreshTokenExpiry =
+                DateTime.UtcNow.AddDays(
+                    _jwtSettings.RefreshTokenExpiryDays);
+
+            await _authRepo.SaveRefreshTokenAsync(
+                user.UserId,
+                refreshToken,
+                refreshTokenExpiry,
+                user.UserId);
+
+
             var response = new LoginResponse
             {
                 UserId = user.UserId,
@@ -106,6 +123,7 @@ namespace GenXTransitAPI.DataAccess.Services
                 AccessToken = accessToken,
 
                 RefreshToken = refreshToken,
+                Permissions = permissions
 
                 //IsFirstLogin = user.IsFirstLogin,
 
@@ -640,6 +658,19 @@ namespace GenXTransitAPI.DataAccess.Services
                         "Invalid user identity.");
                 }
 
+                // 5. Check token in database
+                //var isValid =
+                //    await _authRepo.IsRefreshTokenValidAsync(
+                //        userId,
+                //        request.RefreshToken);
+                var isValid =   await _authRepo.ValidateRefreshTokenAsync( userId,  request.RefreshToken);
+
+                if (!isValid)
+                {
+                    return ApiResponse<RefreshTokenResponse>.Fail(
+                        "Refresh token is invalid or has been revoked.");
+                }
+
                 // 5. Get user from database
                 var user =
                     await _userRepo.GetUserByIdAsync(userId);
@@ -664,6 +695,20 @@ namespace GenXTransitAPI.DataAccess.Services
                 // 8. Generate new Refresh Token
                 var newRefreshToken =
                     _jwtService.GenerateRefreshToken(user.Data);
+
+                await _authRepo.RevokeRefreshTokenAsync(
+             userId,
+               request.RefreshToken);
+
+                var newRefreshTokenExpiry =
+    DateTime.UtcNow.AddDays(
+        _jwtSettings.RefreshTokenExpiryDays);
+
+                await _authRepo.SaveRefreshTokenAsync(
+                    user.Data.UserId,
+                    newRefreshToken,
+                    newRefreshTokenExpiry,
+                    user.Data.UserId);
 
                 // 9. Create response
                 var response = new RefreshTokenResponse
