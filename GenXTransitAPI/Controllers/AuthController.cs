@@ -104,6 +104,16 @@ namespace GenXTransitAPI.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("logout")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout( [FromBody] LogoutRequest request)
+        {
+            var response =
+                await _authService.LogoutAsync(request);
+
+            return Ok(response);
+        }
     }
 }
 
