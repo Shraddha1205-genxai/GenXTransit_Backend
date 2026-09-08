@@ -13,9 +13,14 @@ namespace GenXTransitAPI.Models.DTOs
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
-        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        [RegularExpression(
+      @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+      ErrorMessage = "Please enter a valid email address."
+  )]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Mobile number is required.")]
+        [RegularExpression(@"^[6-9]\d{9}$", ErrorMessage = "Please enter a valid 10-digit mobile number.")]
         public string MobileNo { get; set; }
 
         [Required(ErrorMessage = "First name is required.")]

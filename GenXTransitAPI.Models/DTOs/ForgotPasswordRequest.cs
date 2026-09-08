@@ -12,6 +12,12 @@ namespace GenXTransitAPI.Models.DTOs
         public string Email { get; set; }
     }
 
+    public class ForgotPasswordResponse
+    {
+        public string Message { get; set; }
+        public string Token { get; set; }
+    }
+
     public class PasswordResetTokenResult
     {
         public int RowsAffected { get; set; }
