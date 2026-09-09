@@ -369,14 +369,22 @@ namespace GenXTransitAPI.DataAccess.Services
                 // Get user
                 var user = await _authRepo.GetUserByEmailAsync(email);
 
+                //if (user == null)
+                //{
+                //    return ApiResponse<ForgotPasswordResponse>.Ok(
+                //        new ForgotPasswordResponse
+                //        {
+                //            Message = "No account found with the provided email address.",
+                //            Token = null
+                //        });
+                //}
+
+                //var user = await _authRepo.GetUserByEmailAsync(email);
+
                 if (user == null)
                 {
-                    return ApiResponse<ForgotPasswordResponse>.Ok(
-                        new ForgotPasswordResponse
-                        {
-                            Message = "No account found with the provided email address.",
-                            Token = null
-                        });
+                    return ApiResponse<ForgotPasswordResponse>.Fail(
+                        "Invalid email address.");
                 }
 
                 // Generate secure random token
@@ -405,7 +413,7 @@ namespace GenXTransitAPI.DataAccess.Services
                 //    $"https://asset.genxai.com/reset-password?token={Uri.EscapeDataString(token)}";
 
                 string resetUrl =
-                    $"http://localhost:5173/reset-password?token={Uri.EscapeDataString(token)}";
+                    $"http://localhost:5173/reset-password?token={Uri.EscapeDataString(tokenHash)}";
 
                 // Send email
                 await _emailService.SendEmailAsync(
@@ -458,7 +466,7 @@ namespace GenXTransitAPI.DataAccess.Services
                     new ForgotPasswordResponse
                     {
                         Message = "Password reset link has been sent.",
-                        Token = token,
+                        Token = tokenHash,
                     });
             }
             catch (Exception ex)
